@@ -1,0 +1,282 @@
+[
+  {
+    "from": "T2-06",
+    "to": "T1-01",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노 솔루션 임대 자세히 보기"
+  },
+  {
+    "from": "T2-07",
+    "to": "T1-02",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노 솔루션 분양 자세히 보기"
+  },
+  {
+    "from": "T3-04",
+    "to": "T2-07",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노라이선스 자세히 보기"
+  },
+  {
+    "from": "T3-05",
+    "to": "T2-07",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노라이선스 자세히 보기"
+  },
+  {
+    "from": "T2-08",
+    "to": "T1-02",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노 솔루션 분양 자세히 보기"
+  },
+  {
+    "from": "T3-01",
+    "to": "T2-08",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노 총판 자세히 보기"
+  },
+  {
+    "from": "T2-04",
+    "to": "T1-03",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "배팅사이트 제작 자세히 보기"
+  },
+  {
+    "from": "T3-03",
+    "to": "T2-04",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노 api 자세히 보기"
+  },
+  {
+    "from": "T2-11",
+    "to": "T1-03",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "배팅사이트 제작 자세히 보기"
+  },
+  {
+    "from": "T2-02",
+    "to": "T1-03",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "배팅사이트 제작 자세히 보기"
+  },
+  {
+    "from": "T3-02",
+    "to": "T2-02",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "싱글월렛 솔루션 자세히 보기"
+  },
+  {
+    "from": "T2-03",
+    "to": "T1-03",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "배팅사이트 제작 자세히 보기"
+  },
+  {
+    "from": "T2-05",
+    "to": "T1-03",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "배팅사이트 제작 자세히 보기"
+  },
+  {
+    "from": "T2-10",
+    "to": "T2-05",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "스포츠 배당 API 자세히 보기"
+  },
+  {
+    "from": "T2-01",
+    "to": "T1-04",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노 솔루션 가격 자세히 보기"
+  },
+  {
+    "from": "T2-09",
+    "to": "T1-04",
+    "type": "up",
+    "required": true,
+    "position": "early",
+    "anchorHint": "카지노 솔루션 가격 자세히 보기"
+  },
+  {
+    "from": "T1-01",
+    "to": "T2-06",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "화이트라벨 카지노 플랫폼"
+  },
+  {
+    "from": "T1-01",
+    "to": "T2-07",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "카지노라이선스"
+  },
+  {
+    "from": "T1-01",
+    "to": "T3-04",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "관할별 카지노 라이선스 비교: 퀴라소·몰타·필리핀·맨섬"
+  },
+  {
+    "from": "T1-01",
+    "to": "T3-05",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "카지노 컴플라이언스 체크리스트: KYC·AML·책임게이밍"
+  },
+  {
+    "from": "T1-02",
+    "to": "T2-08",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "카지노 총판"
+  },
+  {
+    "from": "T1-02",
+    "to": "T3-01",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "카지노 총판이란: 구조와 수수료 방식 FAQ"
+  },
+  {
+    "from": "T1-03",
+    "to": "T2-04",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "카지노 api"
+  },
+  {
+    "from": "T1-03",
+    "to": "T3-03",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "에볼루션 게이밍"
+  },
+  {
+    "from": "T1-03",
+    "to": "T2-11",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "betconstruct"
+  },
+  {
+    "from": "T1-03",
+    "to": "T2-02",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "싱글월렛 솔루션"
+  },
+  {
+    "from": "T1-03",
+    "to": "T3-02",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "싱글월렛 vs 시드월렛 차이 FAQ"
+  },
+  {
+    "from": "T1-03",
+    "to": "T2-03",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "배팅사이트 입출금 시스템 구축"
+  },
+  {
+    "from": "T1-03",
+    "to": "T2-05",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "스포츠 배당 API"
+  },
+  {
+    "from": "T1-03",
+    "to": "T2-10",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "Digitain 한국어 지원"
+  },
+  {
+    "from": "T1-04",
+    "to": "T2-01",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "카지노 솔루션 수익쉐어 구조"
+  },
+  {
+    "from": "T1-04",
+    "to": "T2-09",
+    "type": "down",
+    "required": false,
+    "position": "cluster_complete",
+    "anchorHint": "7Play 가격"
+  },
+  {
+    "from": "T2-00",
+    "to": "T1-01",
+    "type": "cross",
+    "required": true,
+    "position": "contextual",
+    "anchorHint": "카지노 솔루션 임대"
+  },
+  {
+    "from": "T2-00",
+    "to": "T1-02",
+    "type": "cross",
+    "required": true,
+    "position": "contextual",
+    "anchorHint": "카지노 솔루션 분양"
+  },
+  {
+    "from": "T2-00",
+    "to": "T1-03",
+    "type": "cross",
+    "required": true,
+    "position": "contextual",
+    "anchorHint": "배팅사이트 제작"
+  }
+]

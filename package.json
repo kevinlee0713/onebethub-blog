@@ -1,0 +1,22 @@
+{
+  "name": "onebethub-blog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate-post.mjs",
+    "generate:dry": "cross-env DRY_RUN=true node scripts/generate-post.mjs",
+    "build-link-map": "node scripts/build-link-map.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.37.0",
+    "@google/generative-ai": "^0.24.0",
+    "marked": "^12.0.0",
+    "openai": "^4.0.0",
+    "node-ssh": "^13.2.0",
+    "sharp": "^0.33.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

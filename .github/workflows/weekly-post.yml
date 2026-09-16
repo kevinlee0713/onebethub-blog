@@ -1,0 +1,56 @@
+name: OneBetHub Post Generator (Tue 09:00 KST)
+
+on:
+  schedule:
+    # 화요일 오전 9시 KST(자정 UTC) — 원본(월/수/금)보다 낮은 빈도로 시작, 필요 시 cron 늘리기
+    - cron: '0 0 * * 2'
+  workflow_dispatch: # 수동 실행 허용 (DRY_RUN 테스트 포함)
+
+jobs:
+  generate-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Korean fonts
+        run: sudo apt-get install -y fonts-noto-cjk
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate and publish post
+        env:
+          DRY_RUN: ${{ vars.DRY_RUN || 'false' }} # WordPress/SSH 준비 전에는 repo variable로 true 설정
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_WP_PATH: ${{ secrets.SSH_WP_PATH }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          AUTHOR_ONEBETHUB: ${{ secrets.AUTHOR_ONEBETHUB }}
+          CLICKUP_API_KEY: ${{ secrets.CLICKUP_API_KEY }}
+          CLICKUP_LIST_ID: ${{ secrets.CLICKUP_LIST_ID }}
+        run: node scripts/generate-post.mjs
+
+      - name: Commit updated published-log.json
+        if: always()
+        run: |
+          git config user.name "onebethub-bot"
+          git config user.email "bot@onebethub.com"
+          git add data/published-log.json
+          git diff --cached --quiet || git commit -m "chore: update published-log.json [skip ci]"
+          git push || true
