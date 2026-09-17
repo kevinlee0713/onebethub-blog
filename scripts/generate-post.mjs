@@ -48,7 +48,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-not-config
 const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'not-configured')
 
 const WP_URL  = (process.env.WORDPRESS_URL ?? (DRY_RUN ? 'https://onebethub.com' : '')).replace(/\/$/, '')
-const WP_PATH = process.env.SSH_WP_PATH ?? '/home2/onebethub/public_html'
+const WP_PATH = process.env.SSH_WP_PATH ?? '/home/1555616.cloudwaysapps.com/trqundhprt/public_html'
 
 const PASS_SCORE = 7       // 이 점수 이상이면 통과
 const MAX_RETRIES = 2      // SEO 게이트 재시도 최대 횟수
@@ -158,13 +158,16 @@ let _ssh = null
 async function getSSH() {
   if (_ssh) return _ssh
   _ssh = new NodeSSH()
+  const auth = process.env.SSH_PRIVATE_KEY
+    ? { privateKey: process.env.SSH_PRIVATE_KEY.replace(/\\n/g, '\n') }
+    : { password: process.env.SSH_PASSWORD }
   await _ssh.connect({
     host: process.env.SSH_HOST,
     username: process.env.SSH_USER,
-    privateKey: (process.env.SSH_PRIVATE_KEY ?? '').replace(/\\n/g, '\n'),
     port: parseInt(process.env.SSH_PORT ?? '22'),
     readyTimeout: 30000,
     hostVerifier: () => true,
+    ...auth,
   })
   return _ssh
 }
@@ -175,7 +178,7 @@ async function sshClose() {
 
 async function wpCli(args) {
   const ssh = await getSSH()
-  const result = await ssh.execCommand(`wp ${args} --path="${WP_PATH}"`)
+  const result = await ssh.execCommand(`wp ${args} --path="${WP_PATH}"`, { cwd: WP_PATH })
   if (result.code !== 0 && !result.stdout.trim()) {
     throw new Error(`WP-CLI(${result.code}): ${result.stderr || 'no output'}`)
   }
@@ -1650,7 +1653,11 @@ async function linkPolylangTranslations(koId, enId) {
 async function main() {
   const required = DRY_RUN
     ? ['ANTHROPIC_API_KEY']
-    : ['ANTHROPIC_API_KEY', 'WORDPRESS_URL', 'SSH_HOST', 'SSH_USER', 'SSH_PRIVATE_KEY']
+    : ['ANTHROPIC_API_KEY', 'WORDPRESS_URL', 'SSH_HOST', 'SSH_USER']
+  if (!DRY_RUN && !process.env.SSH_PRIVATE_KEY && !process.env.SSH_PASSWORD) {
+    console.error('Missing required env: SSH_PRIVATE_KEY or SSH_PASSWORD')
+    process.exit(1)
+  }
   for (const key of required) {
     if (!process.env[key]) {
       console.error(`${key} 환경변수가 설정되지 않았습니다.`)

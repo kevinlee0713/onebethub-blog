@@ -3,3 +3,4 @@ node_modules/
 data/dry-run-output/
 npm-debug.log*
 .DS_Store
+.ssh-local/
