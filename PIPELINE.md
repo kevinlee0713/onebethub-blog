@@ -251,3 +251,11 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
 `/seo검수` 슬래시 커맨드(`~/.claude/commands/seo검수.md`)에 VOBET Magazine·Sports News Blog와 나란히
 OneBetHub 전용 섹션(C)이 있다 — 이 파이프라인의 실제 규칙(콘텐츠 믹스, CTA 분기, 상향링크, 트레이스
 메타키 등)을 반영해서 발행된 글을 검수한다.
+
+## 문서 동기화 훅
+
+`scripts/generate-post.mjs`를 Edit/Write로 수정하면, Claude Code의 PostToolUse 훅이 "이 문서와
+Drive 문서(`[BD][M2-개발] OneBetHub 콘텐츠 자동화 파이프라인_v1.0`)를 같이 갱신하라"는 리마인더를
+자동으로 띄운다. **훅 설정은 이 저장소 안이 아니라 `C:\project\7play-seo\.claude\settings.json`
+(프로젝트 루트)에 있다** — onebethub-blog는 7play-seo 하위 폴더라서, 실제 세션이 열리는 루트
+기준으로 등록해야 작동한다. 훅 스크립트: `C:\project\7play-seo\.claude\hooks\check-pipeline-doc.mjs`.
