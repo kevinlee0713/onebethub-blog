@@ -143,13 +143,16 @@ function seoDescription(desc) {
   return out
 }
 
+// 이 텔레그램 봇은 VOBET 파이프라인과 공유하는 기존 봇이라(2026-09-18, Kevin이 신규 발급 대신 재사용
+// 선택), 메시지만 보고는 어느 블로그 알림인지 구분이 안 된다 — 그래서 모든 메시지 맨 앞에 "원벳허브
+// 블로그" 표시를 무조건 붙인다(호출부마다 따로 넣지 않아도 되게 여기서 한 번에 처리).
 async function tg(text) {
   if (!TG_TOKEN || !TG_CHAT) return
   try {
     await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: 'HTML' }),
+      body: JSON.stringify({ chat_id: TG_CHAT, text: `🟦 <b>[원벳허브 블로그]</b>\n${text}`, parse_mode: 'HTML' }),
     })
   } catch { /* 알림 실패는 파이프라인 중단 안 함 */ }
 }
