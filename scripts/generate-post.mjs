@@ -1686,14 +1686,16 @@ function extractTag(tag, text) {
   return text.slice(contentStart, end).trim()
 }
 
-// ── ClickUp 태스크 생성 ──────────────────────────────────────────
+// ── ClickUp "포스팅" 리스트 동기화 ───────────────────────────────
 // VOBET과 워크스페이스/리스트를 공유하지 않도록(호스팅/네트워크 지문 분리 원칙) 리스트 ID를 env로 분리.
-
-async function createClickUpTask(title, postUrl, keyword, publishDate) {
+// keyword-map.json의 22페이지는 전부 ClickUp "포스팅" 리스트에 미리 등록된 태스크(page.clickupTaskId)를
+// 갖고 있다 — 새 페이지 추가 시 그 리스트에 수동으로 태스크를 만들고 clickupTaskId를 채워둘 것
+// (안 채우면 매 실행마다 새 태스크가 중복 생성됨, 아래 else 분기 참고).
+async function syncClickUpPostingTask(page, title, postUrl, keyword, postStatus) {
   const apiKey = process.env.CLICKUP_API_KEY
   const listId = process.env.CLICKUP_LIST_ID
   if (!apiKey || !listId) {
-    console.log('  ⚠ CLICKUP_API_KEY 또는 CLICKUP_LIST_ID 없음 — ClickUp 태스크 생성 건너뜀')
+    console.log('  ⚠ CLICKUP_API_KEY 또는 CLICKUP_LIST_ID 없음 — ClickUp 동기화 건너뜀')
     return
   }
 
@@ -1706,62 +1708,58 @@ async function createClickUpTask(title, postUrl, keyword, publishDate) {
     const fieldMap = {}
     for (const f of fields) if (f.name) fieldMap[f.name.toLowerCase()] = f
 
-    const customFields = []
-    const getOptLabel = (o) => o.label ?? o.name ?? ''
-    const makeValue = (field, opt) => field.type === 'labels' ? [opt.id] : parseInt(opt.orderindex ?? 0)
+    const websiteField = fieldMap['website']
+    const keywordField = fieldMap['keyword'] ?? fieldMap['키워드']
+    const postUrlField = fieldMap['post url'] ?? fieldMap['post_url']
+    const btagField = fieldMap['btag']
 
-    const deptField = fieldMap['department'] ?? fieldMap['부서'] ?? fieldMap['dept']
-    if (deptField) {
-      const opt = (deptField.type_config?.options ?? []).find(o => getOptLabel(o).toLowerCase() === 'seo')
-      if (opt) customFields.push({ id: deptField.id, value: makeValue(deptField, opt) })
+    const clickupStatus = postStatus === 'publish' ? 'published' : 'pending'
+
+    if (page.clickupTaskId) {
+      // 미리 등록된 태스크 업데이트 — Name/Status는 일반 update, custom field는 필드별 개별 엔드포인트.
+      const res = await fetch(`https://api.clickup.com/api/v2/task/${page.clickupTaskId}`, {
+        method: 'PUT',
+        headers: { 'Authorization': apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: title, status: clickupStatus }),
+      })
+      if (!res.ok) {
+        console.log(`  ⚠ ClickUp 태스크 업데이트 실패 (HTTP ${res.status}): ${await res.text()}`)
+        return
+      }
+      const fieldUpdates = [
+        websiteField && [websiteField.id, WP_URL],
+        keywordField && [keywordField.id, keyword],
+        postUrlField && [postUrlField.id, postUrl],
+        btagField && page.btag && [btagField.id, page.btag],
+      ].filter(Boolean)
+      for (const [fieldId, value] of fieldUpdates) {
+        await fetch(`https://api.clickup.com/api/v2/task/${page.clickupTaskId}/field/${fieldId}`, {
+          method: 'POST',
+          headers: { 'Authorization': apiKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value }),
+        })
+      }
+      console.log(`  ✓ ClickUp 포스팅 태스크 업데이트 완료 (${page.clickupTaskId}, 상태: ${clickupStatus})`)
+    } else {
+      // page.clickupTaskId가 없는 새 페이지 — 안전망으로 새 태스크 생성(다음부턴 clickupTaskId를
+      // keyword-map.json에 수동으로 채워 넣어야 이 함수가 업데이트 경로를 탈 수 있음).
+      const customFields = [
+        websiteField && { id: websiteField.id, value: WP_URL },
+        keywordField && { id: keywordField.id, value: keyword },
+        postUrlField && { id: postUrlField.id, value: postUrl },
+        btagField && page.btag && { id: btagField.id, value: page.btag },
+      ].filter(Boolean)
+      const res = await fetch(`https://api.clickup.com/api/v2/list/${listId}/task`, {
+        method: 'POST',
+        headers: { 'Authorization': apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: title, status: clickupStatus, custom_fields: customFields }),
+      })
+      const data = await res.json()
+      if (data.id) console.log(`  ✓ ClickUp 포스팅 태스크 신규 생성 (ID: ${data.id}) — keyword-map.json에 clickupTaskId="${data.id}" 추가 필요`)
+      else console.log(`  ⚠ ClickUp 태스크 생성 실패 (HTTP ${res.status}): ${JSON.stringify(data)}`)
     }
-    const channelField = fieldMap['channel'] ?? fieldMap['채널']
-    if (channelField) {
-      const opt = (channelField.type_config?.options ?? []).find(o => getOptLabel(o).toLowerCase() === 'blog')
-      if (opt) customFields.push({ id: channelField.id, value: makeValue(channelField, opt) })
-    }
-    const urlField = fieldMap['url']
-    if (urlField) customFields.push({ id: urlField.id, value: postUrl })
-    const kwField = fieldMap['키워드'] ?? fieldMap['keyword']
-    if (kwField) customFields.push({ id: kwField.id, value: keyword })
-
-    const dueTs = new Date(publishDate).setHours(23, 59, 0, 0)
-
-    const listRes = await fetch(`https://api.clickup.com/api/v2/list/${listId}`, { headers: { 'Authorization': apiKey } })
-    const listData = await listRes.json()
-    const statuses = listData.statuses ?? []
-    const reviewStatus = statuses.find(s => ['in review', 'review', 'in_review'].includes(s.status?.toLowerCase() ?? ''))
-      ?? statuses.find(s => (s.status?.toLowerCase() ?? '') === 'open')
-      ?? statuses[0]
-    const statusName = reviewStatus?.status ?? 'Open'
-
-    const res = await fetch(`https://api.clickup.com/api/v2/list/${listId}/task`, {
-      method: 'POST',
-      headers: { 'Authorization': apiKey, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: title,
-        status: statusName,
-        markdown_description:
-          `**포커스 키워드:** ${keyword}\n\n` +
-          `**발행 URL:** ${postUrl}\n\n` +
-          `**검수 체크리스트**\n` +
-          `- [ ] 제목이 자연스러운가?\n` +
-          `- [ ] 브랜드 방향과 맞는가? (특정 업체 일방 홍보 없는지 — 어뷰징 방지)\n` +
-          `- [ ] 사람이 쓴 것처럼 자연스러운가?\n` +
-          `- [ ] FAQ 섹션이 있는가?\n` +
-          `- [ ] CTA(7play.co 링크)가 있는가?\n` +
-          `- [ ] 상향 링크(있는 경우)가 본문 첫 3문단 안에 있는가?\n` +
-          `- [ ] 아웃바운드 링크가 실제로 열리는가?`,
-        due_date: dueTs,
-        due_date_time: false,
-        custom_fields: customFields,
-      }),
-    })
-    const data = await res.json()
-    if (data.id) console.log(`  ✓ ClickUp 태스크 생성 완료 (ID: ${data.id}, 상태: ${statusName})`)
-    else console.log(`  ⚠ ClickUp 태스크 생성 실패 (HTTP ${res.status}): ${JSON.stringify(data)}`)
   } catch (e) {
-    console.log(`  ⚠ ClickUp 태스크 생성 실패: ${e.message}`)
+    console.log(`  ⚠ ClickUp 동기화 실패: ${e.message}`)
   }
 }
 
@@ -2072,8 +2070,8 @@ async function main() {
 
   log = appendPublishedLog({ id: page.id, publishedAt: new Date().toISOString(), lang: 'ko', title: post.title, url: koPostUrl, status: postStatus })
 
-  console.log('\n[ClickUp] 검수 태스크 생성 중...')
-  await createClickUpTask(post.title, koPostUrl, focusKeyword, new Date().toISOString())
+  console.log('\n[ClickUp] 포스팅 리스트 동기화 중...')
+  await syncClickUpPostingTask(page, post.title, koPostUrl, focusKeyword, postStatus)
 
   console.log('\n[번역] 영문 번역 중...')
   let enPostUrl = null

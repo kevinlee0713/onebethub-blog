@@ -153,7 +153,8 @@ Cloudways 호스팅에 배포하면서 겪은 문제와 수정 내역"을 함께
 - 영문 번역 로직(포커스 키워드 추출·검증, 제목-키워드 정합성 재시도, 외부 링크 로케일 치환) — URL을
   절대 변형/발명하지 말라는 지시를 2026-09-18에 더 명시적으로 강화했다(아래 2번 항목 참고).
 - JSON-LD 결정적 생성(BlogPosting + FAQPage, 최종 본문 기준 — LLM 생성분 미사용)
-- ClickUp 태스크 생성(커스텀 필드 조회 → Department/Channel/URL/키워드 매핑), 텔레그램 알림
+- ClickUp 커스텀 필드 동적 조회 방식(필드명으로 매핑) 자체는 재사용 — 단 대상 리스트와 필드 구성은
+  onebethub 전용으로 교체(아래 "ClickUp 연동" 절 참고), 텔레그램 알림
 
 ## Stage 4 — SEO 품질 게이트 (11항목)
 
@@ -336,6 +337,34 @@ Kevin의 A.M 스페이스 `B2B SEO PROJECT - KEVIN` 폴더 안에 목적이 다�
 키워드와 정확히 1:1로 매칭됐다(예: B-45 "카지노 솔루션 분양" = T1-02). 각 태스크 설명에 해당 btag
 URL을 적어뒀고, `keyword-map.json`의 `page.btag` 필드에도 반영해 파이프라인이 발행 시 자동으로 그
 btag를 CTA로 쓴다(위 "CTA — 개별 btag 우선순위" 절 참고).
+
+### 포스팅 리스트 실시간 동기화 (`syncClickUpPostingTask()`, 2026-09-18)
+
+처음엔 22개 태스크를 전부 수동으로 만들고 끝냈는데, Kevin이 "글이 실제로 발행되면 Name(제목)·Status·
+Post url이 자동으로 채워져야 하고, 검수 단계에서 제목이 바뀌면 그것도 반영돼야 한다"고 요청해서
+`generate-post.mjs`에 실시간 동기화를 추가했다:
+
+- `keyword-map.json`의 22페이지 전부 `page.clickupTaskId`(위에서 만든 포스팅 리스트 태스크 ID)를
+  미리 채워뒀다. **새 페이지를 keyword-map.json에 추가할 땐 포스팅 리스트에 태스크를 먼저 만들고
+  그 ID를 `clickupTaskId`로 반드시 채울 것** — 안 채우면 매 실행마다 새 태스크가 중복 생성된다(안전망
+  fallback 경로, 아래 참고).
+- KO 글이 WordPress에 저장된 직후(`createWordPressPost` 이후, Stage5 재작성까지 전부 끝나 제목이
+  최종 확정된 시점) `syncClickUpPostingTask(page, post.title, koPostUrl, focusKeyword, postStatus)`를
+  호출한다. `page.clickupTaskId`가 있으면:
+  - `PUT /api/v2/task/{id}` — Name=최종 제목, Status=`postStatus==='publish' ? 'published' : 'pending'`.
+  - 커스텀 필드(Website/Keyword/Post url/Btag)는 ClickUp API 특성상 일반 update에 못 묶고 필드별로
+    `POST /api/v2/task/{id}/field/{fieldId}`를 따로 호출해야 한다 — Website=`WP_URL`, Keyword=
+    `focusKeyword`, Post url=KO 발행 URL(EN은 별도 필드 없어 추적 안 함, 페이지 단위 1행 설계),
+    Btag=`page.btag`(있는 페이지만).
+  - `page.clickupTaskId`가 없으면 새 태스크를 생성만 하고(안전망), 콘솔에 "keyword-map.json에
+    clickupTaskId 추가 필요"를 경고로 남긴다.
+- 필요 env: `CLICKUP_API_KEY`(ClickUp 개인 API 토큰), `CLICKUP_LIST_ID`(포스팅 리스트 ID
+  `901821678685`, `.env`와 GitHub Actions secret 양쪽에 등록 완료). **`CLICKUP_API_KEY`는 아직
+  미등록 — Kevin이 ClickUp 설정에서 발급해서 전달해야 실제로 동작한다.** 둘 다 없으면 함수가
+  조용히 스킵(콘솔 경고만 남김, 파이프라인 자체는 안 죽음).
+- 제목이 Stage5에서 재작성돼도 이 호출은 그 이후에 일어나므로 최종 제목이 자동으로 반영된다. 다만
+  **발행 후 사람이 WordPress에서 직접 제목을 수정하는 경우**는 별도 동기화 로직이 없어 ClickUp에
+  반영 안 됨(웹훅/폴링이 필요한 별개 기능 — 필요하면 추후 추가).
 
 ## 검수
 
