@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OneBetHub | B2B Gaming Platform Infrastructure &amp; Intelligence</title>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+          },
+          colors: {
+            slate: {
+              850: '#151f33',
+              900: '#0f172a',
+              950: '#090d16',
+            },
+            brand: {
+              blue: '#0284c7',
+              sky: '#38bdf8',
+              dark: '#0b1324',
+              accent: '#0369a1'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts: Newsreader & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="base-typography">
+    body {
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-serif-headline {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+    .font-data-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+<style data-purpose="custom-layouts">
+    /* Subtle fine-line borders reminiscent of FT / Bloomberg Terminal */
+    .fine-border-r {
+      border-right: 1px solid #e2e8f0;
+    }
+    .fine-border-b {
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .ticker-gradient {
+      background: linear-gradient(90deg, #090d16 0%, #0f172a 100%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-w-[1440px] antialiased selection:bg-sky-100 selection:text-sky-900">
+<!-- BEGIN: TopFlashTicker -->
+<aside class="ticker-gradient text-slate-300 text-xs py-2 px-6 border-b border-slate-800" data-purpose="flash-ticker">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between">
+<div class="flex items-center space-x-3 overflow-hidden text-ellipsis whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-rose-950/80 text-rose-400 border border-rose-800/60 uppercase">
+          FLASH INTEL
+        </span>
+<span class="font-medium text-slate-200">2025 글로벌 게이밍 플랫폼 공급망 TCO 인덱스 발표</span>
+<span class="text-slate-600">|</span>
+<span class="text-slate-400">48개 벤더 API 레이턴시 및 GGR 쉐어 전수 조사 보고서</span>
+<span class="text-slate-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 font-semibold inline-flex items-center transition-colors" href="#featured-report">
+          데이터 분석 요약본 열람 <span class="ml-1">→</span>
+</a>
+</div>
+<div class="flex items-center space-x-4 pl-4 shrink-0 text-[11px] font-data-mono text-slate-400">
+<span class="inline-flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>API GATEWAY: NORMAL (14ms)</span>
+<span>INDEX UPDATED 09:30 KST</span>
+</div>
+</div>
+</aside>
+<!-- END: TopFlashTicker -->
+<!-- BEGIN: MainHeader -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+<!-- Top Utility & Brand Bar -->
+<div class="max-w-[1440px] mx-auto px-8 pt-4 pb-3 flex items-center justify-between">
+<!-- Brand Logo & Subtitle -->
+<div class="flex items-center space-x-6">
+<a class="flex items-center" href="/">
+<img alt="OneBetHub B2B Intel" class="h-11 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WG7r9GCESwQOKBqcJ305IUndhXsCdDLiUmlPEczAyUEx5msi03VQqQVrq4KEIroh4dxkg8IbHuWwy87QbkoFV_9JWySVna0gDBJpw03kUipj04IcgyG2rXLzkt-YiyU8YLIJZgu65N6nQaOU3zbQ9WXVvf5DaMOQUvblYq0UNfizwNV7Juj158DdxDihNnn1F-O67RfPjKI4i7OUYmJMzl_Z66nxvcaKrFCCydHqQcfHAuRuqumtkIOJQ"/>
+</a>
+<div class="h-8 w-px bg-slate-200"></div>
+<div class="flex flex-col">
+<span class="text-[11px] font-bold tracking-widest uppercase text-slate-500 font-data-mono">AUDIT FRAMEWORK v4.2</span>
+<span class="text-xs font-semibold text-slate-700">Vendor-Neutral Infrastructure Audits</span>
+</div>
+</div>
+<!-- Center Search Bar with Keyboard Shortcut -->
+<div class="w-[420px]">
+<div class="relative flex items-center">
+<svg class="absolute left-3.5 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input class="w-full bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs text-slate-800 pl-10 pr-14 py-2 rounded border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition" placeholder="벤더 SLA, API 규격, GGR 수수료 비교, 라이선스 검색..." type="search"/>
+<kbd class="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-data-mono text-slate-400 bg-white border border-slate-200 rounded shadow-2xs font-semibold">⌘K</kbd>
+</div>
+</div>
+<!-- Right Utility Actions: Language, CTA, User -->
+<div class="flex items-center space-x-5">
+<!-- Language Switcher -->
+<div class="flex items-center border border-slate-200 rounded p-0.5 bg-slate-50 text-xs font-semibold">
+<button class="px-2 py-1 rounded bg-white text-slate-900 shadow-xs">KO</button>
+<button class="px-2 py-1 text-slate-500 hover:text-slate-800 transition">EN</button>
+</div>
+<!-- Executive Briefing CTA Button -->
+<button class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded transition shadow-sm flex items-center space-x-1.5">
+<svg class="w-3.5 h-3.5 text-sky-400" fill="currentColor" viewbox="0 0 20 20">
+<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+</svg>
+<span>Executive Briefing</span>
+</button>
+<!-- User Avatar & Profile Card -->
+<div class="flex items-center pl-2 border-l border-slate-200 space-x-2.5 cursor-pointer group">
+<div class="relative">
+<img alt="User Avatar" class="w-8 h-8 rounded-full ring-2 ring-slate-200 object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1V6qEGs8bBx255oIvVGJskY8sfjv2NwmYeO8FFijrcMaU3lMYRhMsqgRW49gPS8hep7ZJ5ArGbJdSIOyWPkRvT3Rl9JAV3rl5hvyYUL-Ix_1j-KgFM1h7xOspOCWc1lqQXvlU0xpJVg2gmDSugE4afdKZyMUcJZrVOnubfMRY5TC1J0YnbKTVb-B2YpLNbNdiWyBoClXwwg7sqfCjftZ8WJ9tR-V39-X4YMg1sVpn0wyPguV9sBv8jvaLs"/>
+<span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+</div>
+<div class="text-left hidden xl:block">
+<p class="text-[11px] font-bold text-slate-800 leading-tight">Institutional Member</p>
+<p class="text-[10px] text-slate-500 font-data-mono">T1-CREDENTIAL</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Navigation Taxonomy Bar: Strict 5 Category Order -->
+<nav class="border-t border-slate-200 bg-white">
+<div class="max-w-[1440px] mx-auto px-8 flex items-stretch text-sm font-medium">
+<a class="flex items-center px-5 py-3 border-b-2 border-sky-600 text-sky-900 bg-sky-50/40 font-semibold group transition" href="#category-lease">
+<span class="text-xs font-data-mono text-sky-600 mr-2 font-bold">01</span>
+<span>임대</span>
+<span class="text-xs text-slate-400 font-normal ml-1.5 tracking-tight">(Platform Lease)</span>
+</a>
+<a class="flex items-center px-5 py-3 border-b-2 border-transparent text-slate-700 hover:text-slate-900 hover:border-slate-300 group transition" href="#category-distribution">
+<span class="text-xs font-data-mono text-slate-400 mr-2 group-hover:text-slate-600">02</span>
+<span>분양</span>
+<span class="text-xs text-slate-400 font-normal ml-1.5 tracking-tight">(Distribution)</span>
+</a>
+<a class="flex items-center px-5 py-3 border-b-2 border-transparent text-slate-700 hover:text-slate-900 hover:border-slate-300 group transition" href="#category-custom">
+<span class="text-xs font-data-mono text-slate-400 mr-2 group-hover:text-slate-600">03</span>
+<span>제작</span>
+<span class="text-xs text-slate-400 font-normal ml-1.5 tracking-tight">(Custom Dev)</span>
+</a>
+<a class="flex items-center px-5 py-3 border-b-2 border-transparent text-slate-700 hover:text-slate-900 hover:border-slate-300 group transition" href="#category-pricing">
+<span class="text-xs font-data-mono text-slate-400 mr-2 group-hover:text-slate-600">04</span>
+<span>가격</span>
+<span class="text-xs text-slate-400 font-normal ml-1.5 tracking-tight">(Pricing &amp; CapEx)</span>
+</a>
+<a class="flex items-center px-5 py-3 border-b-2 border-transparent text-slate-700 hover:text-slate-900 hover:border-slate-300 group transition" href="#category-sportsbook">
+<span class="text-xs font-data-mono text-slate-400 mr-2 group-hover:text-slate-600">05</span>
+<span>토토개발</span>
+<span class="text-xs text-slate-400 font-normal ml-1.5 tracking-tight">(Sportsbook Eng)</span>
+</a>
+<!-- Right Side Index Meta -->
+<div class="ml-auto flex items-center space-x-6 text-xs text-slate-500 font-data-mono pr-2">
+<span>Q1/2025 BENCHMARKS</span>
+<span class="h-3 w-px bg-slate-200"></span>
+<span class="text-emerald-700 font-semibold">COVERAGE: 148 VENDORS</span>
+</div>
+</div>
+</nav>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: HeroFeaturedLayout -->
+<section class="bg-white border-b border-slate-200 py-8" data-purpose="hero-featured" id="featured-report">
+<div class="max-w-[1440px] mx-auto px-8">
+<!-- Section Label -->
+<div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-200">
+<div class="flex items-center space-x-2">
+<span class="h-2.5 w-2.5 bg-slate-900"></span>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-900 font-data-mono">INSTITUTIONAL LEAD INTELLIGENCE</h2>
+</div>
+<div class="text-[11px] text-slate-500 font-data-mono">REPORT REF: OBH-2025-Q1-TCO</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Large Card (7 Cols) -->
+<article class="col-span-7 pr-4 fine-border-r flex flex-col justify-between" data-purpose="primary-lead-story">
+<div>
+<!-- Badges -->
+<div class="flex items-center space-x-2 mb-3">
+<span class="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-sky-50 text-sky-800 border border-sky-200 rounded-xs">
+                임대 · 심층 실사
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xs">
+                가격 · TCO
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 text-xs font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200 rounded-xs">
+                Vetted Intelligence
+              </span>
+<span class="text-xs text-slate-400 ml-auto font-data-mono">2025.02.18 KST</span>
+</div>
+<!-- Headline -->
+<h1 class="font-serif-headline text-3xl xl:text-4xl font-bold leading-tight text-slate-950 mb-3 tracking-tight hover:text-sky-900 cursor-pointer transition">
+              2025 아시아 카지노·스포츠북 화이트라벨 벤더 공급 단가 심층 비교: 임대 vs 자체 제작 TCO 분석
+            </h1>
+<p class="text-slate-600 text-sm leading-relaxed mb-6">
+              아시아 iGaming 인프라 벤더 12개사의 턴키 라이선스 계약서와 실제 정산 내역서를 교차 검증했습니다. 월간 고정 서버 인프라 유지비와 GGR(Gross Gaming Revenue) 쉐어 비율, 그리고 36개월 기준 자체 엔진 개발(CapEx) 시의 실질 손익분기점(BEP)을 정량 모델로 공개합니다.
+            </p>
+<!-- Key Metrics Box -->
+<div class="bg-slate-50 rounded border border-slate-200 p-4 mb-6">
+<div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 font-data-mono">Benchmark Metrics Summary (36-Month Model)</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="border-l-2 border-sky-600 pl-3">
+<div class="text-xs text-slate-500 font-medium">평균 GGR 수수료</div>
+<div class="text-2xl font-bold font-data-mono text-slate-900 mt-0.5">11.4<span class="text-sm font-normal text-slate-600">%</span></div>
+<div class="text-[10px] text-slate-400">최저 8.5% ~ 최고 16.0%</div>
+</div>
+<div class="border-l-2 border-emerald-600 pl-3">
+<div class="text-xs text-slate-500 font-medium">셋업 납기 중앙값</div>
+<div class="text-2xl font-bold font-data-mono text-slate-900 mt-0.5">21<span class="text-sm font-normal text-slate-600">일</span></div>
+<div class="text-[10px] text-slate-400">DNS 세팅 및 게임사 API 연동</div>
+</div>
+<div class="border-l-2 border-slate-700 pl-3">
+<div class="text-xs text-slate-500 font-medium">조사 대상 벤더</div>
+<div class="text-2xl font-bold font-data-mono text-slate-900 mt-0.5">12<span class="text-sm font-normal text-slate-600">개사</span></div>
+<div class="text-[10px] text-slate-400">화이트라벨/턴키 티어1 기준</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom: Byline & CTA -->
+<div class="flex items-center justify-between pt-4 border-t border-slate-100">
+<div class="flex items-center space-x-3">
+<img alt="김진우 수석 애널리스트" class="w-10 h-10 rounded-full object-cover ring-1 ring-slate-300" src="https://lh3.googleusercontent.com/aida/AEtjO1V6qEGs8bBx255oIvVGJskY8sfjv2NwmYeO8FFijrcMaU3lMYRhMsqgRW49gPS8hep7ZJ5ArGbJdSIOyWPkRvT3Rl9JAV3rl5hvyYUL-Ix_1j-KgFM1h7xOspOCWc1lqQXvlU0xpJVg2gmDSugE4afdKZyMUcJZrVOnubfMRY5TC1J0YnbKTVb-B2YpLNbNdiWyBoClXwwg7sqfCjftZ8WJ9tR-V39-X4YMg1sVpn0wyPguV9sBv8jvaLs"/>
+<div>
+<p class="text-xs font-bold text-slate-900">김진우 수석 애널리스트</p>
+<p class="text-[11px] text-slate-500">플랫폼 아키텍처 &amp; 금융 공학 데스크</p>
+</div>
+</div>
+<a class="inline-flex items-center justify-center px-4 py-2.5 bg-slate-900 hover:bg-brand-blue text-white text-xs font-semibold rounded transition shadow-sm" href="#full-analysis">
+<span>리포트 열람하기</span>
+<span class="ml-1.5 font-data-mono">→</span>
+</a>
+</div>
+</article>
+<!-- Right Column (5 Cols) Trending Intelligence Cards -->
+<div class="col-span-5 flex flex-col justify-between space-y-4" data-purpose="secondary-featured-feed">
+<!-- Trending Card 1 -->
+<article class="bg-white p-5 rounded border border-slate-200 hover:border-slate-300 hover:shadow-xs transition flex flex-col justify-between h-full">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center px-2 py-0.5 text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 rounded-xs">
+                  토토개발 · 오즈 파이프라인
+                </span>
+<span class="text-[11px] text-slate-400 font-data-mono">READ TIME: 8 MIN</span>
+</div>
+<h3 class="font-serif-headline text-lg font-bold text-slate-900 mb-2 leading-snug hover:text-sky-800 cursor-pointer">
+                스포츠 실시간 배당 오즈 엔진 파이프라인 개발: Betradar &amp; Betgenius API 연동 아키텍처
+              </h3>
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-3">
+                초당 12,000건의 라이브 오즈 틱(Tick)을 처리하는 분산 메시지 큐(Apache Kafka) 파이프라인 구축 상세. 레이턴시 30ms 미만 유지를 위한 인메모리 캐싱과 배당 서스펜션 오토메이션 전략.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500 font-data-mono font-medium">DATA: ARCHITECTURE DIAGRAM INCLUDED</span>
+<span class="text-sky-700 font-semibold hover:underline cursor-pointer">스펙 분석 보기 →</span>
+</div>
+</article>
+<!-- Trending Card 2 -->
+<article class="bg-white p-5 rounded border border-slate-200 hover:border-slate-300 hover:shadow-xs transition flex flex-col justify-between h-full">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center px-2 py-0.5 text-[11px] font-semibold bg-purple-50 text-purple-800 border border-purple-200 rounded-xs">
+                  제작 · 백오피스 벤치마크
+                </span>
+<span class="text-[11px] text-slate-400 font-data-mono">READ TIME: 11 MIN</span>
+</div>
+<h3 class="font-serif-headline text-lg font-bold text-slate-900 mb-2 leading-snug hover:text-sky-800 cursor-pointer">
+                마이크로서비스 아키텍처 기반 카지노 백오피스 구축: Go vs Node.js 실시간 트랜잭션 벤치마크
+              </h3>
+<p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-3">
+                동시 접속 플레이어 50,000명 환경에서 월렛 잔고 동기화와 원장(Ledger) 처리 성능 비교. 분산 락(Distributed Lock) 구현에 따른 트랜잭션 충돌 해결 및 인프라 서버 비용 차이 분석.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500 font-data-mono font-medium">TPS BENCHMARK: 42,000 req/sec</span>
+<span class="text-sky-700 font-semibold hover:underline cursor-pointer">벤치마크 전문 →</span>
+</div>
+</article>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HeroFeaturedLayout -->
+<!-- BEGIN: HorizontalFilterBar -->
+<section class="border-b border-slate-200 bg-slate-100/60 py-3" data-purpose="taxonomy-filter">
+<div class="max-w-[1440px] mx-auto px-8 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-2 font-data-mono">TOPIC FILTER:</span>
+<button class="px-3 py-1 bg-slate-900 text-white rounded text-xs font-semibold shadow-xs">전체 보기 (All 142)</button>
+<button class="px-3 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded text-xs font-medium transition">01 플랫폼 임대 (38)</button>
+<button class="px-3 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded text-xs font-medium transition">02 분양·디스트리뷰터 (27)</button>
+<button class="px-3 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded text-xs font-medium transition">03 커스텀 제작 (31)</button>
+<button class="px-3 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded text-xs font-medium transition">04 단가 및 CapEx (24)</button>
+<button class="px-3 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded text-xs font-medium transition">05 스포츠북 엔지니어링 (22)</button>
+</div>
+<div class="flex items-center space-x-3 text-xs text-slate-500">
+<span class="font-data-mono">SORT:</span>
+<button class="font-bold text-slate-800 underline">최신 실사순</button>
+<span class="text-slate-300">|</span>
+<button class="hover:text-slate-800">벤더 평점순</button>
+<span class="text-slate-300">|</span>
+<button class="hover:text-slate-800">피독점 제보순</button>
+</div>
+</div>
+</section>
+<!-- END: HorizontalFilterBar -->
+<!-- BEGIN: MainContentGrid (70% - 30%) -->
+<main class="max-w-[1440px] mx-auto px-8 py-8">
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Main Intelligence Feed (70% / 8.4 cols approx => 8 Cols or 8.5) -->
+<section class="col-span-8 space-y-6" data-purpose="recent-intelligence-feed">
+<div class="flex items-center justify-between pb-3 border-b border-slate-300">
+<div>
+<h2 class="text-xl font-serif-headline font-bold text-slate-900 tracking-tight">최신 공급망 인텔리전스 피드</h2>
+<p class="text-xs text-slate-500 mt-0.5">글로벌 플랫폼 코어, API 공급사, 결제 게이트웨이 및 관할 규제 실사</p>
+</div>
+<span class="text-xs font-data-mono text-slate-400">REALTIME AUDIT STREAM</span>
+</div>
+<!-- Feed List -->
+<div class="divide-y divide-slate-200">
+<!-- Article Item 1 -->
+<article class="py-6 group" data-purpose="feed-item">
+<div class="flex items-center space-x-2.5 mb-2">
+<span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-sky-100 text-sky-800 rounded-xs">01 임대</span>
+<span class="px-2 py-0.5 text-[10px] font-mono bg-slate-100 text-slate-700 rounded-xs">SLA VERIFICATION</span>
+<span class="text-xs text-slate-400 font-data-mono">2025.02.17</span>
+<span class="text-xs text-slate-300">·</span>
+<span class="text-xs text-slate-500">인프라 보안 감사팀</span>
+</div>
+<h3 class="font-serif-headline text-xl font-bold text-slate-900 group-hover:text-sky-700 transition leading-snug mb-2">
+<a href="#article-1">Tier-1 턴키 플랫폼 임대 시 SLA 체크리스트: DDOS 방어와 실시간 피드 지연율 검증법</a>
+</h3>
+<p class="text-xs text-slate-600 leading-relaxed mb-4">
+              대규모 트래픽 유입 시 다운타임 보상 조항(99.95% vs 99.9%)의 법적 효력과 Anycast DNS 기반 L3/L4/L7 디도스 방어 계층을 실사했습니다. Cloudflare Magic Transit 및 AWS Shield Advanced 연동 옵션에 따른 벤더별 추가 비용 부과 사례 분석.
+            </p>
+<div class="flex items-center justify-between text-xs text-slate-500">
+<div class="flex items-center space-x-4 font-data-mono text-[11px]">
+<span>KEYWORD: Cloudflare, SLA 99.9%, Packet Scrubbing</span>
+<span class="text-slate-300">|</span>
+<span>AUDITED: 8 Turnkey Systems</span>
+</div>
+<a class="text-slate-800 font-semibold group-hover:text-sky-700 inline-flex items-center" href="#article-1">
+                실사 리포트 <span class="ml-1 font-data-mono">→</span>
+</a>
+</div>
+</article>
+<!-- Article Item 2 -->
+<article class="py-6 group" data-purpose="feed-item">
+<div class="flex items-center space-x-2.5 mb-2">
+<span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-xs">02 분양</span>
+<span class="px-2 py-0.5 text-[10px] font-mono bg-slate-100 text-slate-700 rounded-xs">FINANCIAL GOVERNANCE</span>
+<span class="text-xs text-slate-400 font-data-mono">2025.02.15</span>
+<span class="text-xs text-slate-300">·</span>
+<span class="text-xs text-slate-500">정산 시스템 리스크 연구소</span>
+</div>
+<h3 class="font-serif-headline text-xl font-bold text-slate-900 group-hover:text-sky-700 transition leading-snug mb-2">
+<a href="#article-2">마스터 디스트리뷰터(분양) 계약 시 주의할 리베이트 정산 구조 및 하위 에이전트 트리 관리 솔루션</a>
+</h3>
+<p class="text-xs text-slate-600 leading-relaxed mb-4">
+              N-Tier 계층 구조의 하부 총판 에이전트 커미션 롤링(Rolling) 및 루징(Losing) 정산 과정에서 발생하는 마진 압박(Margin Squeeze) 요인을 파헤칩니다. 음수 이월(Negative Carryover) 조항과 멀티 통화 정산 자동화 아키텍처 점검.
+            </p>
+<div class="flex items-center justify-between text-xs text-slate-500">
+<div class="flex items-center space-x-4 font-data-mono text-[11px]">
+<span>KEYWORD: Multi-tier Agent, Rebate Audit, Margin Protection</span>
+<span class="text-slate-300">|</span>
+<span>CASE STUDY: 3 Networks</span>
+</div>
+<a class="text-slate-800 font-semibold group-hover:text-sky-700 inline-flex items-center" href="#article-2">
+                실사 리포트 <span class="ml-1 font-data-mono">→</span>
+</a>
+</div>
+</article>
+<!-- Article Item 3 -->
+<article class="py-6 group" data-purpose="feed-item">
+<div class="flex items-center space-x-2.5 mb-2">
+<span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800 rounded-xs">03 제작 / 04 가격</span>
+<span class="px-2 py-0.5 text-[10px] font-mono bg-slate-100 text-slate-700 rounded-xs">COMPLIANCE CAPEX</span>
+<span class="text-xs text-slate-400 font-data-mono">2025.02.13</span>
+<span class="text-xs text-slate-300">·</span>
+<span class="text-xs text-slate-500">글로벌 규제 감사팀</span>
+</div>
+<h3 class="font-serif-headline text-xl font-bold text-slate-900 group-hover:text-sky-700 transition leading-snug mb-2">
+<a href="#article-3">자체 플랫폼 개발 시 관할권별 라이선스 인증(GLI-19, BMM Testlabs) 비용 산출 모형</a>
+</h3>
+<p class="text-xs text-slate-600 leading-relaxed mb-4">
+              쿠라사오, 몰타(MGA), 필리핀(PAGCOR/FCLRC) 등 주요 규제 지역별 iGaming 플랫폼 원천 소스코드 심사 절차와 인증 랩(GLI/BMM) 검사 수수료 구조를 공개합니다. RNG(난수 생성기) 알고리즘 인증 실패로 인한 개발 지연 리스크 억제 가이드.
+            </p>
+<div class="flex items-center justify-between text-xs text-slate-500">
+<div class="flex items-center space-x-4 font-data-mono text-[11px]">
+<span>KEYWORD: GLI-19 Standard, RNG Certification, CapEx Breakdown</span>
+<span class="text-slate-300">|</span>
+<span>JURISDICTIONS: 5 Regions</span>
+</div>
+<a class="text-slate-800 font-semibold group-hover:text-sky-700 inline-flex items-center" href="#article-3">
+                실사 리포트 <span class="ml-1 font-data-mono">→</span>
+</a>
+</div>
+</article>
+<!-- Article Item 4 -->
+<article class="py-6 group" data-purpose="feed-item">
+<div class="flex items-center space-x-2.5 mb-2">
+<span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 rounded-xs">05 토토개발</span>
+<span class="px-2 py-0.5 text-[10px] font-mono bg-slate-100 text-slate-700 rounded-xs">ALGORITHMIC TRADING</span>
+<span class="text-xs text-slate-400 font-data-mono">2025.02.11</span>
+<span class="text-xs text-slate-300">·</span>
+<span class="text-xs text-slate-500">정량 퀀트 오즈 엔지니어링</span>
+</div>
+<h3 class="font-serif-headline text-xl font-bold text-slate-900 group-hover:text-sky-700 transition leading-snug mb-2">
+<a href="#article-4">실시간 라이브 인플레이(In-Play) 배당 서스펜션 방지 알고리즘 및 웹소켓 메시지 브로커 설계</a>
+</h3>
+<p class="text-xs text-slate-600 leading-relaxed mb-4">
+              경기 중 결정적 순간(VAR 판독, 페널티킥, 레드카드) 발생 시 오즈 급변동에 대응하기 위한 자동 베팅 락(Betting Lock) 지연 시간 최소화 방안. Redis Pub/Sub과 RabbitMQ 클러스터링을 활용한 안정적 동시성 제어 아키텍처.
+            </p>
+<div class="flex items-center justify-between text-xs text-slate-500">
+<div class="flex items-center space-x-4 font-data-mono text-[11px]">
+<span>KEYWORD: WebSocket, In-play Suspension, Low Latency</span>
+<span class="text-slate-300">|</span>
+<span>LATENCY: 12ms Target</span>
+</div>
+<a class="text-slate-800 font-semibold group-hover:text-sky-700 inline-flex items-center" href="#article-4">
+                실사 리포트 <span class="ml-1 font-data-mono">→</span>
+</a>
+</div>
+</article>
+</div>
+<!-- Pagination / Archive Link -->
+<div class="pt-6 border-t border-slate-200 flex items-center justify-between">
+<div class="text-xs text-slate-500 font-data-mono">
+            SHOWING 1 - 4 OF 142 AUDITED PAPERS
+          </div>
+<div class="flex items-center space-x-2">
+<button class="px-3 py-1.5 border border-slate-200 bg-white text-xs font-semibold text-slate-700 rounded hover:bg-slate-50 disabled:opacity-50" disabled="">← 이전</button>
+<span class="px-3 py-1.5 bg-slate-900 text-white text-xs font-data-mono font-bold rounded">1</span>
+<button class="px-3 py-1.5 border border-slate-200 bg-white text-xs font-data-mono text-slate-700 rounded hover:bg-slate-50">2</button>
+<button class="px-3 py-1.5 border border-slate-200 bg-white text-xs font-data-mono text-slate-700 rounded hover:bg-slate-50">3</button>
+<span class="px-1 text-slate-400">...</span>
+<button class="px-3 py-1.5 border border-slate-200 bg-white text-xs font-semibold text-slate-700 rounded hover:bg-slate-50">다음 →</button>
+</div>
+</div>
+</section>
+<!-- Right Column: Institutional Sidebar (30% / 4 Cols) -->
+<aside class="col-span-4 space-y-6" data-purpose="institutional-sidebar">
+<!-- Widget 1: Weekly Top 5 Read Intelligence -->
+<div class="bg-white p-5 rounded border border-slate-200 shadow-2xs" data-purpose="trending-widget">
+<div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-200">
+<h3 class="text-xs font-bold text-slate-900 tracking-wider uppercase font-data-mono flex items-center">
+<span class="w-2 h-2 bg-sky-600 mr-2 rounded-full"></span>
+              주간 최다 열람 인텔리전스
+            </h3>
+<span class="text-[10px] text-slate-400 font-data-mono">TOP READS</span>
+</div>
+<ol class="divide-y divide-slate-100 text-xs">
+<li class="py-3 flex items-start space-x-3">
+<span class="font-data-mono text-base font-bold text-slate-400 shrink-0 w-4">01</span>
+<div>
+<a class="font-serif-headline font-semibold text-slate-900 hover:text-sky-700 leading-tight block" href="#">
+                  동남아시아 타깃 화이트라벨 솔루션 5사 백도어 취약점 코드 감사 결과
+                </a>
+<div class="mt-1 flex items-center space-x-2 text-[11px] text-slate-500 font-data-mono">
+<span class="text-rose-600 font-medium">SECURITY</span>
+<span>·</span>
+<span>4,821 VIEW</span>
+</div>
+</div>
+</li>
+<li class="py-3 flex items-start space-x-3">
+<span class="font-data-mono text-base font-bold text-slate-400 shrink-0 w-4">02</span>
+<div>
+<a class="font-serif-headline font-semibold text-slate-900 hover:text-sky-700 leading-tight block" href="#">
+                  에볼루션 게이밍 API 다이렉트 연동 시 최소 보증금(MG) 및 GGR 수수료 테이블
+                </a>
+<div class="mt-1 flex items-center space-x-2 text-[11px] text-slate-500 font-data-mono">
+<span class="text-sky-600 font-medium">CASINO API</span>
+<span>·</span>
+<span>3,940 VIEW</span>
+</div>
+</div>
+</li>
+<li class="py-3 flex items-start space-x-3">
+<span class="font-data-mono text-base font-bold text-slate-400 shrink-0 w-4">03</span>
+<div>
+<a class="font-serif-headline font-semibold text-slate-900 hover:text-sky-700 leading-tight block" href="#">
+                  국내 결제 대행(PG) 가상계좌 및 코인 입출금 게이트웨이 연동 리스크 가이드
+                </a>
+<div class="mt-1 flex items-center space-x-2 text-[11px] text-slate-500 font-data-mono">
+<span class="text-amber-600 font-medium">PAYMENT</span>
+<span>·</span>
+<span>3,219 VIEW</span>
+</div>
+</div>
+</li>
+<li class="py-3 flex items-start space-x-3">
+<span class="font-data-mono text-base font-bold text-slate-400 shrink-0 w-4">04</span>
+<div>
+<a class="font-serif-headline font-semibold text-slate-900 hover:text-sky-700 leading-tight block" href="#">
+                  Kambi vs Altenar: 스포츠북 B2B 엔진 피드 안정성 및 현지화 마진 비교
+                </a>
+<div class="mt-1 flex items-center space-x-2 text-[11px] text-slate-500 font-data-mono">
+<span class="text-blue-600 font-medium">ODDS ENGINE</span>
+<span>·</span>
+<span>2,850 VIEW</span>
+</div>
+</div>
+</li>
+<li class="py-3 flex items-start space-x-3">
+<span class="font-data-mono text-base font-bold text-slate-400 shrink-0 w-4">05</span>
+<div>
+<a class="font-serif-headline font-semibold text-slate-900 hover:text-sky-700 leading-tight block" href="#">
+                  총판 분양 플랫폼 계약 해지 시 DB 소유권 분쟁 및 암호화 마이그레이션 판례
+                </a>
+<div class="mt-1 flex items-center space-x-2 text-[11px] text-slate-500 font-data-mono">
+<span class="text-emerald-600 font-medium">CONTRACT</span>
+<span>·</span>
+<span>2,411 VIEW</span>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<!-- Widget 2: Editorial Independence Box -->
+<div class="bg-slate-900 text-slate-300 p-5 rounded border border-slate-800" data-purpose="charter-widget">
+<div class="flex items-center space-x-2 text-sky-400 mb-2">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-xs font-bold uppercase tracking-wider font-data-mono">EDITORIAL INDEPENDENCE</span>
+</div>
+<h4 class="font-serif-headline text-white text-base font-bold mb-2">편집권 독립 헌장</h4>
+<p class="text-[11px] text-slate-400 leading-relaxed mb-3">
+            OneBetHub는 게이밍 플랫폼 공급업체로부터 광고비를 받고 실사 순위를 조작하지 않습니다. 모든 벤더 평점과 TCO 산출 모델은 익명 계약서 원본과 네트워크 패킷 모니터링 로그에 기반한 객관적 팩트만을 게재합니다.
+          </p>
+<div class="pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] font-data-mono text-slate-400">
+<span>GOVERNANCE AUDIT: VERIFIED</span>
+<a class="text-sky-400 hover:underline" href="#charter">윤리강령 전문 보기 →</a>
+</div>
+</div>
+<!-- Widget 3: Spec Matrix & API Benchmark Database Callout -->
+<div class="bg-gradient-to-br from-sky-50 to-slate-100 p-5 rounded border border-sky-200" data-purpose="database-callout">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-sky-800 bg-sky-200/60 px-2 py-0.5 rounded font-data-mono">PRO SUBSCRIBER TOOL</span>
+<span class="text-[10px] text-slate-500 font-data-mono">v2025.2</span>
+</div>
+<h4 class="font-serif-headline text-base font-bold text-slate-900 mb-1">
+            글로벌 iGaming 벤더 스펙 매트릭스 &amp; API 대조표
+          </h4>
+<p class="text-xs text-slate-600 mb-4 leading-relaxed">
+            전 세계 148개 화이트라벨/턴키 및 게임 공급사의 실시간 가동률, WebSocket 레이턴시, GGR 최저 계약 조건 원본 데이터를 직접 필터링하십시오.
+          </p>
+<a class="block w-full text-center bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-2.5 rounded transition" href="#database">
+            벤더 대조 매트릭스 DB 접속 →
+          </a>
+</div>
+<!-- Widget 4: Newsletter Signup -->
+<div class="bg-white p-5 rounded border border-slate-200 shadow-2xs" data-purpose="newsletter-widget">
+<div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-data-mono mb-1">EXECUTIVE BRIEFING</div>
+<h4 class="font-serif-headline text-base font-bold text-slate-900 mb-2">매주 화요일, 심층 리포트를 수신하세요</h4>
+<p class="text-xs text-slate-600 mb-3 leading-relaxed">
+            C-레벨 경영진 및 플랫폼 아키텍트를 위한 주간 공급망 단가 변동 및 미공개 인프라 감사 브리핑을 이메일로 전송합니다.
+          </p>
+<form class="space-y-2" onsubmit="event.preventDefault();">
+<input class="w-full text-xs px-3 py-2 border border-slate-300 rounded focus:border-slate-500 focus:ring-1 focus:ring-slate-500" placeholder="corporate@company.com" required="" type="email"/>
+<button class="w-full bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold py-2 rounded transition" type="submit">
+              기업용 브리핑 무료 구독
+            </button>
+</form>
+<div class="mt-2 text-[10px] text-slate-400 text-center font-data-mono">NO SPAM. STRICT CONFIDENTIALITY.</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- END: MainContentGrid -->
+<!-- BEGIN: InstitutionalFooter -->
+<footer class="bg-slate-950 text-slate-400 text-xs border-t border-slate-800 mt-16 pt-12 pb-8">
+<div class="max-w-[1440px] mx-auto px-8">
+<!-- Top Columns -->
+<div class="grid grid-cols-12 gap-8 pb-10 border-b border-slate-800">
+<!-- Corporate Identification -->
+<div class="col-span-4 space-y-3">
+<div class="flex items-center space-x-3">
+<img alt="OneBetHub Logo" class="h-9 w-auto brightness-0 invert" src="https://lh3.googleusercontent.com/aida/AEtjO1WG7r9GCESwQOKBqcJ305IUndhXsCdDLiUmlPEczAyUEx5msi03VQqQVrq4KEIroh4dxkg8IbHuWwy87QbkoFV_9JWySVna0gDBJpw03kUipj04IcgyG2rXLzkt-YiyU8YLIJZgu65N6nQaOU3zbQ9WXVvf5DaMOQUvblYq0UNfizwNV7Juj158DdxDihNnn1F-O67RfPjKI4i7OUYmJMzl_Z66nxvcaKrFCCydHqQcfHAuRuqumtkIOJQ"/>
+</div>
+<p class="text-slate-400 leading-relaxed text-xs max-w-sm">
+            OneBetHub는 글로벌 온라인 카지노, 스포츠북 배당 엔진 및 화이트라벨 소프트웨어 공급망을 감사·조사하는 독립 B2B 인텔리전스 미디어입니다.
+          </p>
+<div class="text-[11px] font-data-mono text-slate-400">
+            B2B INTELLIGENCE GROUP PTE. LTD. | REG NO: 202394810-C
+          </div>
+</div>
+<!-- 5 Category Taxonomy Links -->
+<div class="col-span-3 space-y-2">
+<div class="text-slate-200 font-bold tracking-wider uppercase text-[11px] font-data-mono">TAXONOMY &amp; RESEARCH</div>
+<ul class="space-y-1.5 text-xs">
+<li><a class="hover:text-white transition" href="#category-lease">01 플랫폼 임대 (Platform Lease SLA)</a></li>
+<li><a class="hover:text-white transition" href="#category-distribution">02 분양 인프라 (Distribution Architecture)</a></li>
+<li><a class="hover:text-white transition" href="#category-custom">03 커스텀 제작 (Custom Software Engineering)</a></li>
+<li><a class="hover:text-white transition" href="#category-pricing">04 단가 및 수수료 (Pricing &amp; CapEx Model)</a></li>
+<li><a class="hover:text-white transition" href="#category-sportsbook">05 스포츠북 개발 (Sportsbook &amp; Odds API)</a></li>
+</ul>
+</div>
+<!-- Governance & Ethics -->
+<div class="col-span-2 space-y-2">
+<div class="text-slate-200 font-bold tracking-wider uppercase text-[11px] font-data-mono">GOVERNANCE</div>
+<ul class="space-y-1.5 text-xs">
+<li><a class="hover:text-white transition" href="#charter">편집권 독립 선언서</a></li>
+<li><a class="hover:text-white transition" href="#methodology">벤더 평가 방법론 (V-Score)</a></li>
+<li><a class="hover:text-white transition" href="#whistleblower">익명 제보 창구 (Signal)</a></li>
+<li><a class="hover:text-white transition" href="#corrections">정정 및 반론 보도 정책</a></li>
+<li><a class="hover:text-white transition" href="#compliance">관할권 라이선스 현황</a></li>
+</ul>
+</div>
+<!-- Analyst Desk Contact -->
+<div class="col-span-3 space-y-2">
+<div class="text-slate-200 font-bold tracking-wider uppercase text-[11px] font-data-mono">ANALYST CONTACT &amp; INQUIRIES</div>
+<p class="text-slate-400 text-xs leading-relaxed">
+            벤더 실사 제보, SLA 분쟁 데이터 제공 및 기업 구독 문의:
+          </p>
+<div class="font-data-mono text-slate-200 text-xs">
+<p>E: <a class="text-sky-400 hover:underline" href="mailto:desk@onebethub.com">desk@onebethub.com</a></p>
+<p>PGP KEY: 4F2A 991B 882E 100C</p>
+<p>TEL: +65 6712 9010 (Analyst Direct)</p>
+</div>
+</div>
+</div>
+<!-- Bottom Disclaimer & Copyright -->
+<div class="pt-6 flex flex-col md:flex-row items-center justify-between text-[11px] text-slate-400 space-y-3 md:space-y-0">
+<p class="max-w-3xl leading-relaxed">
+<strong>Institutional Disclaimer:</strong> 본 매체에 게재된 인텔리전스는 공익적 정보 제공 및 기술적 소프트웨어 아키텍처 비교를 목적으로 하며, 특정 관할권에서 불법으로 규정된 도박 영업을 조장하거나 유인하지 않습니다. 모든 이용자는 소재 지역 법률을 준수할 책임이 있습니다.
+        </p>
+<p class="shrink-0 font-data-mono">
+          © 2025 OneBetHub Intelligence Group. All rights reserved.
+        </p>
+</div>
+</div>
+</footer>
+<!-- END: InstitutionalFooter -->
+</body></html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OneBetHub | 01 임대 (Platform Rental &amp; Lease) - B2B iGaming Intelligence</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              slate: '#0F172A',
+              navy: '#0B132B',
+              primary: '#0284C7',
+              accent: '#38BDF8',
+              muted: '#64748B',
+              surface: '#F8FAFC',
+              border: '#E2E8F0',
+              highlight: '#F0F9FF'
+            }
+          },
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            serif: ['Newsreader', 'Georgia', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&display=swap');
+    
+    .font-newsreader {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+    
+    body {
+      color: #1E293B;
+      background-color: #F8FAFC;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+<style data-purpose="custom-components">
+    .tag-pill-active {
+      background-color: #0F172A;
+      color: #FFFFFF;
+      border-color: #0F172A;
+    }
+    .tag-pill {
+      background-color: #FFFFFF;
+      color: #475569;
+      border-color: #E2E8F0;
+    }
+    .tag-pill:hover {
+      background-color: #F1F5F9;
+      color: #0F172A;
+    }
+  </style>
+</head>
+<body class="min-w-[1440px] text-slate-800 antialiased selection:bg-sky-100 selection:text-sky-900">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm" data-purpose="persistent-header">
+<div class="max-w-[1440px] mx-auto px-8 h-20 flex items-center justify-between">
+<!-- Left side: Brand Logo -->
+<div class="flex items-center gap-8">
+<a class="flex items-center" href="#" title="OneBetHub B2B Intel">
+<img alt="OneBetHub Logo" class="h-11 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WG7r9GCESwQOKBqcJ305IUndhXsCdDLiUmlPEczAyUEx5msi03VQqQVrq4KEIroh4dxkg8IbHuWwy87QbkoFV_9JWySVna0gDBJpw03kUipj04IcgyG2rXLzkt-YiyU8YLIJZgu65N6nQaOU3zbQ9WXVvf5DaMOQUvblYq0UNfizwNV7Juj158DdxDihNnn1F-O67RfPjKI4i7OUYmJMzl_Z66nxvcaKrFCCydHqQcfHAuRuqumtkIOJQ"/>
+</a>
+<!-- Desktop Navigation Bar: 5 Core Categories -->
+<nav aria-label="Main Navigation" class="flex items-center space-x-1">
+<!-- Active Category: 01 임대 -->
+<a class="px-4 py-2 text-sm font-bold text-sky-600 border-b-2 border-sky-600 flex items-center gap-1.5 transition-colors" href="#">
+<span class="text-xs px-1.5 py-0.5 rounded bg-sky-50 text-sky-600 font-mono">01</span>
+<span>임대</span>
+<span class="text-[11px] text-slate-400 font-normal tracking-tight">Lease</span>
+</a>
+<a class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:border-b-2 hover:border-slate-300 flex items-center gap-1.5 transition-colors" href="#">
+<span class="text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono">02</span>
+<span>분양</span>
+<span class="text-[11px] text-slate-400 font-normal tracking-tight">White-label</span>
+</a>
+<a class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:border-b-2 hover:border-slate-300 flex items-center gap-1.5 transition-colors" href="#">
+<span class="text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono">03</span>
+<span>제작</span>
+<span class="text-[11px] text-slate-400 font-normal tracking-tight">Custom Dev</span>
+</a>
+<a class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:border-b-2 hover:border-slate-300 flex items-center gap-1.5 transition-colors" href="#">
+<span class="text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono">04</span>
+<span>가격</span>
+<span class="text-[11px] text-slate-400 font-normal tracking-tight">Pricing Index</span>
+</a>
+<a class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:border-b-2 hover:border-slate-300 flex items-center gap-1.5 transition-colors" href="#">
+<span class="text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono">05</span>
+<span>토토개발</span>
+<span class="text-[11px] text-slate-400 font-normal tracking-tight">Sportsbook</span>
+</a>
+</nav>
+</div>
+<!-- Right side: Global Search, KO/EN Toggle, CTA & Analyst Profile -->
+<div class="flex items-center gap-4">
+<!-- Search Bar -->
+<div class="relative w-64">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<input class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-100 hover:bg-slate-50 focus:bg-white text-slate-800 placeholder-slate-400 rounded-md border border-transparent focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 transition" placeholder="벤더, SLA 스펙, 라이선스 검색..." type="text"/>
+</div>
+<!-- Language Toggle -->
+<div class="flex items-center bg-slate-100 rounded-md p-0.5 text-xs font-semibold border border-slate-200">
+<button class="px-2 py-1 bg-white text-slate-900 rounded shadow-xs">KO</button>
+<button class="px-2 py-1 text-slate-500 hover:text-slate-800">EN</button>
+</div>
+<!-- CTA Button -->
+<button class="px-3.5 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-md shadow-sm transition flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-sky-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" fill-rule="evenodd"></path></svg>
+          Executive Briefing
+        </button>
+<!-- User/Analyst Avatar -->
+<div class="flex items-center pl-2 border-l border-slate-200">
+<div class="relative group cursor-pointer">
+<img alt="Senior B2B Analyst" class="w-9 h-9 rounded-full object-cover border border-slate-300 ring-2 ring-transparent group-hover:ring-sky-500 transition" src="https://lh3.googleusercontent.com/aida/AEtjO1V6qEGs8bBx255oIvVGJskY8sfjv2NwmYeO8FFijrcMaU3lMYRhMsqgRW49gPS8hep7ZJ5ArGbJdSIOyWPkRvT3Rl9JAV3rl5hvyYUL-Ix_1j-KgFM1h7xOspOCWc1lqQXvlU0xpJVg2gmDSugE4afdKZyMUcJZrVOnubfMRY5TC1J0YnbKTVb-B2YpLNbNdiWyBoClXwwg7sqfCjftZ8WJ9tR-V39-X4YMg1sVpn0wyPguV9sBv8jvaLs"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: BreadcrumbNavigation -->
+<div class="bg-white border-b border-slate-100 py-2.5" data-purpose="breadcrumb">
+<div class="max-w-[1440px] mx-auto px-8 flex items-center space-x-2 text-xs text-slate-500">
+<a class="hover:text-slate-900 transition flex items-center gap-1" href="#">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Home</span>
+</a>
+<span class="text-slate-300">/</span>
+<span class="hover:text-slate-900 cursor-pointer">카테고리</span>
+<span class="text-slate-300">/</span>
+<span class="font-semibold text-slate-900">임대 (Platform Lease)</span>
+</div>
+</div>
+<!-- END: BreadcrumbNavigation -->
+<main class="max-w-[1440px] mx-auto px-8 py-8" data-purpose="main-layout">
+<!-- BEGIN: CategoryHeaderHero -->
+<section class="bg-white rounded-xl border border-slate-200 p-8 mb-8 shadow-xs" data-purpose="category-hero">
+<div class="flex flex-col gap-6">
+<!-- Status Badge & Category Title -->
+<div>
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold mb-3">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            VERTICAL 01 • 실시간 데이터 갱신 완료 (Live Audit Active)
+          </div>
+<h1 class="text-3xl font-extrabold text-slate-900 tracking-tight flex items-baseline gap-3">
+            임대 <span class="font-newsreader italic font-normal text-2xl text-slate-500 tracking-normal">Platform Rental &amp; Lease</span>
+</h1>
+<p class="mt-3 text-slate-600 text-sm leading-relaxed max-w-4xl">
+            완제품형 턴키(Turnkey) 및 화이트라벨(White-label) 카지노·스포츠북 솔루션의 공급 계약, SLA 기준, 서버 인프라 호스팅 비용 및 벤더 평가 보고서를 다룹니다. 독립 감사 데이터만을 기반으로 편향 없는 B2B 공급망 벤치마크를 제공합니다.
+          </p>
+</div>
+<!-- Metric Grid -->
+<div class="grid grid-cols-4 gap-4 pt-4 border-t border-slate-100" data-purpose="metrics-grid">
+<div class="p-4 rounded-lg bg-slate-50 border border-slate-200/80">
+<div class="text-xs font-medium text-slate-500 uppercase tracking-wider">등록 벤더 보고서</div>
+<div class="mt-1 text-2xl font-bold text-slate-900">48<span class="text-sm font-medium text-slate-600 ml-1">건</span></div>
+<div class="text-[11px] text-emerald-600 mt-1 flex items-center gap-0.5">
+<span>↑ 분기 신규 6건 추가</span>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-slate-50 border border-slate-200/80">
+<div class="text-xs font-medium text-slate-500 uppercase tracking-wider">평균 셋업 기간</div>
+<div class="mt-1 text-2xl font-bold text-slate-900">14<span class="text-sm font-medium text-slate-600 ml-1">일</span></div>
+<div class="text-[11px] text-slate-500 mt-1">Turnkey 기준 (DNS 및 API 연동)</div>
+</div>
+<div class="p-4 rounded-lg bg-slate-50 border border-slate-200/80">
+<div class="text-xs font-medium text-slate-500 uppercase tracking-wider">평균 GGR 셰어 요율</div>
+<div class="mt-1 text-2xl font-bold text-sky-700">12~18<span class="text-sm font-medium text-slate-600 ml-1">%</span></div>
+<div class="text-[11px] text-slate-500 mt-1">티어별 차등화 (월 최소 개런티 별도)</div>
+</div>
+<div class="p-4 rounded-lg bg-slate-50 border border-slate-200/80">
+<div class="text-xs font-medium text-slate-500 uppercase tracking-wider">조사 대상 관할권</div>
+<div class="mt-1 text-2xl font-bold text-slate-900">6<span class="text-sm font-medium text-slate-600 ml-1">개국</span></div>
+<div class="text-[11px] text-slate-500 mt-1 truncate" title="몰타 MGA, 퀴라소 GCB, PAGCOR, 맨섬 등">MGA, 퀴라소, PAGCOR, 맨섬 등</div>
+</div>
+</div>
+<!-- Category Download CTA Banner -->
+<div class="bg-gradient-to-r from-slate-900 via-slate-800 to-sky-950 rounded-lg p-5 text-white flex items-center justify-between shadow-md" data-purpose="cta-banner">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-300">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-sky-400/10 text-sky-300 text-[11px] font-semibold">
+<span>NEW RELEASE</span> • <span>VERIFIED AUDIT</span>
+</div>
+<h3 class="text-base font-bold text-white mt-0.5">2025 Q1 플랫폼 임대 공급사 스펙 비교표 (PDF + XLSX 38p) 다운로드</h3>
+<p class="text-xs text-slate-300">최신 48개 B2B 솔루션 제공사 기능 명세, GGR 요율표, DDOS 방어 용량 실측치 포함</p>
+</div>
+</div>
+<button class="px-5 py-2.5 rounded-md bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs tracking-wide shadow transition whitespace-nowrap flex items-center gap-2">
+<span>인텔 브리핑 팩 다운로드</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</section>
+<!-- END: CategoryHeaderHero -->
+<!-- BEGIN: SubcategoryFilterBar -->
+<div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200" data-purpose="filter-bar">
+<!-- Subcategory Pills -->
+<div class="flex items-center gap-2">
+<button class="tag-pill-active text-xs font-semibold px-3.5 py-1.5 rounded-full border transition flex items-center gap-1.5">
+<span>전체보기</span>
+<span class="bg-slate-700 text-white text-[10px] px-1.5 py-0.2 rounded-full">48</span>
+</button>
+<button class="tag-pill text-xs font-medium px-3.5 py-1.5 rounded-full border transition">
+          턴키 솔루션 (Turnkey)
+        </button>
+<button class="tag-pill text-xs font-medium px-3.5 py-1.5 rounded-full border transition">
+          화이트라벨 (White-label)
+        </button>
+<button class="tag-pill text-xs font-medium px-3.5 py-1.5 rounded-full border transition">
+          SLA 및 호스팅 인프라
+        </button>
+<button class="tag-pill text-xs font-medium px-3.5 py-1.5 rounded-full border transition">
+          관할권별 라이선스
+        </button>
+</div>
+<!-- Sorting Controller -->
+<div class="flex items-center gap-3">
+<span class="text-xs text-slate-500 font-medium">정렬 기준:</span>
+<div class="relative">
+<select class="appearance-none bg-white border border-slate-200 text-slate-700 text-xs font-semibold py-1.5 pl-3 pr-8 rounded-md hover:border-slate-300 focus:outline-none focus:ring-1 focus:ring-sky-500 cursor-pointer">
+<option selected="">최신순 (Latest)</option>
+<option>조회순 (Popular)</option>
+<option>SLA 평가점수순 (High Rating)</option>
+<option>비용 인덱스순 (Cost Effective)</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<!-- END: SubcategoryFilterBar -->
+<!-- BEGIN: TwoColumnContentLayout -->
+<div class="grid grid-cols-12 gap-8" data-purpose="content-grid">
+<!-- LEFT COLUMN: Main List (70% = 8 cols) -->
+<section class="col-span-8 space-y-4" data-purpose="report-list">
+<!-- Report Item 1 -->
+<article class="bg-white border border-slate-200 hover:border-sky-300 rounded-xl p-6 transition-all duration-200 shadow-xs hover:shadow-md">
+<div class="flex items-start justify-between">
+<div class="space-y-2 max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 uppercase tracking-wide">턴키 솔루션</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600">SLA 검증</span>
+<span class="text-xs text-slate-400">• 2025.02.18</span>
+<span class="text-xs text-slate-400">• 읽는 시간 9분</span>
+</div>
+<h2 class="text-lg font-bold text-slate-900 hover:text-sky-600 transition cursor-pointer">
+                Tier-1 턴키 플랫폼 임대 시 SLA 체크리스트: DDOS 방어와 실시간 피드 지연율 검증법
+              </h2>
+<p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                글로벌 공급사 계약서 상의 가용률 99.9% 약정이 실제 피크 타임 스포츠 이벤트(챔피언스리그, 슈퍼볼 등) 시 유지되는지 여부를 검증하는 기술적 프레임워크를 공개합니다. L7 계층 완화 장비와 멀티 CDN 구성 실태 분석.
+              </p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1.5 rounded hover:bg-slate-50 transition" title="북마크 저장">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center gap-3 text-slate-500">
+<span class="font-medium text-slate-700">심층 리포트 #TR-2025-014</span>
+<span>데이터셋 14건 첨부</span>
+</div>
+<a class="inline-flex items-center gap-1 font-bold text-sky-600 hover:text-sky-700 transition" href="#">
+<span>리포트 열람하기</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</article>
+<!-- Report Item 2 -->
+<article class="bg-white border border-slate-200 hover:border-sky-300 rounded-xl p-6 transition-all duration-200 shadow-xs hover:shadow-md">
+<div class="flex items-start justify-between">
+<div class="space-y-2 max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 uppercase tracking-wide">화이트라벨</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600">비용 비교</span>
+<span class="text-xs text-slate-400">• 2025.02.14</span>
+<span class="text-xs text-slate-400">• 읽는 시간 12분</span>
+</div>
+<h2 class="text-lg font-bold text-slate-900 hover:text-sky-600 transition cursor-pointer">
+                소규모 오퍼레이터를 위한 화이트라벨 임대 솔루션 TOP 5 비교: 초기 보증금과 월 런닝 개런티
+              </h2>
+<p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                신규 시장 진입 시 CAPEX를 최소화할 수 있는 주요 임대 공급사 5곳의 계약 조건을 심층 비교 분석했습니다. 최소 보증금(Security Deposit) 조항, GGR 정산 구조, 결제 게이트웨이(PSP) 셋업 피의 숨겨진 비용 항목을 검토합니다.
+              </p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1.5 rounded hover:bg-slate-50 transition" title="북마크 저장">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center gap-3 text-slate-500">
+<span class="font-medium text-slate-700">심층 리포트 #WL-2025-008</span>
+<span>비교 테이블 XLSX 포함</span>
+</div>
+<a class="inline-flex items-center gap-1 font-bold text-sky-600 hover:text-sky-700 transition" href="#">
+<span>리포트 열람하기</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</article>
+<!-- Report Item 3 -->
+<article class="bg-white border border-slate-200 hover:border-sky-300 rounded-xl p-6 transition-all duration-200 shadow-xs hover:shadow-md">
+<div class="flex items-start justify-between">
+<div class="space-y-2 max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 uppercase tracking-wide">라이브 카지노</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600">대역폭 최적화</span>
+<span class="text-xs text-slate-400">• 2025.02.10</span>
+<span class="text-xs text-slate-400">• 읽는 시간 8분</span>
+</div>
+<h2 class="text-lg font-bold text-slate-900 hover:text-sky-600 transition cursor-pointer">
+                실시간 라이브 카지노 스튜디오 피드 임대 단가와 대역폭 비용 최적화 방안
+              </h2>
+<p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                에볼루션, 프라그마틱 플레이 등 주요 라이브 딜러 프로바이더의 비디오 스트림 트래픽 과금 구조를 진단합니다. 모바일 환경에서의 WebRTC/HLS 최적화와 ISP 간 피어링 캐싱을 통한 데이터 비용 28% 절감 실증 사례.
+              </p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1.5 rounded hover:bg-slate-50 transition" title="북마크 저장">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center gap-3 text-slate-500">
+<span class="font-medium text-slate-700">기술 감사 #LC-2025-003</span>
+<span>아키텍처 다이어그램 수록</span>
+</div>
+<a class="inline-flex items-center gap-1 font-bold text-sky-600 hover:text-sky-700 transition" href="#">
+<span>리포트 열람하기</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</article>
+<!-- Report Item 4 -->
+<article class="bg-white border border-slate-200 hover:border-sky-300 rounded-xl p-6 transition-all duration-200 shadow-xs hover:shadow-md">
+<div class="flex items-start justify-between">
+<div class="space-y-2 max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 uppercase tracking-wide">인프라 아키텍처</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600">호스팅 보안</span>
+<span class="text-xs text-slate-400">• 2025.02.04</span>
+<span class="text-xs text-slate-400">• 읽는 시간 11분</span>
+</div>
+<h2 class="text-lg font-bold text-slate-900 hover:text-sky-600 transition cursor-pointer">
+                클라우드 vs 온프레미스 인프라: 임대 솔루션 보안 아키텍처와 전용선 구성
+              </h2>
+<p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                AWS/GCP 하이브리드 클라우드 형태의 임대 플랫폼과 몰타/퀴라소 현지 데이터센터 전용 코로케이션 서버 간의 레이턴시 비교. 규제 기관 감사 통과를 위한 데이터 보존 연한 및 백업 복구(DR) 프로토콜 체크.
+              </p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1.5 rounded hover:bg-slate-50 transition" title="북마크 저장">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center gap-3 text-slate-500">
+<span class="font-medium text-slate-700">보안 심층 #SEC-2025-021</span>
+<span>DR 벤치마크 테스트</span>
+</div>
+<a class="inline-flex items-center gap-1 font-bold text-sky-600 hover:text-sky-700 transition" href="#">
+<span>리포트 열람하기</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</article>
+<!-- Report Item 5 -->
+<article class="bg-white border border-slate-200 hover:border-sky-300 rounded-xl p-6 transition-all duration-200 shadow-xs hover:shadow-md">
+<div class="flex items-start justify-between">
+<div class="space-y-2 max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 uppercase tracking-wide">백오피스 감사</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600">Fraud 감지</span>
+<span class="text-xs text-slate-400">• 2025.01.29</span>
+<span class="text-xs text-slate-400">• 읽는 시간 14분</span>
+</div>
+<h2 class="text-lg font-bold text-slate-900 hover:text-sky-600 transition cursor-pointer">
+                임대 솔루션 도입 시 백오피스 리포팅 시스템의 필수 감사 요건과 부정 거래 방지(Anti-skimming)
+              </h2>
+<p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                서드파티 플랫폼 벤더가 제공하는 백오피스 원장의 신뢰성을 보장하는 실시간 롤백 감지, 양방 배팅 및 보너스 어뷰징 모니터링 모듈의 완성도를 평가합니다. 내부 직원 권한 통제(RBAC) 표준 가이드.
+              </p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1.5 rounded hover:bg-slate-50 transition" title="북마크 저장">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center gap-3 text-slate-500">
+<span class="font-medium text-slate-700">감사 표준 #AUD-2025-007</span>
+<span>체크리스트 28문항</span>
+</div>
+<a class="inline-flex items-center gap-1 font-bold text-sky-600 hover:text-sky-700 transition" href="#">
+<span>리포트 열람하기</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</article>
+<!-- Report Item 6 -->
+<article class="bg-white border border-slate-200 hover:border-sky-300 rounded-xl p-6 transition-all duration-200 shadow-xs hover:shadow-md">
+<div class="flex items-start justify-between">
+<div class="space-y-2 max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-800 uppercase tracking-wide">결제 모듈</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600">암호화폐 인프라</span>
+<span class="text-xs text-slate-400">• 2025.01.22</span>
+<span class="text-xs text-slate-400">• 읽는 시간 10분</span>
+</div>
+<h2 class="text-lg font-bold text-slate-900 hover:text-sky-600 transition cursor-pointer">
+                멀티 통화 및 암호화폐 결제 모듈이 기본 탑재된 임대 플랫폼 벤더 평가 기준
+              </h2>
+<p class="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                USDT, BTC 등 온체인 자동 입출금 결제 모듈 및 각국 로컬 은행 자동 계좌이체 연동 완성도 점검. 핫월렛 잔고 리밸런싱 주기와 입금 트랜잭션 승인 속도 실측 벤치마크 데이터를 공개합니다.
+              </p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1.5 rounded hover:bg-slate-50 transition" title="북마크 저장">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center gap-3 text-slate-500">
+<span class="font-medium text-slate-700">결제 게이트웨이 #PSP-2025-011</span>
+<span>12개사 비교표</span>
+</div>
+<a class="inline-flex items-center gap-1 font-bold text-sky-600 hover:text-sky-700 transition" href="#">
+<span>리포트 열람하기</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</article>
+<!-- Pagination -->
+<nav aria-label="Pagination" class="flex items-center justify-center gap-1 pt-8 pb-4" data-purpose="pagination">
+<button class="px-3 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-400 cursor-not-allowed">
+            « 처음
+          </button>
+<button class="px-3 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-400 cursor-not-allowed">
+            &lt; 이전
+          </button>
+<button class="px-3.5 py-1.5 rounded border border-slate-900 bg-slate-900 text-xs font-bold text-white shadow-xs">
+            1
+          </button>
+<button class="px-3.5 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            2
+          </button>
+<button class="px-3.5 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            3
+          </button>
+<button class="px-3.5 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            4
+          </button>
+<button class="px-3.5 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            5
+          </button>
+<button class="px-3 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            다음 &gt;
+          </button>
+<button class="px-3 py-1.5 rounded border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+            마지막 »
+          </button>
+</nav>
+</section>
+<!-- RIGHT COLUMN: Sidebar (30% = 4 cols) -->
+<aside class="col-span-4 space-y-6" data-purpose="category-sidebar">
+<!-- Sidebar Widget 1: Related Categories Quick Jump -->
+<div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+<h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
+<span>연관 카테고리 바로가기</span>
+<span class="text-[10px] text-slate-400 font-normal">Cross Navigation</span>
+</h3>
+<div class="space-y-2">
+<a class="group flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition" href="#">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-slate-100 group-hover:bg-sky-50 text-slate-600 group-hover:text-sky-600 text-xs font-mono font-bold flex items-center justify-center">02</span>
+<div>
+<div class="text-xs font-bold text-slate-800 group-hover:text-sky-600">분양 (White-label)</div>
+<div class="text-[11px] text-slate-400">독립 브랜드 구축 및 커스텀 스킨</div>
+</div>
+</div>
+<span class="text-slate-300 group-hover:text-slate-500 font-bold">→</span>
+</a>
+<a class="group flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition" href="#">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-slate-100 group-hover:bg-sky-50 text-slate-600 group-hover:text-sky-600 text-xs font-mono font-bold flex items-center justify-center">03</span>
+<div>
+<div class="text-xs font-bold text-slate-800 group-hover:text-sky-600">제작 (Custom Dev)</div>
+<div class="text-[11px] text-slate-400">자체 소스코드 납품 및 독립 DB</div>
+</div>
+</div>
+<span class="text-slate-300 group-hover:text-slate-500 font-bold">→</span>
+</a>
+<a class="group flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition" href="#">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-slate-100 group-hover:bg-sky-50 text-slate-600 group-hover:text-sky-600 text-xs font-mono font-bold flex items-center justify-center">04</span>
+<div>
+<div class="text-xs font-bold text-slate-800 group-hover:text-sky-600">가격 (Pricing Index)</div>
+<div class="text-[11px] text-slate-400">시장 표준 견적가 및 유지비 분석</div>
+</div>
+</div>
+<span class="text-slate-300 group-hover:text-slate-500 font-bold">→</span>
+</a>
+<a class="group flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition" href="#">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-slate-100 group-hover:bg-sky-50 text-slate-600 group-hover:text-sky-600 text-xs font-mono font-bold flex items-center justify-center">05</span>
+<div>
+<div class="text-xs font-bold text-slate-800 group-hover:text-sky-600">토토개발 (Sportsbook)</div>
+<div class="text-[11px] text-slate-400">배당 피드 엔진 및 배팅 리스크 관리</div>
+</div>
+</div>
+<span class="text-slate-300 group-hover:text-slate-500 font-bold">→</span>
+</a>
+</div>
+</div>
+<!-- Sidebar Widget 2: Editorial Independence Charter -->
+<div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-xl p-5 shadow-sm border border-slate-700">
+<div class="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase tracking-wider mb-2">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Editorial Independence</span>
+</div>
+<h4 class="text-sm font-bold text-white mb-2">OneBetHub 독립 심사 원칙</h4>
+<p class="text-xs text-slate-300 leading-relaxed">
+            모든 플랫폼 임대 벤더의 성능 지표와 리뷰는 솔루션 공급사의 스폰서십을 엄격히 배제합니다. 실제 호스팅 패킷 지연 및 장애율은 3개 대륙 독립 프로브 노드에서 24/7 수집됩니다.
+          </p>
+<div class="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400">
+<span>감사 기준: ISO/IEC 25010</span>
+<a class="text-sky-400 hover:underline" href="#">전문 보기 →</a>
+</div>
+</div>
+<!-- Sidebar Widget 3: Global iGaming Vendor Spec Matrix DB Promo -->
+<div class="bg-sky-50 rounded-xl border border-sky-200 p-5">
+<div class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center mb-3">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5h16M9 4v16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h4 class="text-sm font-bold text-slate-900 mb-1">Global Vendor Spec Matrix DB</h4>
+<p class="text-xs text-slate-600 leading-relaxed mb-4">
+            전 세계 140+ iGaming B2B 공급사의 API 레이턴시, 게임사(Game Provider) 라이선스 보유 현황, 계약 표준안을 직접 비교 검색하십시오.
+          </p>
+<button class="w-full py-2 bg-white hover:bg-slate-100 border border-sky-300 rounded-md text-sky-800 text-xs font-bold transition flex items-center justify-center gap-1.5">
+<span>벤더 매트릭스 데이터베이스 열람</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Sidebar Widget 4: Executive Briefing Newsletter Subscribe -->
+<div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+<h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Executive Briefing 신청</h4>
+<p class="text-xs text-slate-500 mb-3">
+            매주 월요일, 글로벌 iGaming 규제 변경 및 신규 플랫폼 임대 단가 동향을 전송합니다.
+          </p>
+<form class="space-y-2" onsubmit="event.preventDefault();">
+<input class="w-full px-3 py-2 text-xs border border-slate-200 rounded-md focus:border-sky-500 focus:outline-none" placeholder="corporate@company.com" type="email"/>
+<button class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-bold transition" type="submit">
+              구독 신청 (무료)
+            </button>
+</form>
+<p class="text-[10px] text-slate-400 mt-2 text-center">B2B 기업 도메인 이메일만 접수 가능합니다.</p>
+</div>
+</aside>
+<!-- END: Sidebar -->
+</div>
+<!-- END: TwoColumnContentLayout -->
+</main>
+<!-- BEGIN: InstitutionalFooter -->
+<footer class="bg-slate-900 text-slate-400 text-xs border-t border-slate-800 mt-16" data-purpose="global-footer">
+<div class="max-w-[1440px] mx-auto px-8 py-12">
+<!-- Top Grid -->
+<div class="grid grid-cols-5 gap-8 pb-10 border-b border-slate-800">
+<!-- Brand Info -->
+<div class="col-span-2 space-y-4">
+<div class="flex items-center gap-3">
+<img alt="OneBetHub Logo" class="h-9 w-auto object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida/AEtjO1WG7r9GCESwQOKBqcJ305IUndhXsCdDLiUmlPEczAyUEx5msi03VQqQVrq4KEIroh4dxkg8IbHuWwy87QbkoFV_9JWySVna0gDBJpw03kUipj04IcgyG2rXLzkt-YiyU8YLIJZgu65N6nQaOU3zbQ9WXVvf5DaMOQUvblYq0UNfizwNV7Juj158DdxDihNnn1F-O67RfPjKI4i7OUYmJMzl_Z66nxvcaKrFCCydHqQcfHAuRuqumtkIOJQ"/>
+</div>
+<p class="text-slate-400 leading-relaxed pr-6 text-xs">
+            OneBetHub는 엔터프라이즈 iGaming 인프라, 턴키 플랫폼 임대, 화이트라벨 솔루션 및 글로벌 라이선싱 규제 데이터 분석을 전문으로 하는 독립 B2B 인텔리전스 포털입니다.
+          </p>
+<div class="flex items-center space-x-4 text-xs font-medium text-slate-300">
+<span>런던 지국: +44 20 7946 0912</span>
+<span>싱가포르: +65 6789 0123</span>
+</div>
+</div>
+<!-- Vertical Links -->
+<div>
+<h4 class="text-white font-bold mb-3 uppercase tracking-wider text-xs">Category Verticals</h4>
+<ul class="space-y-2 text-slate-400">
+<li><a class="hover:text-white transition" href="#">01 플랫폼 임대 (Lease)</a></li>
+<li><a class="hover:text-white transition" href="#">02 화이트라벨 분양 (White-label)</a></li>
+<li><a class="hover:text-white transition" href="#">03 전용 솔루션 제작 (Custom)</a></li>
+<li><a class="hover:text-white transition" href="#">04 시장 표준 견적 (Pricing)</a></li>
+<li><a class="hover:text-white transition" href="#">05 토토 스포츠북 개발</a></li>
+</ul>
+</div>
+<!-- Intelligence & Tools -->
+<div>
+<h4 class="text-white font-bold mb-3 uppercase tracking-wider text-xs">Research &amp; Tools</h4>
+<ul class="space-y-2 text-slate-400">
+<li><a class="hover:text-white transition" href="#">SLA 실시간 가용성 모니터</a></li>
+<li><a class="hover:text-white transition" href="#">글로벌 벤더 매트릭스 DB</a></li>
+<li><a class="hover:text-white transition" href="#">GGR 셰어 계산 시뮬레이터</a></li>
+<li><a class="hover:text-white transition" href="#">규제 관할권 비교 리포트</a></li>
+<li><a class="hover:text-white transition" href="#">API 연동 테스트베드 가이드</a></li>
+</ul>
+</div>
+<!-- Governance -->
+<div>
+<h4 class="text-white font-bold mb-3 uppercase tracking-wider text-xs">Institutional</h4>
+<ul class="space-y-2 text-slate-400">
+<li><a class="hover:text-white transition" href="#">편집 독립성 헌장</a></li>
+<li><a class="hover:text-white transition" href="#">데이터 검증 방법론</a></li>
+<li><a class="hover:text-white transition" href="#">기관 투자자 리포트 구독</a></li>
+<li><a class="hover:text-white transition" href="#">이용약관 및 법적 면책</a></li>
+<li><a class="hover:text-white transition" href="#">개인정보 처리방침</a></li>
+</ul>
+</div>
+</div>
+<!-- Bottom Institutional Disclaimer -->
+<div class="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between text-[11px] text-slate-500 gap-4">
+<div class="max-w-4xl leading-relaxed">
+<span class="font-bold text-slate-400">LEGAL &amp; REGULATORY DISCLAIMER:</span> 
+          본 포털에서 제공하는 모든 보고서, 인프라 비용 지수 및 벤더 데이터는 기술적·재무적 B2B 산업 벤치마크 및 인포메이션 제공 목적으로만 작성되었습니다. OneBetHub는 온라인 도박 사이트를 운영하지 않으며, 특정 관할권 내에서의 불법적인 게이밍 서비스를 조장하거나 중개하지 않습니다. 각 사업자는 진출 국가의 법률 및 라이선스 요건(MGA, UKGC, Curacao, PAGCOR 등)을 준수할 책임이 있습니다.
+        </div>
+<div class="text-right whitespace-nowrap text-slate-500">
+          © 2025 OneBetHub Intelligence Group. All rights reserved.
+        </div>
+</div>
+</div>
+</footer>
+<!-- END: InstitutionalFooter -->
+</body></html>

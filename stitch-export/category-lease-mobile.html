@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>OneBetHub Enterprise Intelligence</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-error-container":"#93000a","secondary-fixed":"#89f5e7","surface-bright":"#f8f9ff","primary-fixed-dim":"#bec6e0","secondary-fixed-dim":"#6bd8cb","surface-tint":"#565e74","surface-container-high":"#dce9ff","error-container":"#ffdad6","on-secondary-container":"#006f66","on-secondary":"#ffffff","on-surface":"#0b1c30","on-background":"#0b1c30","tertiary-fixed-dim":"#93ccff","on-secondary-fixed":"#00201d","surface-container":"#e5eeff","inverse-on-surface":"#eaf1ff","inverse-primary":"#bec6e0","primary-container":"#131b2e","tertiary-fixed":"#cce5ff","inverse-surface":"#213145","on-primary-fixed":"#131b2e","on-secondary-fixed-variant":"#005049","outline":"#76777d","on-tertiary":"#ffffff","on-tertiary-fixed":"#001d31","on-primary-container":"#7c839b","on-surface-variant":"#45464d","surface-dim":"#cbdbf5","error":"#ba1a1a","secondary":"#006a61","surface":"#f8f9ff","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#3f465c","primary-fixed":"#dae2fd","tertiary-container":"#001d31","on-primary":"#ffffff","tertiary":"#000000","on-tertiary-container":"#188ace","secondary-container":"#86f2e4","surface-variant":"#d3e4fe","primary":"#000000","background":"#f8f9ff","on-tertiary-fixed-variant":"#004b73","on-error":"#ffffff","surface-container-low":"#eff4ff","surface-container-highest":"#d3e4fe","outline-variant":"#c6c6cd"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"gutter-desktop":"2rem","space-xl":"2.5rem","gutter":"1.5rem","margin-tablet":"2rem","space-md":"1rem","margin-desktop":"3rem","space-sm":"0.5rem","space-2xl":"4rem","margin":"1rem","space-xs":"0.25rem","space-lg":"1.5rem"},"fontFamily":{"headline-sm":["Inter"],"caption":["Inter"],"body-md":["Inter"],"headline-lg":["Newsreader"],"body-lead":["Newsreader"],"body-sm":["Inter"],"display":["Newsreader"],"headline-md":["Newsreader"],"label-md":["Inter"],"label-sm":["Inter"],"headline-lg-mobile":["Newsreader"],"display-mobile":["Newsreader"]},"fontSize":{"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["34px",{"lineHeight":"42px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lead":["20px",{"lineHeight":"30px","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"display":["44px",{"lineHeight":"52px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"500"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"600"}],"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-mobile":["32px",{"lineHeight":"38px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased selection:bg-surface-variant"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-28 flex flex-col justify-between"><div class="h-16 px-4 flex items-center justify-between gap-2"><div class="flex items-center gap-2"><img alt="OneBetHub Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1X41Fyq0vzgn16h3kxSnPVWOTdCDhQZLd6dxUuGRldV14yOXHIr9Vwp1nwkuelYrga26Cf7239_LVYRfSv-shZ-DFS9DCLLFnU6Lu4qVPnH5ZP57fV8LV48vtsuzIxE3VtKLgvZpBPFAMuWHzsx83l2kMMYBEe1baUVrRsaSs-s9-ar7ycAAioJr-Q4csvlkT0uv6NyMTXxLylS4BC0xASvF7GJ8OVM8geUhV3WBvlPTKlOozCbTBhL3F0"/><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface uppercase">OneBetHub</span><span class="hidden">Platform Rental</span></div><div class="flex items-center gap-1.5"><div aria-label="Language Selector" class="flex items-center bg-surface-container-high rounded-full p-0.5" role="group"><button class="min-w-[34px] h-[28px] px-2 rounded-full bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-[0_1px_4px_rgba(0,0,0,0.06)] flex items-center justify-center font-semibold" type="button">KO</button><button class="min-w-[34px] h-[28px] px-2 rounded-full text-on-surface-variant font-label-sm text-label-sm flex items-center justify-center hover:text-on-surface" type="button">EN</button></div><a class="w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-on-surface" data-path="search" href="#"><span class="material-symbols-outlined text-[22px]">search</span></a><button class="w-11 h-11 flex items-center justify-center" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAprLFr_taKGaueSbZB6kf9uuVa904HEbE8Gaphrg6fMLCHp-axhR-wxtwjUZAGQbDrRlvjx8Grd96_-1ehGTOHh2Yi8U65XHwuyIW2R-39VucZLQXAeRJQ_h94Ir6MfBbIqWSVrRdBzlzOZggN7VVTL_cQuUmklTA6NEHZryIeYDNQluvKaJQk44c4l6TlFexKvtMpIhxd8dHxFB8Ypk6azhLW8RzjodKUEQ3VM2r77u7Dg7OHd53P"/></button></div></div><nav class="h-12 w-full px-3 flex items-center overflow-x-auto whitespace-nowrap scrollbar-none bg-surface-container-low/60" data-active-classes="text-on-surface font-semibold"><div class="flex items-center gap-1 min-w-max"><a aria-current="page" class="h-9 px-3 flex items-center transition-colors text-on-surface font-semibold" data-path="platform-rental" href="#"><span class="font-semibold mr-1">01</span>임대 <span class="font-caption text-caption text-on-surface-variant ml-1 font-normal">Platform Rental</span></a><a class="h-9 px-3 flex items-center font-label-md text-label-md text-on-surface-variant transition-colors hover:text-on-surface" data-path="platform-distribution" href="#"><span class="font-semibold mr-1">02</span>분양 <span class="font-caption text-caption text-on-surface-variant ml-1 font-normal">Distribution</span></a><a class="h-9 px-3 flex items-center font-label-md text-label-md text-on-surface-variant transition-colors hover:text-on-surface" data-path="custom-development" href="#"><span class="font-semibold mr-1">03</span>제작 <span class="font-caption text-caption text-on-surface-variant ml-1 font-normal">Custom Dev</span></a><a class="h-9 px-3 flex items-center font-label-md text-label-md text-on-surface-variant transition-colors hover:text-on-surface" data-path="pricing-capex" href="#"><span class="font-semibold mr-1">04</span>가격 <span class="font-caption text-caption text-on-surface-variant ml-1 font-normal">Pricing</span></a><a class="h-9 px-3 flex items-center font-label-md text-label-md text-on-surface-variant transition-colors hover:text-on-surface" data-path="sportsbook-engineering" href="#"><span class="font-semibold mr-1">05</span>토토개발 <span class="font-caption text-caption text-on-surface-variant ml-1 font-normal">Sportsbook</span></a></div></nav></div></header><main class="flex-1 flex flex-col relative w-full pt-28 bg-surface"><div class="flex flex-col w-full">
+<!-- Contextual Breadcrumb & Category Header -->
+<section class="px-4 py-5 bg-surface-container-low flex flex-col gap-3">
+<!-- Breadcrumb -->
+<nav class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<a class="hover:text-on-surface transition-colors" data-path="home" href="#">Home</a>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+<a class="hover:text-on-surface transition-colors" data-path="categories" href="#">카테고리</a>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+<span class="text-on-surface font-semibold">임대</span>
+</nav>
+<!-- Header Content Cluster -->
+<div class="flex flex-col gap-2 pt-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold tracking-wider">
+          VERTICAL 01
+        </span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-caption text-caption text-secondary font-medium">실시간 데이터 갱신 완료</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-headline-lg">
+        임대 <span class="font-body-lead text-body-lead text-on-surface-variant font-normal">Platform Rental</span>
+</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+        완제품형 턴키(Turnkey) 및 화이트라벨(White-label) 카지노·스포츠북 솔루션의 공급 계약, SLA 기준, 서버 인프라 호스팅 비용 및 벤더 평가 보고서를 다룹니다.
+      </p>
+</div>
+<!-- Filter Chips (Sub-categories) -->
+<div class="pt-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1" id="filter-chips">
+<button class="filter-chip px-3 py-1.5 rounded-full bg-on-surface text-surface font-label-sm text-label-sm font-semibold shrink-0 shadow-sm transition-all" data-filter="all" type="button">
+        전체보기
+      </button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm shrink-0 shadow-sm hover:bg-surface-container-high transition-all" data-filter="turnkey" type="button">
+        턴키 솔루션
+      </button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm shrink-0 shadow-sm hover:bg-surface-container-high transition-all" data-filter="whitelabel" type="button">
+        화이트라벨
+      </button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm shrink-0 shadow-sm hover:bg-surface-container-high transition-all" data-filter="hosting" type="button">
+        SLA 및 호스팅
+      </button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm shrink-0 shadow-sm hover:bg-surface-container-high transition-all" data-filter="audit" type="button">
+        벤더 감사
+      </button>
+</div>
+</section>
+<!-- Category Benchmark Metric Banner -->
+<section class="px-4 py-4 bg-surface">
+<div class="p-3.5 bg-surface-container rounded-xl shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">analytics</span>
+          임대 시장 벤치마크 지표 (Q1 기준)
+        </span>
+<span class="font-caption text-caption text-on-surface-variant">2025.02 업데이트</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="p-2.5 bg-surface-container-lowest rounded-lg flex flex-col gap-1">
+<span class="font-caption text-caption text-on-surface-variant">등록 벤더 보고서</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">48</span>
+<span class="font-caption text-caption text-on-surface-variant">건</span>
+</div>
+<span class="font-label-sm text-[10px] text-secondary font-medium">전분기 대비 +4</span>
+</div>
+<div class="p-2.5 bg-surface-container-lowest rounded-lg flex flex-col gap-1">
+<span class="font-caption text-caption text-on-surface-variant">평균 셋업 기간</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">14</span>
+<span class="font-caption text-caption text-on-surface-variant">일</span>
+</div>
+<span class="font-label-sm text-[10px] text-on-surface-variant">SLA 최저 7일</span>
+</div>
+<div class="p-2.5 bg-surface-container-lowest rounded-lg flex flex-col gap-1">
+<span class="font-caption text-caption text-on-surface-variant">평균 GGR 셰어</span>
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-sm text-[15px] leading-tight text-on-surface font-bold">12~18</span>
+<span class="font-caption text-caption text-on-surface-variant">%</span>
+</div>
+<span class="font-label-sm text-[10px] text-secondary font-medium">티어별 차등화</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Vendor Matrix Resource Download Card -->
+<section class="px-4 pb-4 bg-surface">
+<div class="p-4 bg-primary-container text-on-primary rounded-xl shadow-md flex items-center justify-between gap-3 relative overflow-hidden">
+<!-- Decorative Backdrop Element -->
+<div class="absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-secondary/15 pointer-events-none blur-xl"></div>
+<div class="flex flex-col gap-1 z-10 max-w-[72%]">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-sm text-[10px] font-bold tracking-wide">
+            PDF REPORT
+          </span>
+<span class="font-caption text-[11px] text-on-primary-container">38 Pages · XLSX Included</span>
+</div>
+<h3 class="font-headline-sm text-[15px] leading-snug text-inverse-on-surface font-semibold">
+          2025 Q1 플랫폼 임대 공급사 스펙 비교표 다운로드
+        </h3>
+<p class="font-caption text-[11px] text-on-primary-container line-clamp-1">
+          글로벌 48개 B2B 임대 벤더의 API 레이턴시, 셋업 비용, 규제 인허가 내역
+        </p>
+</div>
+<button class="z-10 h-10 px-3.5 rounded-lg bg-surface text-on-surface font-label-sm text-label-sm font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" id="download-trigger" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>수령</span>
+</button>
+</div>
+</section>
+<!-- Article Stream / Intelligence Feeds -->
+<section class="px-4 py-2 bg-surface flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface uppercase tracking-wider">
+        분석 리포트 및 인텔리전스
+      </span>
+<span class="font-caption text-caption text-on-surface-variant">총 48편 중 1-6편</span>
+</div>
+<!-- Article Cards List -->
+<div class="flex flex-col gap-3.5">
+<!-- Card 1 (Featured Deep Dive) -->
+<article class="p-3.5 bg-surface-container-lowest rounded-xl shadow-sm flex flex-col gap-3 transition-transform active:scale-[0.99]" data-subcat="turnkey">
+<div class="relative w-full h-44 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Architectural financial and technology analytics workstation with dual monitors displaying enterprise cloud server metrics, technical code contracts, and API telemetry graphs in muted cool cyan and slate blue lighting with minimalist clean aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF_OR52o8rsyikccKOAn7S3318YLzcuRCXrAsWuO-bjvnQEJn3MBBEJSRFDlXyT8WYITSGd89kQ8sPAIYoXAIimWJqFCniyrnwRFv724GLLkf393HmJjJEAB9pOu71_fLbePnn0FAm0ukAwyAJmFyl0Obh8EeKpfBgzBMMdXyjWk9BXRB0xTYRv1fj_s3FkCyoEl6V9mDbZLbl1bvk4S8c1o2TjQAOCxQI4Yl9vxDDUv-KMK00xne-"/>
+<div class="absolute top-2 left-2 flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface/90 backdrop-blur-sm text-on-surface font-label-sm text-label-sm font-semibold shadow-xs">
+              임대 심층
+            </span>
+<span class="px-1.5 py-0.5 rounded bg-secondary text-on-secondary font-label-sm text-[10px] font-medium">
+              인기 리포트
+            </span>
+</div>
+<button aria-label="북마크 저장" class="bookmark-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-surface/80 backdrop-blur-sm flex items-center justify-center text-on-surface hover:bg-surface shadow-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2 font-caption text-caption text-on-surface-variant">
+<span>2025.02.24</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>7분 읽기</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="text-secondary font-medium">턴키 솔루션</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold leading-snug">
+            Tier-1 턴키 플랫폼 임대 시 계약서 필수 조항: API 호출 제한과 데이터 소유권 가이드
+          </h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+            임대 계약 만료 시 유저 베팅 이력 및 결제 로그의 이전 권한을 법적으로 확보하는 핵심 특약 조항 5가지와 피크타임 API 쓰로틀링 방지 SLA 책정법.
+          </p>
+<div class="pt-2 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+              김성훈 수석 인텔리전스 분석관
+            </span>
+<a class="text-on-surface font-semibold flex items-center gap-0.5" href="#">
+              열람하기 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="p-3 bg-surface-container-lowest rounded-xl shadow-sm flex gap-3 transition-transform active:scale-[0.99]" data-subcat="whitelabel">
+<div class="relative w-28 h-28 rounded-lg overflow-hidden bg-surface-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern executive office desk with analytical comparison data sheets, corporate tablet showing white-label platform UX interfaces in clean minimalist layout, soft daylight illumination with slate grey and teal accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLpzUp8BZTDnxCiT_Ao517tm5stOQhmINAyWGvtEtdcGsAXTcIX6xFqCPoYx803_S9-5jllJQkAWevp9XNuD_Y1mxHLMURSv2FUjEYh-mS9Ktc9U9YlYsiYEOgdN-yCYIIjmh6ukwqlTwiFzm930eWo7ZyVCgPEH1VRNEbrCLaldKw2nuUMGw0XTNhw3WDpHAVM7onlxk5G5wmYW22G3luMKDCZtiz698TvZZCgXtBxztWrbT20Jvi"/>
+<span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-surface/90 text-on-surface font-label-sm text-[10px] font-semibold">
+            화이트라벨
+          </span>
+</div>
+<div class="flex flex-col justify-between flex-1 min-w-0">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 font-caption text-caption text-on-surface-variant">
+<span>2025.02.20</span>
+<span class="w-0.5 h-0.5 rounded-full bg-outline-variant"></span>
+<span>9분 읽기</span>
+</div>
+<h2 class="font-headline-sm text-[15px] text-on-surface font-semibold leading-snug line-clamp-2">
+              소규모 오퍼레이터를 위한 화이트라벨 임대 솔루션 TOP 5 비교 분석
+            </h2>
+<p class="font-body-sm text-caption text-on-surface-variant line-clamp-1">
+              초기 보증금 3만 달러 미만, 통합 백오피스 및 현지 결제 PG 연동을 지원하는 대표 공급사.
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-caption text-[11px] text-secondary font-medium">B2B 공급망 평가</span>
+<button aria-label="북마크" class="bookmark-btn text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="p-3 bg-surface-container-lowest rounded-xl shadow-sm flex gap-3 transition-transform active:scale-[0.99]" data-subcat="hosting">
+<div class="relative w-28 h-28 rounded-lg overflow-hidden bg-surface-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="High-tech broadcast studio control room and multi-camera live video streaming ingest servers with network bandwidth bandwidth telemetry graphs on clean monitors in modern institutional design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpQiXgGeYAxsVlmfoZUryH9Ri5J1qKjPZVxVZz4fszfGfkkl9wv5s86v3ld0MOrm8s-WYNXivq1CXprBWQLutN5RmYgfS9SXy3p95qav2BI16pK10IqgwW3zdYPDdObL55-h0qZlfsgQwV9RppKEpInEL-Rg5uHtSd6yWfcqAxpMuTNEZYqTz10yvyLDDJ7cR9oOZoMb0ifb7dekB1J2vCQF-4sw5KezFp3BevgNiM5LG6tYLe_FxV"/>
+<span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-surface/90 text-on-surface font-label-sm text-[10px] font-semibold">
+            호스팅 단가
+          </span>
+</div>
+<div class="flex flex-col justify-between flex-1 min-w-0">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 font-caption text-caption text-on-surface-variant">
+<span>2025.02.15</span>
+<span class="w-0.5 h-0.5 rounded-full bg-outline-variant"></span>
+<span>6분 읽기</span>
+</div>
+<h2 class="font-headline-sm text-[15px] text-on-surface font-semibold leading-snug line-clamp-2">
+              실시간 라이브 카지노 스튜디오 피드 임대 단가와 대역폭 비용 구조 분석
+            </h2>
+<p class="font-body-sm text-caption text-on-surface-variant line-clamp-1">
+              초저지연 WebRTC 피드 공급 계약 시 숨겨진 CDN 오버리지 요금과 동시접속자당 과금 체계.
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-caption text-[11px] text-on-surface-variant">인프라 분석팀</span>
+<button aria-label="북마크" class="bookmark-btn text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="p-3 bg-surface-container-lowest rounded-xl shadow-sm flex gap-3 transition-transform active:scale-[0.99]" data-subcat="hosting">
+<div class="relative w-28 h-28 rounded-lg overflow-hidden bg-surface-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="Secure server rack corridor in an institutional enterprise datacenter with cool blue status LEDs, clean cabling, and subtle geometric reflections denoting cybersecurity and cloud infrastructure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuH5loUbTjrWkvFiC8ynoXe-QFA268AWQsBI3uLqGXkVqQfBky6gfVbbmU9KNrnAuqwnKly_oNeUtSzWf9WWcgWs6nf9p1yzq-oy-a8jAH7SVbb36FIlpVH0Ep5d5OH9Z6xRmcH_XBIDdVVK3E29w1Ih5mdExup3cQDzIm7P2MEB4HPn2WOCDrNVW4zYKKtxzBBoPs_34x9cX6LLoJ8Gnqs65Dg19fqD8pL89meKVRemYpSxQqqG1_"/>
+<span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-surface/90 text-on-surface font-label-sm text-[10px] font-semibold">
+            보안 아키텍처
+          </span>
+</div>
+<div class="flex flex-col justify-between flex-1 min-w-0">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 font-caption text-caption text-on-surface-variant">
+<span>2025.02.10</span>
+<span class="w-0.5 h-0.5 rounded-full bg-outline-variant"></span>
+<span>8분 읽기</span>
+</div>
+<h2 class="font-headline-sm text-[15px] text-on-surface font-semibold leading-snug line-clamp-2">
+              클라우드 vs 온프레미스 인프라: 임대 솔루션 보안 아키텍처 실사 보고서
+            </h2>
+<p class="font-body-sm text-caption text-on-surface-variant line-clamp-1">
+              AWS/GCP 하이브리드 구성과 전용 베어메탈 서버 임대 시 DDoS 방어 및 규제 준수 비교.
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-caption text-[11px] text-on-surface-variant">보안 엔지니어링</span>
+<button aria-label="북마크" class="bookmark-btn text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="p-3 bg-surface-container-lowest rounded-xl shadow-sm flex gap-3 transition-transform active:scale-[0.99]" data-subcat="audit">
+<div class="relative w-28 h-28 rounded-lg overflow-hidden bg-surface-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up of financial audit ledger documents, precision analytical stylus, and sleek digital tablet showing real-time gross gaming revenue reporting charts in soft professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP6qaa19WCBwD0AmNWB0hNeh7EQ08bo1QyeV132MmuWI8g11A6FHcJsQSuaJCxYJDGyTAcBXHMlaF-_pKtHTVP0-kViPRttoASu40PrrqxQXrotOVf9ob8HO0aYXGaW1LYkkP85YJZ4892zLVFkciSdNbm8OB-4AVV7WMNRC660kb08YH3DyHQv8gRs3Qzg2sH_Sh3G9EgK_iaswScvEHuMAsGKADFdKglJINZb1cd2zy6FMubmvSh"/>
+<span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-surface/90 text-on-surface font-label-sm text-[10px] font-semibold">
+            벤더 감사
+          </span>
+</div>
+<div class="flex flex-col justify-between flex-1 min-w-0">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 font-caption text-caption text-on-surface-variant">
+<span>2025.02.05</span>
+<span class="w-0.5 h-0.5 rounded-full bg-outline-variant"></span>
+<span>5분 읽기</span>
+</div>
+<h2 class="font-headline-sm text-[15px] text-on-surface font-semibold leading-snug line-clamp-2">
+              임대 솔루션 도입 시 백오피스 리포팅 시스템의 필수 감사 요건
+            </h2>
+<p class="font-body-sm text-caption text-on-surface-variant line-clamp-1">
+              매출 누락 방지(Anti-skimming), 실시간 RTP 변동 감지 및 정산 데이터 정합성 검증 체크리스트.
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-caption text-[11px] text-on-surface-variant">재무 감사팀</span>
+<button aria-label="북마크" class="bookmark-btn text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="p-3 bg-surface-container-lowest rounded-xl shadow-sm flex gap-3 transition-transform active:scale-[0.99]" data-subcat="turnkey">
+<div class="relative w-28 h-28 rounded-lg overflow-hidden bg-surface-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="High precision fintech payment gateway interface screen showing multi-currency transactions, cryptocurrency wallet ledger settlement, and digital security handshake in cool blue tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4--JHgVoJC2gjNGzngYj9SHK59TaYxpPu60plisyWEGmBzxTNXABtjVW8L_L4KwKpv7xOFxMaE6o6sDWZqT1jkO3GY19N5PaKypBYyRdaRfw7zKdqV7OehRx6E-4LjEMKsJ4XdIqgYjOULgxdtNquMmMjJnITbYYTNPq017qYulayLQM1Sr73pSJ7DHnkcdPJykw_DIyPtab734fyVeuo7e9KTLCmmARN5aDA6D6RgaATF4zVMZMo"/>
+<span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-surface/90 text-on-surface font-label-sm text-[10px] font-semibold">
+            결제 모듈
+          </span>
+</div>
+<div class="flex flex-col justify-between flex-1 min-w-0">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 font-caption text-caption text-on-surface-variant">
+<span>2025.01.28</span>
+<span class="w-0.5 h-0.5 rounded-full bg-outline-variant"></span>
+<span>11분 읽기</span>
+</div>
+<h2 class="font-headline-sm text-[15px] text-on-surface font-semibold leading-snug line-clamp-2">
+              멀티 통화 및 암호화폐 결제 모듈이 기본 탑재된 임대 플랫폼 평가
+            </h2>
+<p class="font-body-sm text-caption text-on-surface-variant line-clamp-1">
+              USDT 자동 정산 프로토콜 및 다중 통화 입출금 자동 승인 파이프라인의 수수료 효율성 비교.
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-caption text-[11px] text-secondary font-medium">PG &amp; 결제 인텔리전스</span>
+<button aria-label="북마크" class="bookmark-btn text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Clean Pagination Controls -->
+<section class="px-4 py-6 bg-surface flex items-center justify-center">
+<div aria-label="페이지 내비게이션" class="flex items-center gap-1.5 bg-surface-container-low p-1 rounded-xl shadow-xs" role="navigation">
+<!-- Active Page 1 -->
+<button class="w-9 h-9 rounded-lg bg-on-surface text-surface font-label-md text-label-md font-semibold flex items-center justify-center shadow-xs" type="button">
+        1
+      </button>
+<!-- Page 2 -->
+<button class="w-9 h-9 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">
+        2
+      </button>
+<!-- Page 3 -->
+<button class="w-9 h-9 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">
+        3
+      </button>
+<!-- Page 4 -->
+<button class="w-9 h-9 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">
+        4
+      </button>
+<!-- Next Button -->
+<button class="h-9 px-3 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md font-semibold flex items-center gap-0.5 hover:bg-surface-container-high transition-colors" type="button">
+<span>다음</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Toast Notification for Micro-Delight Interaction -->
+<div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-2.5 rounded-lg shadow-xl font-label-sm text-label-sm flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-3" id="download-toast">
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]">check_circle</span>
+<span id="toast-message">비교표 리포트가 다운로드 큐에 추가되었습니다.</span>
+</div>
+</div>
+<script>
+  (function() {
+    // 1. Interactive Tag Filtering
+    const chips = document.querySelectorAll('.filter-chip');
+    const articles = document.querySelectorAll('article[data-subcat]');
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => {
+          c.classList.remove('bg-on-surface', 'text-surface', 'font-semibold');
+          c.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+        chip.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+        chip.classList.add('bg-on-surface', 'text-surface', 'font-semibold');
+
+        const filter = chip.getAttribute('data-filter');
+        articles.forEach(art => {
+          const sub = art.getAttribute('data-subcat');
+          if (filter === 'all' || sub === filter) {
+            art.style.display = 'flex';
+          } else {
+            art.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 2. Bookmark Toggle Micro-interaction
+    const bookmarkBtns = document.querySelectorAll('.bookmark-btn');
+    bookmarkBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const icon = btn.querySelector('.material-symbols-outlined');
+        const isSaved = icon.textContent.trim() === 'bookmark';
+        if (isSaved) {
+          icon.textContent = 'bookmark_border';
+          icon.style.fontVariationSettings = "'FILL' 0";
+          showToast('보관함에서 제거되었습니다.');
+        } else {
+          icon.textContent = 'bookmark';
+          icon.style.fontVariationSettings = "'FILL' 1";
+          showToast('리포트가 보관함에 저장되었습니다.');
+        }
+      });
+    });
+
+    // 3. Download Spec Matrix Action
+    const dlBtn = document.getElementById('download-trigger');
+    if (dlBtn) {
+      dlBtn.addEventListener('click', () => {
+        showToast('2025 Q1 플랫폼 임대 비교표(XLSX/PDF)가 발송되었습니다.');
+      });
+    }
+
+    // Helper: Toast Trigger
+    function showToast(msg) {
+      const toast = document.getElementById('download-toast');
+      const text = document.getElementById('toast-message');
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+      }, 2600);
+    }
+  })();
+</script><footer class="w-full bg-surface-container-low px-5 py-8 mt-12 pb-28"><div class="flex flex-col gap-4 max-w-lg mx-auto"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight uppercase">OneBetHub</span><span class="bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm px-1.5 py-0.5 rounded">B2B INTELLIGENCE</span></div><p class="font-caption text-caption text-on-surface-variant leading-relaxed">OneBetHub은 글로벌 iGaming 및 스포츠북 공급 인프라 시장의 엔터프라이즈 사업자, 솔루션 공급자, 기술 구매 담당자를 위한 B2B 솔루션 테크 분석 미디어입니다.</p><div class="p-3 bg-surface-container rounded"><p class="font-caption text-caption text-on-surface leading-normal font-medium">OneBetHub은 플랫폼 벤더 공급망 및 솔루션 기술 분석 전문 B2B 미디어이며 일반 이용자를 위한 베팅 서비스를 제공하지 않습니다.</p></div><div class="flex flex-wrap gap-x-4 gap-y-2 pt-2"><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface underline underline-offset-2" data-path="editorial-policy" href="#">Source Policy</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface underline underline-offset-2" data-path="privacy-policy" href="#">Terms &amp; Privacy</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface underline underline-offset-2" data-path="vendor-disclosure" href="#">Vendor Disclosure</a></div><p class="font-caption text-caption text-outline pt-2">© 2025 OneBetHub. All Rights Reserved. Institutional B2B Platform Analytics.</p></div></footer></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-on-surface font-semibold"><div class="flex justify-around items-center h-16 px-2"><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] h-12 text-on-surface-variant transition-colors hover:text-on-surface" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">newspaper</span><span class="font-label-sm text-label-sm">홈</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] h-12 text-on-surface-variant transition-colors hover:text-on-surface" data-path="categories" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-label-sm">카테고리</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] h-12 text-on-surface-variant transition-colors hover:text-on-surface" data-path="search" href="#"><span class="material-symbols-outlined text-[22px]">search</span><span class="font-label-sm text-label-sm">검색</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] h-12 text-on-surface-variant transition-colors hover:text-on-surface" data-path="saved" href="#"><span class="material-symbols-outlined text-[22px]">bookmark</span><span class="font-label-sm text-label-sm">보관함</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[48px] h-12 text-on-surface-variant transition-colors hover:text-on-surface" data-path="my" href="#"><span class="material-symbols-outlined text-[22px]">account_circle</span><span class="font-label-sm text-label-sm">마이</span></a></div></nav></body></html>

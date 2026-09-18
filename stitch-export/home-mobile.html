@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>OneBetHub Enterprise Intelligence</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-error-container":"#93000a","secondary-fixed":"#89f5e7","surface-bright":"#f8f9ff","primary-fixed-dim":"#bec6e0","secondary-fixed-dim":"#6bd8cb","surface-tint":"#565e74","surface-container-high":"#dce9ff","error-container":"#ffdad6","on-secondary-container":"#006f66","on-secondary":"#ffffff","on-surface":"#0b1c30","on-background":"#0b1c30","tertiary-fixed-dim":"#93ccff","on-secondary-fixed":"#00201d","surface-container":"#e5eeff","inverse-on-surface":"#eaf1ff","inverse-primary":"#bec6e0","primary-container":"#131b2e","tertiary-fixed":"#cce5ff","inverse-surface":"#213145","on-primary-fixed":"#131b2e","on-secondary-fixed-variant":"#005049","outline":"#76777d","on-tertiary":"#ffffff","on-tertiary-fixed":"#001d31","on-primary-container":"#7c839b","on-surface-variant":"#45464d","surface-dim":"#cbdbf5","error":"#ba1a1a","secondary":"#006a61","surface":"#f8f9ff","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#3f465c","primary-fixed":"#dae2fd","tertiary-container":"#001d31","on-primary":"#ffffff","tertiary":"#000000","on-tertiary-container":"#188ace","secondary-container":"#86f2e4","surface-variant":"#d3e4fe","primary":"#000000","background":"#f8f9ff","on-tertiary-fixed-variant":"#004b73","on-error":"#ffffff","surface-container-low":"#eff4ff","surface-container-highest":"#d3e4fe","outline-variant":"#c6c6cd"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"gutter-desktop":"2rem","space-xl":"2.5rem","gutter":"1.5rem","margin-tablet":"2rem","space-md":"1rem","margin-desktop":"3rem","space-sm":"0.5rem","space-2xl":"4rem","margin":"1rem","space-xs":"0.25rem","space-lg":"1.5rem"},"fontFamily":{"headline-sm":["Inter"],"caption":["Inter"],"body-md":["Inter"],"headline-lg":["Newsreader"],"body-lead":["Newsreader"],"body-sm":["Inter"],"display":["Newsreader"],"headline-md":["Newsreader"],"label-md":["Inter"],"label-sm":["Inter"],"headline-lg-mobile":["Newsreader"],"display-mobile":["Newsreader"]},"fontSize":{"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["34px",{"lineHeight":"42px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lead":["20px",{"lineHeight":"30px","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"display":["44px",{"lineHeight":"52px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"500"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"600"}],"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-mobile":["32px",{"lineHeight":"38px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased selection:bg-surface-variant"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-4 flex items-center justify-between gap-3"><div class="flex items-center gap-2 min-w-0"><button class="w-11 h-11 -ml-2 flex items-center justify-center text-on-surface hover:text-on-surface-variant" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="OneBetHub Logo" class="h-7 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1X41Fyq0vzgn16h3kxSnPVWOTdCDhQZLd6dxUuGRldV14yOXHIr9Vwp1nwkuelYrga26Cf7239_LVYRfSv-shZ-DFS9DCLLFnU6Lu4qVPnH5ZP57fV8LV48vtsuzIxE3VtKLgvZpBPFAMuWHzsx83l2kMMYBEe1baUVrRsaSs-s9-ar7ycAAioJr-Q4csvlkT0uv6NyMTXxLylS4BC0xASvF7GJ8OVM8geUhV3WBvlPTKlOozCbTBhL3F0"/><h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Article Detail</h1></div><div class="flex items-center gap-1 shrink-0"><button class="w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[22px]">share</span></button><button class="w-11 h-11 flex items-center justify-center" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAprLFr_taKGaueSbZB6kf9uuVa904HEbE8Gaphrg6fMLCHp-axhR-wxtwjUZAGQbDrRlvjx8Grd96_-1ehGTOHh2Yi8U65XHwuyIW2R-39VucZLQXAeRJQ_h94Ir6MfBbIqWSVrRdBzlzOZggN7VVTL_cQuUmklTA6NEHZryIeYDNQluvKaJQk44c4l6TlFexKvtMpIhxd8dHxFB8Ypk6azhLW8RzjodKUEQ3VM2r77u7Dg7OHd53P"/></button></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface pb-safe"><div class="flex flex-col w-full">
+<!-- Reading Progress Bar -->
+<div class="sticky top-0 left-0 w-full h-1 bg-surface-container-high z-40" id="scroll-progress-container">
+<div class="h-full bg-on-surface transition-all duration-75" id="scroll-progress-bar" style="width: 0%;"></div>
+</div>
+<article class="w-full max-w-4xl mx-auto px-4 pt-6 pb-12 flex flex-col gap-8">
+<!-- 1. Header & Byline Cluster -->
+<header class="flex flex-col gap-4">
+<!-- Category Badges -->
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-500/10 text-amber-900 font-label-sm text-label-sm uppercase tracking-wider font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+          가격 &amp; CapEx
+        </span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-950 font-label-sm text-label-sm uppercase tracking-wider font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+          플랫폼 아키텍처
+        </span>
+<span class="ml-auto text-on-surface-variant font-caption text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">verified</span>
+          검증된 실사 리포트 #OBH-2025-02
+        </span>
+</div>
+<!-- Headline -->
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface tracking-tight leading-tight">
+        2025 엔터프라이즈 카지노·스포츠북 벤더 총소유비용(TCO) 심층 분석: 임대 vs 자체 제작 3개년 비용 모델
+      </h1>
+<!-- Sub-headline -->
+<p class="font-body-lead text-body-lead text-on-surface-variant leading-relaxed">
+        12개 글로벌 솔루션 벤더 실사를 바탕으로 초기 구축비, 라이선스 요율, API 피드 유지비 및 기술 부채를 정량 검증합니다.
+      </p>
+<!-- Byline & Action Row -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4 bg-surface-container-lowest p-4 rounded-xl shadow-sm">
+<div class="flex items-center gap-3">
+<img alt="이서준 애널리스트" class="w-11 h-11 rounded-full object-cover shadow-sm shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAprLFr_taKGaueSbZB6kf9uuVa904HEbE8Gaphrg6fMLCHp-axhR-wxtwjUZAGQbDrRlvjx8Grd96_-1ehGTOHh2Yi8U65XHwuyIW2R-39VucZLQXAeRJQ_h94Ir6MfBbIqWSVrRdBzlzOZggN7VVTL_cQuUmklTA6NEHZryIeYDNQluvKaJQk44c4l6TlFexKvtMpIhxd8dHxFB8Ypk6azhLW8RzjodKUEQ3VM2r77u7Dg7OHd53P"/>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px] font-semibold">
+              이서준 수석 테크 애널리스트
+            </span>
+<span class="font-caption text-caption text-on-surface-variant">
+              OneBetHub 리서치랩 · 2025년 2월 24일 발행 · 읽는 시간 약 12분
+            </span>
+</div>
+</div>
+<!-- Action Utility Controls -->
+<div class="flex items-center gap-1.5 self-end md:self-auto shrink-0">
+<button class="px-2.5 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-1 transition-colors" id="font-toggle-btn" title="글자 크기 조절" type="button">
+<span class="material-symbols-outlined text-[16px]">format_size</span>
+<span id="font-size-label">100%</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" id="bookmark-btn" title="리포트 북마크" type="button">
+<span class="material-symbols-outlined text-[18px]" id="bookmark-icon">bookmark_border</span>
+</button>
+<button class="w-8 h-8 rounded bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" id="share-link-btn" title="링크 복사" type="button">
+<span class="material-symbols-outlined text-[18px]">link</span>
+</button>
+<button class="px-3 py-1.5 rounded bg-primary text-on-primary font-label-md text-label-md flex items-center gap-1.5 hover:bg-primary-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>PDF (4.8MB)</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Editorial Lead Hero Graphic: Enterprise System Architecture Abstract -->
+<div class="w-full relative rounded-xl overflow-hidden shadow-sm bg-surface-container-high h-64 md:h-80">
+<div class="bg-cover bg-center w-full h-full flex flex-col justify-end p-6" data-alt="A clean, high-precision architectural visualization of cloud servers, fintech API data streams, sportsbook odd processing nodes, and cryptographic ledger trees, modern minimal isometric style with deep slate, cyan, and neutral tones, editorial tech publication aesthetic" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9c8nJHUnaUJq5J-ailOIRlKi-YPNIwyWEc7KDqAABIi2h0s-Etbisc5uk6nK1TMe1M3BovhluwrKVv7NqinJvcAW-94ez-S35GLkdmP5jmaO_o-93VO8XiThWy5PXZbCz9OKY3IgAqrmmbp5hY6GQIDF4gtazqGKzCvNc_Mj4wSldUZ2kknj3qQ_2xVkTp4tvPDJSXfBM-StCwM8zVVma4XW5StT2518sQFiYp0eFJgv8kE7kytCJ')">
+<div class="bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-lg max-w-md shadow-sm">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold tracking-wider">Figure 1.0</span>
+<p class="font-body-sm text-body-sm text-on-surface mt-1 font-medium">
+            엔터프라이즈 iGaming 인프라 스택의 3개 레이어: 유저 세션 • 배당 오즈 엔진 • 결제/정산 원장
+          </p>
+</div>
+</div>
+</div>
+<!-- 2. Distinct "Key Facts" Summary Box -->
+<section class="bg-surface-container-low rounded-xl p-5 md:p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+<div class="flex items-center gap-2.5 text-on-surface">
+<span class="material-symbols-outlined text-[24px] text-amber-600">push_pin</span>
+<h2 class="font-headline-sm text-headline-sm tracking-tight text-on-surface">
+          EXECUTIVE SUMMARY · 핵심 정량 수치 요약
+        </h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+<!-- Metric Item 1 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-medium">턴키 임대(Turnkey) 평균 초기비용</span>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">$15,000 ~ $45,000</span>
+<p class="font-caption text-caption text-on-surface-variant">셋업 타임라인: 2~4주 소요 (화이트라벨 솔루션 기준)</p>
+</div>
+<!-- Metric Item 2 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-medium">자체 제작(Custom Build) 초기 개발비</span>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">$180,000 ~ $450,000</span>
+<p class="font-caption text-caption text-on-surface-variant">엔지니어링 공수: 풀스택 전담 6~9개월 소요</p>
+</div>
+<!-- Metric Item 3 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-medium">GGR 로열티 TCO 전환 분기점</span>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">월 GGR $500,000</span>
+<p class="font-caption text-caption text-on-surface-variant">초과 시 자체 제작 아키텍처의 3개년 누적 마진 우위 달성</p>
+</div>
+<!-- Metric Item 4 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-medium">실시간 스포츠 배당 API 피드 월 유지비</span>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">월 $4,000 ~ $18,000</span>
+<p class="font-caption text-caption text-on-surface-variant">커버리지 리그 및 종목 수, 라이브 트레이딩 옵션에 비례</p>
+</div>
+</div>
+<div class="bg-surface-container p-3 rounded text-on-surface font-caption text-caption flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant shrink-0">info</span>
+<span>본 조사는 2024년 4분기부터 2025년 1월까지 아시아·유럽 12개 주요 엔터프라이즈 솔루션 벤더 RFP 실사 견적을 실측 표준화한 데이터입니다.</span>
+</div>
+</section>
+<!-- 3. Interactive Table of Contents (목차) -->
+<nav class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-on-surface">list_alt</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[16px]">리포트 목차 (Index)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5개 섹션 수록</span>
+</div>
+<ol class="flex flex-col gap-1.5 font-body-sm text-body-sm text-on-surface">
+<li>
+<a class="flex items-center justify-between p-2 rounded hover:bg-surface-container transition-colors group" href="#section-1">
+<span class="group-hover:text-primary font-medium">1. 플랫폼 공급망 시장 동향 및 벤더 분류 체계</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">arrow_forward</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-between p-2 rounded hover:bg-surface-container transition-colors group" href="#section-2">
+<span class="group-hover:text-primary font-medium">2. 턴키 임대 vs 자체 제작 3개년 비용 구조 상세 비교</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">arrow_forward</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-between p-2 rounded hover:bg-surface-container transition-colors group" href="#section-3">
+<span class="group-hover:text-primary font-medium">3. 주요 숨겨진 비용: 피드 연동, 결제 게이트웨이 및 인프라</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">arrow_forward</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-between p-2 rounded hover:bg-surface-container transition-colors group" href="#section-4">
+<span class="group-hover:text-primary font-medium">4. 벤더 실사(Due Diligence) 필수 체크리스트</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">arrow_forward</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-between p-2 rounded hover:bg-surface-container transition-colors group" href="#section-5">
+<span class="group-hover:text-primary font-medium">5. 자주 묻는 질문 (Enterprise FAQ)</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">arrow_forward</span>
+</a>
+</li>
+</ol>
+</nav>
+<!-- 4. Article Body Content -->
+<div class="flex flex-col gap-10 text-on-surface leading-relaxed transition-all duration-200" id="article-content-body">
+<!-- Section 1 -->
+<section class="flex flex-col gap-4 scroll-mt-20" id="section-1">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-6 bg-on-surface rounded-full"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">
+            1. 플랫폼 공급망 시장 동향 및 벤더 분류 체계
+          </h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+          엔터프라이즈 iGaming 인프라는 단순한 카지노 게임 어그리게이터 연동을 넘어 고빈도 트랜잭션 수용과 규제 준수를 동시에 달성해야 하는 고난도 미션 크리티컬 시스템입니다. 공급망 내 공급 모델은 크게 <strong>턴키 임대(Turnkey SaaS)</strong>, <strong>화이트라벨 분양(White-label Distribution)</strong>, 그리고 <strong>자체 제작(Proprietary Source Code Build)</strong>의 3개 아키텍처로 세분화됩니다.
+        </p>
+<!-- Secondary illustrative graphic placeholder -->
+<div class="w-full h-48 rounded-lg overflow-hidden bg-surface-container-high my-2">
+<div class="bg-cover bg-center w-full h-full p-4 flex items-end" data-alt="Technical data visualization showing global server distribution, real-time risk hedging dashboard, and low-latency API websocket pipeline, high-tech dark financial aesthetic with teal and gold accents" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCprL6wiDAW-HHhU5BHTmqY7LTtxo9jIHKnwSt93FyyCaRcuuys-dJSwS9eQngItz7JVKCBrhLHqdJZwp1tv3JJfKFpAlXh1tjLfcG-CC9BDYPjPmryAFrPOqqe-LQopsRpgjUHu6Yw7EeM1KJ8KFjywnIltCmXV7QmOsayaovGTyvx8oXSqYO6JKaoqbIZUEfF27j3uRDW0iaRViLf8ATK583uaiPQ0ZYWq2jw2BtLv57drdagNPaU')">
+<span class="bg-surface-container-lowest/80 text-on-surface font-caption text-caption px-2.5 py-1 rounded backdrop-blur">
+              글로벌 공급 벤더의 레이턴시 및 서버 분산 토폴로지
+            </span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+<strong>턴키 임대 모델</strong>은 소프트웨어 벤더가 호스팅 환경, 관리형 백오피스, 사전 체결된 게임/배당 공급사(Content Aggregator) 계약을 일괄 제공하는 구조입니다. 운영사는 브랜드 UI 테마와 마케팅에만 집중할 수 있어 평균 2~4주 이내 빠른 Go-to-Market(GTM)이 가능하지만, 총게임수익(GGR, Gross Gaming Revenue)의 8%~15%에 달하는 지속적 플랫폼 로열티를 지불해야 합니다.
+        </p>
+<p class="font-body-md text-body-md text-on-surface">
+          반면 <strong>자체 제작(Proprietary In-house)</strong> 방식은 초기 6~9개월간 대규모 자본 지출(CapEx)이 투입되나, 플랫폼 로열티 부담이 영구적으로 소멸됩니다. 자체 오즈 컴파일러 엔진과 원장 데이터베이스(Ledger DB)의 소유권을 100% 확보하여 정산 리스크와 벤더 종속성(Vendor Lock-in)을 원천 차단할 수 있는 강점이 있습니다.
+        </p>
+<!-- Intelligence Callout Box -->
+<div class="bg-surface-container-low p-4 md:p-5 rounded-lg flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">ANALYST TAKE</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium">
+            "많은 스타트업 운영사가 초기 턴키 벤더의 화려한 데모와 저렴한 초기 셋업비에 매몰되어 계약합니다. 그러나 월 GGR이 $300,000을 돌파하는 시점부터 벤더 수수료가 월간 최대 고정 지출로 전환되며, 이때 소스 코드 이양 권한이 없다면 플랫폼 마이그레이션 시 기존 플레이어 DB의 40% 이상이 유실되는 '스위칭 트랩'에 직면하게 됩니다."
+          </p>
+</div>
+</section>
+<!-- Section 2 -->
+<section class="flex flex-col gap-4 scroll-mt-20" id="section-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-6 bg-on-surface rounded-full"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">
+            2. 턴키 임대 vs 자체 제작 3개년 비용 구조 상세 비교
+          </h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+          아래 시뮬레이션 매트릭스는 <strong>월평균 GGR $400,000, 활성 베팅 플레이어 15,000명</strong>을 보유한 중견 엔터프라이즈 운영사를 기준으로 산출한 3개년 TCO 정량 데이터입니다.
+        </p>
+<!-- Data Table: Vendor Comparison Matrix -->
+<div class="overflow-x-auto rounded-xl bg-surface-container-lowest shadow-sm">
+<table class="w-full text-left font-body-sm text-body-sm text-on-surface">
+<thead class="bg-surface-container-low font-label-md text-label-md text-on-surface-variant uppercase">
+<tr>
+<th class="p-3.5 whitespace-nowrap">비용 항목 (Cost Stream)</th>
+<th class="p-3.5 whitespace-nowrap">턴키 임대 (Turnkey SaaS)</th>
+<th class="p-3.5 whitespace-nowrap">자체 제작 (Proprietary Build)</th>
+<th class="p-3.5 whitespace-nowrap">비고 및 핵심 차이</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-3.5 font-medium whitespace-nowrap">초기 구축비 (Year 1 CapEx)</td>
+<td class="p-3.5 font-semibold text-on-surface">$25,000</td>
+<td class="p-3.5 font-semibold text-on-surface">$280,000</td>
+<td class="p-3.5 text-on-surface-variant font-caption text-caption">자체 개발 시 아키텍처 설계 및 코어 엔진 코딩 포함</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-3.5 font-medium whitespace-nowrap">연간 플랫폼 로열티 (GGR 10%)</td>
+<td class="p-3.5 text-error font-medium">$480,000 /년</td>
+<td class="p-3.5 text-secondary font-medium">$0 (완전 면제)</td>
+<td class="p-3.5 text-on-surface-variant font-caption text-caption">월 GGR $400,000 기준 로열티 부담 격차 심화</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-3.5 font-medium whitespace-nowrap">엔지니어링 &amp; 유지보수</td>
+<td class="p-3.5 text-on-surface">$24,000 /년 (기본 패키지)</td>
+<td class="p-3.5 text-on-surface">$120,000 /년 (인하우스 2인)</td>
+<td class="p-3.5 text-on-surface-variant font-caption text-caption">자체 제작 시 버그 픽스 및 기능 개선 내부 인력 필수</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-3.5 font-medium whitespace-nowrap">AWS/GCP 클라우드 인프라</td>
+<td class="p-3.5 text-on-surface">포함 (공용 인프라)</td>
+<td class="p-3.5 text-on-surface">$36,000 /년 (전용 VPC)</td>
+<td class="p-3.5 text-on-surface-variant font-caption text-caption">트래픽 급증 시 독립 전용 클러스터의 안정성 우위</td>
+</tr>
+<tr class="bg-surface-container-high font-semibold">
+<td class="p-3.5">3개년 누적 총소유비용 (3-Yr TCO)</td>
+<td class="p-3.5 text-on-surface text-headline-sm">$1,537,000</td>
+<td class="p-3.5 text-secondary text-headline-sm">$748,000</td>
+<td class="p-3.5 text-on-surface font-caption text-caption">3개년 운영 시 자체 제작이 약 $789,000 (51.3%) 비용 절감</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section 3 -->
+<section class="flex flex-col gap-4 scroll-mt-20" id="section-3">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-6 bg-on-surface rounded-full"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">
+            3. 주요 숨겨진 비용: 피드 연동, 결제 게이트웨이 및 인프라
+          </h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+          RFP 계약서 체결 단계에서 명시되지 않아 사후 운영 마진을 급격히 잠식하는 3대 언더그라운드 비용 요소를 사전에 통제해야 합니다.
+        </p>
+<!-- Bento Grid for Hidden Costs -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col gap-2">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]">sports_soccer</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[16px]">실시간 피드 연동비</span>
+<p class="font-caption text-caption text-on-surface-variant">
+              Betradar, Betgenius 등 Tier-1 데이터 공급업체의 고속 웹소켓 피드는 종목당 $1,500/월 이상 청구되며, 지연율 200ms 이하 SLA 체결 시 30% 할증이 부과됩니다.
+            </p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col gap-2">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[16px]">결제 게이트웨이 수수료</span>
+<p class="font-caption text-caption text-on-surface-variant">
+              글로벌 고위험(High-risk) 신용카드 PG는 5.5%~8.5%의 정산 수수료와 180일 롤링 리저브(10%)를 강제하며, USDT 블록체인 노드 구축에도 월 가스비 방어 비용이 듭니다.
+            </p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col gap-2">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]">security</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[16px]">디도스 완화 및 L7 방화벽</span>
+<p class="font-caption text-caption text-on-surface-variant">
+              대규모 경기(월드컵, 챔피언스리그 결승) 시 발생하는 초당 400만 패킷 테라바이트급 볼륨 공격에 대응하려면 엔터프라이즈 Cloudflare Magic Transit 수준의 고정 방어가 필수입니다.
+            </p>
+</div>
+</div>
+</section>
+<!-- 5. Vendor Evaluation Checklist Section -->
+<section class="bg-surface-container-lowest p-5 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 scroll-mt-20" id="section-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[24px] text-secondary">fact_check</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">
+              4. 벤더 실사(Due Diligence) 필수 체크리스트
+            </h2>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-on-surface-variant" id="checklist-counter">
+            0 / 5 검증 완료
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          벤더 계약서 최종 날인 전 실무 엔지니어와 법무팀이 즉시 대조해볼 수 있는 5개 필수 조항입니다. 항목을 클릭하여 실사 진척도를 기록하세요.
+        </p>
+<div class="flex flex-col gap-2.5 pt-2">
+<!-- Item 1 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors select-none">
+<input class="checklist-item mt-1 w-4 h-4 rounded text-primary focus:ring-0 accent-on-surface" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">
+                SLA 99.95% 가동 시간 및 서버 장애 배상 기준 명시 여부
+              </span>
+<span class="font-caption text-caption text-on-surface-variant">
+                월 다운타임 21.6분 초과 시 당월 플랫폼 수수료 전액 차감 및 유저 손실 보상 한도 설정 여부 확인.
+              </span>
+</div>
+</label>
+<!-- Item 2 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors select-none">
+<input class="checklist-item mt-1 w-4 h-4 rounded text-primary focus:ring-0 accent-on-surface" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">
+                실시간 배당 데이터 피드 지연율(Latency) 200ms 이하 보장 여부
+              </span>
+<span class="font-caption text-caption text-on-surface-variant">
+                라이브 인플레이(In-Play) 베팅 시 코츠 수신 지연으로 인한 아비트라지 악용 방지 레이턴시 검증.
+              </span>
+</div>
+</label>
+<!-- Item 3 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors select-none">
+<input class="checklist-item mt-1 w-4 h-4 rounded text-primary focus:ring-0 accent-on-surface" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">
+                백오피스 트랜잭션 원장 데이터 직접 접근(Direct DB Read) 지원 여부
+              </span>
+<span class="font-caption text-caption text-on-surface-variant">
+                서드파티 BI 분석 툴 및 독자적 감사 시스템 연동을 위한 Read Replica DB 계정 권한 제공 여부.
+              </span>
+</div>
+</label>
+<!-- Item 4 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors select-none">
+<input class="checklist-item mt-1 w-4 h-4 rounded text-primary focus:ring-0 accent-on-surface" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">
+                글로벌 및 로컬 결제 게이트웨이(PG/USDT) 독립 연동 가능 여부
+              </span>
+<span class="font-caption text-caption text-on-surface-variant">
+                벤더사의 지정 결제망에 강제 종속되지 않고 운영사 자체 머천트 키를 통한 독립 정산 흐름 구현.
+              </span>
+</div>
+</label>
+<!-- Item 5 -->
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors select-none">
+<input class="checklist-item mt-1 w-4 h-4 rounded text-primary focus:ring-0 accent-on-surface" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">
+                규제 관할권별 라이선스 인증(GLI, BMM Testlabs) 준수 여부
+              </span>
+<span class="font-caption text-caption text-on-surface-variant">
+                몰타 MGA, 큐라소 GCB 등 글로벌 공인 인증 기관의 난수생성기(RNG) 및 플랫폼 적합성 성적서 유효성.
+              </span>
+</div>
+</label>
+</div>
+</section>
+<!-- 6. Expandable/Accordion FAQ Section -->
+<section class="flex flex-col gap-4 scroll-mt-20" id="section-5">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-6 bg-on-surface rounded-full"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">
+            5. 자주 묻는 질문 (FAQ)
+          </h2>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Accordion Q1 -->
+<details class="group bg-surface-container-lowest rounded-xl p-4 shadow-sm open:bg-surface-container-low transition-all">
+<summary class="flex items-center justify-between cursor-pointer list-none select-none">
+<span class="font-headline-sm text-headline-sm text-[16px] text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface text-center leading-6 font-label-md text-label-md shrink-0">Q1</span>
+                초기 자본금이 제한적인 경우 임대와 분양 중 어떤 모델이 유리한가요?
+              </span>
+<span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="pt-3 pl-8 font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              초기 셋업 비용 절감 및 빠른 시장 진입에는 턴키 임대가 유리하며, 분양은 자체 마케팅 네트워크와 에이전트 조직이 이미 구축되어 있을 때 정산 수익률 측면에서 적합합니다. 임대는 운영 시스템 완성도가 높지만 커스텀 제약이 따르므로 초기 트래픽 유입 규모에 맞춰 선택해야 합니다.
+            </div>
+</details>
+<!-- Accordion Q2 -->
+<details class="group bg-surface-container-lowest rounded-xl p-4 shadow-sm open:bg-surface-container-low transition-all">
+<summary class="flex items-center justify-between cursor-pointer list-none select-none">
+<span class="font-headline-sm text-headline-sm text-[16px] text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface text-center leading-6 font-label-md text-label-md shrink-0">Q2</span>
+                자체 제작 시 소스 코드 소유권은 완벽히 이전받을 수 있습니까?
+              </span>
+<span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="pt-3 pl-8 font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              개발 계약서의 IP(지식재산권) 양도 조항에 명시되어야 하며, 서드파티 게임 공급사(Evolution, Pragmatic Play 등)의 게임 엔진 SDK는 별도 상용 라이선스 계약 대상이므로 원천 코드가 아닌 통합 브릿지 코드만 소유권 인정 대상이 됩니다.
+            </div>
+</details>
+<!-- Accordion Q3 -->
+<details class="group bg-surface-container-lowest rounded-xl p-4 shadow-sm open:bg-surface-container-low transition-all">
+<summary class="flex items-center justify-between cursor-pointer list-none select-none">
+<span class="font-headline-sm text-headline-sm text-[16px] text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface text-center leading-6 font-label-md text-label-md shrink-0">Q3</span>
+                피드 제공업체와의 직접 계약 대비 플랫폼 번들 피드의 단점은 무엇입니까?
+              </span>
+<span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="pt-3 pl-8 font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              번들 피드는 통합 관리가 간편하나 오즈 마진 조정의 자율성이 제한되며, 고액 베팅(High Roller) 발생 시 강제 베팅 거절 혹은 리스크 매니지먼트 권한이 플랫폼 벤더사에 귀속되어 운영사 고유의 마케팅 엣지를 상실할 수 있습니다.
+            </div>
+</details>
+<!-- Accordion Q4 -->
+<details class="group bg-surface-container-lowest rounded-xl p-4 shadow-sm open:bg-surface-container-low transition-all">
+<summary class="flex items-center justify-between cursor-pointer list-none select-none">
+<span class="font-headline-sm text-headline-sm text-[16px] text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface text-center leading-6 font-label-md text-label-md shrink-0">Q4</span>
+                벤더 교체 시 기존 유저 DB 및 배팅 히스토리 이전이 가능합니까?
+              </span>
+<span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="pt-3 pl-8 font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              사전에 데이터 마이그레이션 포맷(JSON/SQL)과 API 내보내기 권한을 계약에 포함시켜야 기술 부채 없이 마이그레이션이 가능합니다. 대부분의 임대형 벤더는 회원 해시 패스워드 추출을 거부하므로 이 경우 비밀번호 재설정 캠페인 설계가 선행되어야 합니다.
+            </div>
+</details>
+</div>
+</section>
+</div>
+<!-- 7. Subtle, Non-Intrusive B2B Call-to-Action (CTA Box) -->
+<aside class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<div class="flex flex-col gap-1.5 max-w-xl">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary">file_present</span>
+<span class="font-label-md text-label-md text-secondary uppercase font-semibold">2025 Benchmarking Release</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">
+          2025 OneBetHub 벤더 벤치마크 리포트 (Full Version 58p PDF)
+        </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          전 세계 30개 주요 공급사의 실제 견적표, SLA 비교 데이터 및 기술 스펙 매트릭스를 담은 전문 조사서 전문을 무료로 열람하십시오.
+        </p>
+</div>
+<button class="px-5 py-2.5 rounded bg-primary text-on-primary font-label-md text-label-md flex items-center gap-2 hover:bg-primary-container transition-colors shadow-sm shrink-0" type="button">
+<span class="material-symbols-outlined text-[18px]">download_for_offline</span>
+<span>리포트 다운로드 신청</span>
+</button>
+</aside>
+<!-- 8. Related Intelligence Reports -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">연관 인텔리전스 리포트</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">관련 테마 분석 3편</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Related 1 -->
+<a class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between gap-3 group hover:bg-surface-container-low transition-colors" href="#">
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">ENGINEERING</span>
+<h4 class="font-headline-sm text-headline-sm text-[15px] text-on-surface group-hover:text-primary transition-colors">
+              스포츠 배당 오즈 엔진 레이턴시 최적화 실무
+            </h4>
+<p class="font-caption text-caption text-on-surface-variant line-clamp-2">
+              인플레이 라이브 트레이딩 시 100ms 미만 전송 지연을 구현하기 위한 웹소켓 파이프라인 아키텍처.
+            </p>
+</div>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+            읽는 시간 8분 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</span>
+</a>
+<!-- Related 2 -->
+<a class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between gap-3 group hover:bg-surface-container-low transition-colors" href="#">
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">DISTRIBUTION</span>
+<h4 class="font-headline-sm text-headline-sm text-[15px] text-on-surface group-hover:text-primary transition-colors">
+              분양 에이전트 다계층 정산 아키텍처 구축 가이드
+            </h4>
+<p class="font-caption text-caption text-on-surface-variant line-clamp-2">
+              총판 및 하부 총판 롤링/루징 커미션 자동 연산과 실시간 밸런스 정산 엔진 설계 전략.
+            </p>
+</div>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+            읽는 시간 11분 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</span>
+</a>
+<!-- Related 3 -->
+<a class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between gap-3 group hover:bg-surface-container-low transition-colors" href="#">
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">SECURITY &amp; AUDIT</span>
+<h4 class="font-headline-sm text-headline-sm text-[15px] text-on-surface group-hover:text-primary transition-colors">
+              카지노 백오피스 보안 감사 및 내부 횡령 방지 통제
+            </h4>
+<p class="font-caption text-caption text-on-surface-variant line-clamp-2">
+              관리자 권한 분립(Dual Control) 체계와 머니 조작 탐지를 위한 DB 감사 로깅 시스템.
+            </p>
+</div>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+            읽는 시간 9분 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</span>
+</a>
+</div>
+</section>
+<!-- 9. Author Bio Block -->
+<footer class="bg-surface-container-low p-6 rounded-xl shadow-sm flex flex-col md:flex-row gap-5 items-start">
+<img alt="이서준 프로필" class="w-16 h-16 rounded-full object-cover shadow-sm shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAprLFr_taKGaueSbZB6kf9uuVa904HEbE8Gaphrg6fMLCHp-axhR-wxtwjUZAGQbDrRlvjx8Grd96_-1ehGTOHh2Yi8U65XHwuyIW2R-39VucZLQXAeRJQ_h94Ir6MfBbIqWSVrRdBzlzOZggN7VVTL_cQuUmklTA6NEHZryIeYDNQluvKaJQk44c4l6TlFexKvtMpIhxd8dHxFB8Ypk6azhLW8RzjodKUEQ3VM2r77u7Dg7OHd53P"/>
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">이서준 (Seojun Lee)</h4>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm">RESEARCH LEAD</span>
+</div>
+<p class="font-label-md text-label-md text-secondary">OneBetHub 수석 테크 애널리스트 &amp; 산업 조사위원</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-normal pt-1">
+          글로벌 iGaming 기술 인프라 및 B2B 플랫폼 공급망을 12년간 심층 취재·분석해 왔습니다. 前 엔터프라이즈 핀테크 아키텍트로 일하며 분산 원장 및 실시간 데이터 파이프라인 설계를 주도했습니다.
+        </p>
+</div>
+</footer>
+</article>
+<!-- Interactive JavaScript -->
+<script>
+    (function() {
+      // 1. Reading Progress Bar Logic
+      window.addEventListener('scroll', function() {
+        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        const bar = document.getElementById('scroll-progress-bar');
+        if (bar) {
+          bar.style.width = scrolled + '%';
+        }
+      });
+
+      // 2. Font Size Toggle Logic
+      let fontScaleIndex = 0;
+      const fontScales = [
+        { label: '100%', class: '' },
+        { label: '115%', class: 'scale-up-1' },
+        { label: '130%', class: 'scale-up-2' }
+      ];
+      const fontBtn = document.getElementById('font-toggle-btn');
+      const fontLabel = document.getElementById('font-size-label');
+      const articleBody = document.getElementById('article-content-body');
+
+      if (fontBtn && fontLabel && articleBody) {
+        fontBtn.addEventListener('click', function() {
+          fontScaleIndex = (fontScaleIndex + 1) % fontScales.length;
+          fontLabel.textContent = fontScales[fontScaleIndex].label;
+          if (fontScaleIndex === 0) {
+            articleBody.style.fontSize = '15px';
+            articleBody.style.lineHeight = '24px';
+          } else if (fontScaleIndex === 1) {
+            articleBody.style.fontSize = '17px';
+            articleBody.style.lineHeight = '28px';
+          } else {
+            articleBody.style.fontSize = '19px';
+            articleBody.style.lineHeight = '32px';
+          }
+        });
+      }
+
+      // 3. Bookmark Toggle
+      const bookmarkBtn = document.getElementById('bookmark-btn');
+      const bookmarkIcon = document.getElementById('bookmark-icon');
+      let bookmarked = false;
+      if (bookmarkBtn && bookmarkIcon) {
+        bookmarkBtn.addEventListener('click', function() {
+          bookmarked = !bookmarked;
+          bookmarkIcon.textContent = bookmarked ? 'bookmark' : 'bookmark_border';
+          bookmarkBtn.classList.toggle('text-secondary', bookmarked);
+        });
+      }
+
+      // 4. Share Link Copy
+      const shareBtn = document.getElementById('share-link-btn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', function() {
+          navigator.clipboard.writeText(window.location.href).then(function() {
+            const icon = shareBtn.querySelector('span');
+            if (icon) {
+              icon.textContent = 'check';
+              setTimeout(() => { icon.textContent = 'link'; }, 1500);
+            }
+          }).catch(function() {
+            // fallback
+          });
+        });
+      }
+
+      // 5. Checklist Counter Logic
+      const checkboxes = document.querySelectorAll('.checklist-item');
+      const counterLabel = document.getElementById('checklist-counter');
+      function updateChecklist() {
+        if (!checkboxes.length || !counterLabel) return;
+        let checkedCount = 0;
+        checkboxes.forEach(function(cb) {
+          if (cb.checked) checkedCount++;
+        });
+        counterLabel.textContent = checkedCount + ' / ' + checkboxes.length + ' 검증 완료';
+        if (checkedCount === checkboxes.length) {
+          counterLabel.classList.remove('bg-surface-container', 'text-on-surface-variant');
+          counterLabel.classList.add('bg-secondary', 'text-on-secondary');
+        } else {
+          counterLabel.classList.add('bg-surface-container', 'text-on-surface-variant');
+          counterLabel.classList.remove('bg-secondary', 'text-on-secondary');
+        }
+      }
+      checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', updateChecklist);
+      });
+    })();
+  </script>
+</div><footer class="w-full bg-surface-container-low px-5 py-8 mt-12"><div class="flex flex-col gap-4 max-w-lg mx-auto"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight uppercase">OneBetHub</span><span class="bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm px-1.5 py-0.5 rounded">ANALYST REPORT</span></div><p class="font-caption text-caption text-on-surface-variant leading-relaxed">OneBetHub의 모든 심층 테크 리포트 및 벤더 평가 자료는 공시 자료와 기술 실사 기반으로 집필됩니다.</p><div class="p-3 bg-surface-container rounded"><p class="font-caption text-caption text-on-surface leading-normal font-medium">OneBetHub은 플랫폼 벤더 공급망 및 솔루션 기술 분석 전문 B2B 미디어이며 일반 이용자를 위한 베팅 서비스를 제공하지 않습니다.</p></div><p class="font-caption text-caption text-outline pt-2">© 2025 OneBetHub. All Rights Reserved.</p></div></footer></main></body></html>

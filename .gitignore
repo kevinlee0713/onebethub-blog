@@ -4,3 +4,5 @@ data/dry-run-output/
 npm-debug.log*
 .DS_Store
 .ssh-local/
+*-log.txt
+*-log-*.txt

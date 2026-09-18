@@ -1,0 +1,243 @@
+/*
+Theme Name: OneBetHub
+Theme URI: https://onebethub.com
+Author: OneBetHub Intelligence Group
+Author URI: https://onebethub.com
+Description: B2B trade-publication theme for OneBetHub Enterprise Intelligence — a vendor-neutral iGaming platform infrastructure trade journal. Bloomberg/FT-style editorial layout built with Newsreader (serif headlines) and Inter (sans UI), Tailwind CSS (CDN). Not a consumer gambling theme.
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 7.4
+Text Domain: onebethub
+*/
+
+/* ---------------------------------------------------------------------
+   Base resets not worth doing via Tailwind CDN utility classes.
+   Tailwind CDN (loaded in functions.php) handles the vast majority of
+   styling; this file only carries things that need to live outside the
+   utility-class system: font-face fallbacks, .entry-content typography
+   scoping, and a couple of small non-Tailwind selectors (details/summary
+   caret rotation, line-clamp fallback, print).
+--------------------------------------------------------------------- */
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-serif-headline,
+.entry-content h2,
+.entry-content h3,
+.entry-content blockquote {
+  font-family: 'Newsreader', Georgia, serif;
+}
+
+/* Fine hairline borders reminiscent of FT / Bloomberg Terminal */
+.fine-border-r { border-right: 1px solid #e2e8f0; }
+.fine-border-b { border-bottom: 1px solid #e2e8f0; }
+
+.ticker-gradient {
+  background: linear-gradient(90deg, #090d16 0%, #0f172a 100%);
+}
+
+/* ---------------------------------------------------------------------
+   .entry-content — scoping for whatever HTML Stage2/Stage3 of the
+   generation pipeline produced (headings, tables, lists, blockquotes).
+   Reading width ~68ch, Newsreader for the lead paragraph, Inter body.
+--------------------------------------------------------------------- */
+.entry-content {
+  max-width: 68ch;
+  color: #1e293b;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.entry-content > *:first-child {
+  margin-top: 0;
+}
+
+.entry-content p {
+  margin: 1.25em 0;
+}
+
+.entry-content > p:first-of-type {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #334155;
+}
+
+.entry-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  margin: 2.25em 0 0.75em;
+  padding-top: 0.25em;
+  border-top: 1px solid #e2e8f0;
+}
+
+.entry-content h2:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.entry-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 1.75em 0 0.6em;
+}
+
+.entry-content h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 1.5em 0 0.5em;
+}
+
+.entry-content ul,
+.entry-content ol {
+  margin: 1.25em 0;
+  padding-left: 1.5em;
+}
+
+.entry-content li {
+  margin: 0.4em 0;
+}
+
+.entry-content ul {
+  list-style: disc;
+}
+
+.entry-content ol {
+  list-style: decimal;
+}
+
+.entry-content a {
+  color: #0369a1;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.entry-content a:hover {
+  color: #075985;
+}
+
+.entry-content strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.entry-content blockquote {
+  margin: 1.75em 0;
+  padding: 1em 1.25em;
+  background: #f8fafc;
+  border-left: 3px solid #0284c7;
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+  color: #334155;
+}
+
+.entry-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1.5em 0;
+}
+
+.entry-content figcaption {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: center;
+  margin-top: 0.4em;
+}
+
+.entry-content hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 2.5em 0;
+}
+
+.entry-content code {
+  background: #f1f5f9;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Wide elements (tables, comparison grids) are allowed to exceed the
+   68ch reading column but never the article column itself. */
+.entry-content table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 1.75em 0;
+  font-size: 0.9rem;
+}
+
+.entry-content table th,
+.entry-content table td {
+  padding: 0.65em 0.85em;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.entry-content table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.entry-content table tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+.entry-content-wide-table-wrap {
+  overflow-x: auto;
+  margin: 1.75em 0;
+}
+
+.entry-content-wide-table-wrap table {
+  margin: 0;
+}
+
+/* Line clamp fallback (Tailwind CDN already ships line-clamp utilities,
+   this only guards non-webkit browsers gracefully) */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Category taxonomy accent rail used on category.php hero */
+.category-accent-rail {
+  height: 4px;
+  border-radius: 2px;
+}
+
+@media print {
+  header, footer, .no-print { display: none !important; }
+}
+
+/* Horizontal category nav / filter chip rows scroll without a visible
+   scrollbar on mobile, matching the Stitch mobile mockups. */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
