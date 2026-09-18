@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:\\project\\onebethub-blog\\.claude\\hooks\\check-pipeline-doc.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
