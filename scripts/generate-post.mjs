@@ -1721,10 +1721,17 @@ async function syncClickUpPostingTask(page, title, postUrl, keyword, postStatus)
 
     if (page.clickupTaskId) {
       // 미리 등록된 태스크 업데이트 — Name/Status는 일반 update, custom field는 필드별 개별 엔드포인트.
+      // due_date는 실제 발행(publish) 시점에만 "오늘"로 갱신한다(2026-09-18, Kevin 요청) — draft
+      // 상태일 땐 아직 발행된 게 아니므로 기존에 적혀 있던 예상일을 건드리지 않는다.
+      const updateBody = { name: title, status: clickupStatus }
+      if (postStatus === 'publish') {
+        updateBody.due_date = Date.now()
+        updateBody.due_date_time = false
+      }
       const res = await fetch(`https://api.clickup.com/api/v2/task/${page.clickupTaskId}`, {
         method: 'PUT',
         headers: { 'Authorization': apiKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: title, status: clickupStatus }),
+        body: JSON.stringify(updateBody),
       })
       if (!res.ok) {
         console.log(`  ⚠ ClickUp 태스크 업데이트 실패 (HTTP ${res.status}): ${await res.text()}`)

@@ -266,6 +266,15 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
    (T2-06)의 필수 상향링크가 실제로 존재하지 않는 URL(게다가 `/en/` 같은 잘못된 패턴)을 가리키는 채로
    라이브 발행됐었다. DRY_RUN 로그 완전 분리 + 오염 데이터 정리 + 재발행으로 해결, `resolvePageUrlSync`/
    `enPostUrl`의 DRY_RUN 전용 잘못된 `/en/` 프리픽스도 함께 제거.
+7. **GitHub Actions 워크플로우가 SSH_PASSWORD를 안 넘기고 있었음(2026-09-18)** — `weekly-post.yml`의
+   env 블록이 `SSH_PRIVATE_KEY`만 참조하고 있었는데, 이 서버는 애초에 키가 아니라 비밀번호 인증이라
+   `SSH_PRIVATE_KEY` 시크릿 자체가 등록된 적이 없었다. `getSSH()`는 `SSH_PRIVATE_KEY`가 없으면
+   `SSH_PASSWORD`로 폴백하는데, 워크플로우가 `SSH_PASSWORD`를 env로 넘기지 않아서 그 폴백 값 자체가
+   없는 상태 — 즉 **스케줄이 "active"로 떠 있어도 실제 화요일 자동 실행 때 SSH 연결부터 실패했을
+   상황**이었다. `gh run list`로 지금까지 실행 이력이 0건인 걸로 처음 의심을 확인했고,
+   `SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}`를 env에 추가해서 수정. `vars.DRY_RUN=true`로 임시
+   전환 후 `gh workflow run`으로 수동 트리거해 GitHub 러너에서 정상 동작하는지 검증함(검증 후 변수
+   원복).
 
 ## 알려진 이슈 / 참고사항
 
@@ -363,6 +372,12 @@ Post url이 자동으로 채워져야 하고, 검수 단계에서 제목이 바�
   `keyword-map.json`에 저장해뒀고 `keywordLabel = page.clickupCode ? \`${page.clickupCode}. ${keyword}\`
   : keyword`로 "B-45. 카지노 솔루션 분양" 형태를 만들어 Keyword 필드에 넣는다. 코드가 없는 나머지
   12페이지는 키워드만 그대로 들어간다.
+- **due_date 자동 갱신(2026-09-18)** — 22개 태스크에 처음 적어둔 due_date는 "매주 화요일 1개씩
+  나온다"고 가정한 예상치일 뿐, 실제 발행을 트리거하지도 실제 발행일과 자동으로 맞춰지지도 않는다는
+  걸 Kevin에게 명확히 하고, 실제 발행 시점에 반영되도록 개선했다: `postStatus === 'publish'`일 때만
+  (draft면 아직 발행된 게 아니므로 건드리지 않음) `PUT` 바디에 `due_date: Date.now()`를 같이 실어
+  보내 "오늘 실제로 발행됨"으로 갱신한다. 실제 발행 트리거 자체는 여전히 GitHub Actions 주간 cron +
+  `sortedPages()`의 고정 순서이고, ClickUp의 이 필드는 순전히 기록용이다.
 - 필요 env: `CLICKUP_API_KEY`(ClickUp 개인 API 토큰), `CLICKUP_LIST_ID`(포스팅 리스트 ID
   `901821678685`). 둘 다 `.env`와 GitHub Actions secret에 등록 완료(2026-09-18, 실제 API 호출로
   인증·업데이트 둘 다 동작 확인됨). 둘 중 하나라도 없으면 함수가 조용히 스킵(콘솔 경고만 남김,
