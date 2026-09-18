@@ -394,6 +394,23 @@ Post url이 자동으로 채워져야 하고, 검수 단계에서 제목이 바�
   **발행 후 사람이 WordPress에서 직접 제목을 수정하는 경우**는 별도 동기화 로직이 없어 ClickUp에
   반영 안 됨(웹훅/폴링이 필요한 별개 기능 — 필요하면 추후 추가).
 
+## PUBLISHING_SCHEDULE.md — 저장소 안 발행 스케줄표 (2026-09-18)
+
+ClickUp을 열지 않고도 VS Code에서 바로 볼 수 있게, 저장소 루트에 `PUBLISHING_SCHEDULE.md`를 둔다.
+**직접 수정하지 않는 자동 생성 파일** — `scripts/generate-schedule.mjs`가 `keyword-map.json` +
+`data/published-log.json`에서 매번 다시 계산해서 통째로 새로 쓴다. 표 구성은 ClickUp "포스팅" 리스트와
+동일: 순번, 클러스터/티어, ID, 제목, 상태(✅ 발행완료/⏳ 예정), 날짜, 담당(Kevin 배정 키워드는
+⭐ 표시), Btag 코드, 발행 URL.
+
+- `generate-post.mjs`의 `main()` 끝에서 **실발행(`!DRY_RUN`)일 때만** `regenerateSchedule()`을 호출해
+  자동 갱신한다(ClickUp 동기화와 같은 이유로 DRY_RUN 가드 필수 — DRY_RUN 로그로 계산하면 파일이 테스트
+  데이터로 오염됨). GitHub Actions의 "Commit updated published-log.json and schedule" 스텝이
+  `PUBLISHING_SCHEDULE.md`도 함께 커밋·푸시하므로, 매주 화요일 자동 실행 후 저절로 최신화된다.
+- 수동 재생성: `node scripts/generate-schedule.mjs`.
+- "예정" 행의 날짜는 매주 화요일 1페이지씩 나온다고 가정한 추정치일 뿐 실제 발행을 트리거하지 않는다
+  (ClickUp due date와 동일한 성격 — 위 "ClickUp 연동" 절 참고). 발행완료 행의 날짜는
+  `published-log.json`의 실제 `publishedAt`을 그대로 쓴다.
+
 ## 검수
 
 `/seo검수` 슬래시 커맨드(`~/.claude/commands/seo검수.md`)에 VOBET Magazine·Sports News Blog와 나란히

@@ -47,11 +47,11 @@ jobs:
           CLICKUP_LIST_ID: ${{ secrets.CLICKUP_LIST_ID }}
         run: node scripts/generate-post.mjs
 
-      - name: Commit updated published-log.json
+      - name: Commit updated published-log.json and schedule
         if: always()
         run: |
           git config user.name "onebethub-bot"
           git config user.email "bot@onebethub.com"
-          git add data/published-log.json
-          git diff --cached --quiet || git commit -m "chore: update published-log.json [skip ci]"
+          git add data/published-log.json PUBLISHING_SCHEDULE.md
+          git diff --cached --quiet || git commit -m "chore: update published-log.json and PUBLISHING_SCHEDULE.md [skip ci]"
           git push || true

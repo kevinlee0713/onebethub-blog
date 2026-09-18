@@ -30,6 +30,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { NodeSSH } from 'node-ssh'
 import os from 'os'
+import { regenerateSchedule } from './generate-schedule.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const KEYWORD_MAP_FILE = path.join(__dirname, 'keyword-map.json')
@@ -2181,6 +2182,17 @@ async function main() {
     }
   } catch (e) {
     console.log(`  ⚠ 영문 번역/저장 실패: ${e.message}`)
+  }
+
+  // DRY_RUN은 별도 로그(dry-run-output/published-log.json)라 여기서 재계산하면 실제 스케줄표가
+  // 테스트 데이터로 오염된다(2026-09-18, ClickUp 쪽에서 겪은 것과 같은 사고 유형) — 실발행 때만.
+  if (!DRY_RUN) {
+    try {
+      const { publishedCount, total } = regenerateSchedule()
+      console.log(`  ✓ PUBLISHING_SCHEDULE.md 갱신 (발행완료 ${publishedCount}/${total})`)
+    } catch (e) {
+      console.log(`  ⚠ PUBLISHING_SCHEDULE.md 갱신 실패: ${e.message}`)
+    }
   }
 
   console.log('\n✅ 파이프라인 완료')
