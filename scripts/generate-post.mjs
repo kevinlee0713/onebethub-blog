@@ -35,10 +35,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const KEYWORD_MAP_FILE = path.join(__dirname, 'keyword-map.json')
 const LINK_MAP_FILE = path.join(__dirname, 'link-map.json')
 const DATA_DIR = path.join(__dirname, '..', 'data')
-const PUBLISHED_LOG_FILE = path.join(DATA_DIR, 'published-log.json')
 const DRY_RUN_OUTPUT_DIR = path.join(DATA_DIR, 'dry-run-output')
 
 const DRY_RUN = (process.env.DRY_RUN ?? '').toLowerCase() === 'true'
+
+// DRY_RUN은 반드시 별도 파일에 기록한다 — 예전엔 DRY_RUN도 실제 published-log.json에 draft 항목을
+// 남겨서, 그 뒤 실제(non-DRY_RUN) 실행의 pickPage()/resolvePageUrlSync()가 "이미 발행됨"으로 착각하고
+// 실제로는 존재하지 않는 허브 페이지 URL(DRY_RUN 전용 `/en/` 프리픽스 포함)을 상향/내부 링크로 삽입하는
+// 사고가 있었다(2026-09-18 발견·수정). DRY_RUN 로그는 실제 발행 판단에 절대 영향을 주면 안 된다.
+const PUBLISHED_LOG_FILE = DRY_RUN
+  ? path.join(DRY_RUN_OUTPUT_DIR, 'published-log.json')
+  : path.join(DATA_DIR, 'published-log.json')
 
 // OpenAI SDK는 apiKey가 비어 있으면 생성자에서 즉시 throw한다(Anthropic/Gemini SDK는 그렇지 않음).
 // OPENAI_API_KEY/GEMINI_API_KEY는 원래 선택 사항(없으면 해당 검증만 skip)이므로, 미설정 시 더미 값으로
@@ -161,7 +168,7 @@ function loadPublishedLog() {
 function appendPublishedLog(entry) {
   const log = loadPublishedLog()
   log.push(entry)
-  fs.mkdirSync(DATA_DIR, { recursive: true })
+  fs.mkdirSync(path.dirname(PUBLISHED_LOG_FILE), { recursive: true })
   fs.writeFileSync(PUBLISHED_LOG_FILE, JSON.stringify(log, null, 2) + '\n', 'utf-8')
   return log
 }
@@ -523,8 +530,13 @@ function resolvePageUrlSync(page, lang, log) {
   const entry = log.find(e => e.id === page.id && e.lang === lang)
   if (entry?.url) return entry.url
   if (DRY_RUN) {
-    const prefix = lang === 'en' ? 'en/' : ''
-    return `${WP_URL}/${prefix}${page.slug}/`
+    // 실제 퍼머링크는 언어 접두 디렉터리가 없다 — EN은 슬러그 자체에 -en 접미사가 붙을 뿐이다
+    // (createWordPressPost 호출부의 `enSlug = ${page.slug}-en` 참고). 예전엔 여기서 `en/` 접두사를
+    // 붙였는데, 이 값이 DRY_RUN 발행 원장에 그대로 기록됐다가 실제 실행에서 재사용되며 존재하지
+    //않는 `/en/...` URL이 상향/내부 링크로 삽입되는 사고로 이어졌다(2026-09-18) — 이제 DRY_RUN
+    // 원장은 별도 파일로 분리했지만, 애초에 이 프리픽스 자체가 실제 URL 구조와 달라 틀린 값이었다.
+    const slug = lang === 'en' ? `${page.slug}-en` : page.slug
+    return `${WP_URL}/${slug}/`
   }
   return null
 }
@@ -661,6 +673,47 @@ OneBetHub(onebethub.com)는 특정 브랜드 홍보 채널이 아니라 카지�
 패턴 방지 — 반드시 지켜야 할 원칙).`
 }
 
+// 전환 페이지(role에 "전환" 포함 — keyword-map.json상 클러스터당 T1 한 곳, 임대는 T1-01)만 7Play로
+// 직접 연결한다. 그 외 지원/허브 페이지(T2-00 "유입 허브(전환 아님)" 포함 대다수)는 클러스터의 전환
+// 페이지로 가는 내부 링크를 CTA로 쓴다 — 사이트의 모든 글이 매번 동일한 외부 상업 링크로 귀결되는
+// 도어웨이 패턴을 피하기 위한 설계(세션 합의, 2026-09-18). keyword-map.json의 role 구분이 애초에
+// 이 의도를 전제하고 있었는데 CTA 하드코딩이 그걸 반영하지 못했던 것을 바로잡음.
+function isConversionPage(page) {
+  return (page.role || '').includes('전환')
+}
+
+// 지원/허브 페이지의 CTA 목적지 — 같은 클러스터의 전환 페이지(T1, role="전환")로 가는 내부 링크.
+// 그 전환 페이지가 아직 발행 전이면(사이트 초기 한정) 안전망으로 7Play 직접 링크를 임시로 쓴다 —
+// 전환 페이지가 발행되는 순간 다음 실행부터 자동으로 내부 링크로 전환된다(CTA는 매번 재생성되므로
+// 과거에 이미 나간 글은 고정되지만, 이 파일 개별 실행 시점 기준 최신 상태를 반영한다).
+function resolveCtaUrl(page, pages, log) {
+  if (isConversionPage(page)) return CTA_URL_MAP[page.cluster] ?? 'https://7play.co/'
+  const target = pages.find(p => p.cluster === page.cluster && p.id !== page.id && isConversionPage(p))
+  const url = target ? resolvePageUrlSync(target, 'ko', log) : null
+  return url ?? (CTA_URL_MAP[page.cluster] ?? 'https://7play.co/')
+}
+
+function ctaBlock(page, ctaUrl) {
+  if (isConversionPage(page)) {
+    return `---
+## 카지노 솔루션 도입을 검토 중이라면
+
+이 글이 도움이 됐다면, 7Play의 솔루션 라인업을 함께 살펴보고 필요한 옵션을 비교해보세요.
+
+[→ 7Play 솔루션 보기](${ctaUrl})
+
+---`
+  }
+  return `---
+## 더 깊이 알아보고 싶다면
+
+이 주제와 직접 관련된 도입·비용 비교 글에서 실무적으로 확인해야 할 체크포인트를 이어서 확인해보세요.
+
+[→ 관련 글 더 보기](${ctaUrl})
+
+---`
+}
+
 async function generatePost(page, outboundLinks = [], internalLinks = [], requiredUpwardLink = null, ctaUrl) {
   const systemPrompt = buildBrandSystemPrompt()
 
@@ -706,16 +759,9 @@ ${upwardRule}
    - 출처로 뒷받침되지 않는 구체 수치를 절대 지어내지 마세요. 불확실하면 단정 대신 경향·범위로 표현하세요.
    - 미확정 사안(법규 개정, 특정 업체의 비공개 가격 등)은 단정하지 말고 "전망/일반적으로/사업자에 따라 다름"으로 표현하세요.
 
-   - 글 마지막에 반드시 아래 CTA 섹션 포함:
+   - 글 마지막에 반드시 아래 CTA 섹션을 그대로(문구·URL 변형 없이) 포함:
 
----
-## 카지노 솔루션 도입을 검토 중이라면
-
-이 글이 도움이 됐다면, 7Play의 솔루션 라인업을 함께 살펴보고 필요한 옵션을 비교해보세요.
-
-[→ 7Play 솔루션 보기](${ctaUrl})
-
----
+${ctaBlock(page, ctaUrl)}
 
 4. 키워드: SEO 키워드 5~8개 (쉼표 구분, 첫 번째는 "${focusKeyword}")
 
@@ -757,7 +803,7 @@ async function humanizePost(post, page, ctaUrl) {
 - 구체적 수치·통계를 추가할 때는 반드시 본문의 외부 출처에 근거한 것만 쓰세요. 출처 없는 수치를 새로 지어내지 말고, 근거가 없으면 경향·범위 표현이나 필자의 실무 경험 사례로 대체하세요
 - 한 군데에 필자의 개인적인 견해나 실무 관점을 넣으세요
 - "중요합니다", "필수입니다", "반드시" 같은 AI 관용구를 줄이세요
-- CTA 섹션(7Play 링크)은 절대 수정하지 마세요
+- CTA 섹션(마지막 링크 블록)은 절대 수정하지 마세요
 - 본문의 모든 링크(내부 onebethub.com 링크 + 외부 출처 링크)의 URL은 절대 삭제·변경하지 마세요. 앵커텍스트 문장은 자연스럽게 다듬어도 되지만 링크 자체는 유지하세요
 - <aside> Key Facts 박스, FAQ 섹션, 체크리스트는 구조를 유지하되 문장은 자연스럽게 다듬으세요
 - 제목, 메타 설명, 키워드는 유지하고 본문(CONTENT)만 수정하세요
@@ -797,7 +843,7 @@ function firstParagraphs(content, n) {
   return content.split(/\n{2,}/).filter(p => p.trim() && !p.trim().startsWith('#')).slice(0, n).join('\n\n')
 }
 
-function runSeoChecks(post, page, requiredUpwardLink) {
+function runSeoChecks(post, page, requiredUpwardLink, ctaUrl) {
   const issues = []
   const focusKeyword = (page.primaryKeyword || page.title).toLowerCase()
   const title = post.title.toLowerCase()
@@ -843,8 +889,13 @@ function runSeoChecks(post, page, requiredUpwardLink) {
   // 9. 본문 길이 2,000자 이상
   if (content.length < 2000) issues.push(`본문 너무 짧음: ${content.length}자 (최소 2,000자)`)
 
-  // 10. CTA 섹션 (7Play 링크)
-  if (!content.includes('7play.co')) issues.push('CTA 섹션 누락: 7play.co 링크 필요')
+  // 10. CTA 섹션 — 전환 페이지(role="전환")는 7play.co 직접 링크, 그 외 지원/허브 페이지는 클러스터
+  // 전환 페이지로 가는 내부 링크(ctaUrl)만 있으면 통과 (ctaBlock/resolveCtaUrl 참고 — 도어웨이 패턴 방지)
+  if (isConversionPage(page)) {
+    if (!content.includes('7play.co')) issues.push('CTA 섹션 누락: 7play.co 링크 필요 (전환 페이지)')
+  } else if (!content.includes(ctaUrl)) {
+    issues.push(`CTA 섹션 누락: 내부 전환 링크(${ctaUrl}) 필요`)
+  }
 
   // 11. [신규] 상향 링크 존재 여부 — pushesTo가 있는 페이지는 본문 첫 3문단 안에 상향링크 필수.
   // (세션 합의: 원본 파이프라인에는 없던 게이트 항목. 고정 내부링크 테이블의 "상향링크 필수" 규칙을 강제한다.)
@@ -859,7 +910,7 @@ function runSeoChecks(post, page, requiredUpwardLink) {
 }
 
 // EN 번역본용 룰 게이트 — runSeoChecks의 영문판.
-function runSeoChecksEn(post, focusKeyword, requiredUpwardLinkEn) {
+function runSeoChecksEn(post, focusKeyword, requiredUpwardLinkEn, page, ctaUrl) {
   const issues = []
   const keyword = (focusKeyword ?? '').toLowerCase()
   const title = (post.title ?? '').toLowerCase()
@@ -893,7 +944,11 @@ function runSeoChecksEn(post, focusKeyword, requiredUpwardLinkEn) {
 
   if (content.length < 2000) issues.push(`EN 본문 너무 짧음: ${content.length}자 (최소 2,000자)`)
 
-  if (!content.includes('7play.co')) issues.push('EN CTA 섹션 누락: 7play.co 링크 필요')
+  if (isConversionPage(page)) {
+    if (!content.includes('7play.co')) issues.push('EN CTA 섹션 누락: 7play.co 링크 필요 (전환 페이지)')
+  } else if (!content.includes(ctaUrl)) {
+    issues.push(`EN CTA 섹션 누락: 내부 전환 링크(${ctaUrl}) 필요`)
+  }
 
   // 11. [신규] EN 상향 링크
   if (requiredUpwardLinkEn) {
@@ -907,17 +962,11 @@ function runSeoChecksEn(post, focusKeyword, requiredUpwardLinkEn) {
 }
 
 // CTA 섹션을 결정적으로 보장 — 생성/재작성 과정에서 잘리거나 누락돼도 표준 CTA를 덧붙임.
-function ensureCta(content, ctaUrl) {
-  if (content.includes('7play.co')) return content
+function ensureCta(content, page, ctaUrl) {
+  if (content.includes(ctaUrl)) return content
   return content.trimEnd() + `
 
----
-
-## 카지노 솔루션 도입을 검토 중이라면
-
-이 글이 도움이 됐다면, 7Play의 솔루션 라인업을 함께 살펴보고 필요한 옵션을 비교해보세요.
-
-[→ 7Play 솔루션 보기](${ctaUrl})
+${ctaBlock(page, ctaUrl)}
 `
 }
 
@@ -1113,7 +1162,7 @@ ${allIssues.map(i => `- ${i}`).join('\n')}
 
 개선 지침:
 - 위 문제점을 구체적으로 수정하세요
-- CTA 섹션(7Play 링크, ${ctaUrl})은 절대 수정하지 마세요
+- CTA 섹션(마지막 링크 블록, ${ctaUrl})은 절대 수정하지 마세요
 - 본문의 모든 링크(내부 onebethub.com 링크 + 외부 출처 링크 + 상향 링크)의 URL과 개수를 절대 삭제·변경하지 마세요. 앵커텍스트 문장은 더 자연스럽게 다듬어도 되지만, 링크 자체는 반드시 그대로 유지하세요.
 - <aside> Key Facts 박스, FAQ 섹션, 체크리스트 구조는 유지하세요
 - 제목, 메타 설명, 키워드는 유지하세요
@@ -1522,10 +1571,10 @@ async function translateToEnglish(post, page, internalLinks = [], attempt = 1, s
 
 Rules:${retryRule}${seoRule}${upwardRule}
 - Keep all markdown formatting, headings, links, and HTML tags (<aside>, <figure>, etc.)
-- Keep the CTA section but translate the surrounding text (preserve the 7play.co link)
+- Keep the CTA section but translate the surrounding text (preserve its link URL exactly)
 - Keep the FAQ section structure ("## Frequently Asked Questions")
 - Keep the checklist format (- [ ])
-- Do NOT translate URLs or external links
+- CRITICAL: Do NOT translate, localize, or modify any URL in any way — never add or remove path segments (e.g. never turn "onebethub.com/slug/" into "onebethub.com/en/slug/" or similar). Every URL must be copied character-for-character from the source, except for the internal-link replacements explicitly listed below (and even those must be copied character-for-character from the list, not invented).
 ${internalRule}
 - Write naturally — not a literal word-for-word translation
 - The TITLE must be at most 60 characters — write a complete, natural title within that limit.
@@ -1774,7 +1823,7 @@ async function main() {
     return
   }
 
-  const ctaUrl = CTA_URL_MAP[page.cluster] ?? 'https://7play.co/'
+  const ctaUrl = resolveCtaUrl(page, pages, log)
   const focusKeyword = page.primaryKeyword || page.title
 
   // 상향 링크 대상 해석 (SEO 게이트 11항목 + 프롬프트 강제 주입)
@@ -1829,10 +1878,10 @@ async function main() {
 
     console.log('\n[Stage 3] 휴머나이징')
     post = await humanizePost(draft, page, ctaUrl)
-    post = { ...post, content: ensureCta(post.content, ctaUrl) }
+    post = { ...post, content: ensureCta(post.content, page, ctaUrl) }
 
     console.log('\n[Stage 4] SEO 품질 검사 (11항목)')
-    const seoIssues = runSeoChecks(post, page, requiredUpwardLink)
+    const seoIssues = runSeoChecks(post, page, requiredUpwardLink, ctaUrl)
     seoGateIssues = seoIssues
 
     if (seoIssues.length > 0) {
@@ -1872,7 +1921,7 @@ async function main() {
     revisionCount++
     console.log(`\n  ✗ 검증 미통과 — 재작성 ${revisionCount}/${MAX_AI_REVISIONS}회차`)
     post = await reviseWithFeedback(post, page, claudeAgentResult, gptResult, geminiResult, ctaUrl)
-    post = { ...post, content: ensureCta(post.content, ctaUrl) }
+    post = { ...post, content: ensureCta(post.content, page, ctaUrl) }
   }
 
   post = { ...post, description: seoDescription(post.description) }
@@ -2024,12 +2073,12 @@ async function main() {
     let enSeoIssues = []
     if (enPost.title && enPost.content) {
       console.log('\n[번역-게이트] EN SEO 품질 검사 (11항목)')
-      enSeoIssues = runSeoChecksEn(enPost, enPost.focusKeyword || focusKeyword, upEdgeEnUrl)
+      enSeoIssues = runSeoChecksEn(enPost, enPost.focusKeyword || focusKeyword, upEdgeEnUrl, page, ctaUrl)
       if (enSeoIssues.length > 0) {
         console.log(`  ✗ EN SEO 검사 실패 (${enSeoIssues.length}건) — 재번역 1회`)
         const enRetry = await translateToEnglish({ ...post, content: contentForTranslation }, page, enInternalLinks, 1, enSeoIssues, upEdgeEnUrl)
         if (enRetry.title && enRetry.content) {
-          const retryIssues = runSeoChecksEn(enRetry, enRetry.focusKeyword || focusKeyword, upEdgeEnUrl)
+          const retryIssues = runSeoChecksEn(enRetry, enRetry.focusKeyword || focusKeyword, upEdgeEnUrl, page, ctaUrl)
           if (retryIssues.length < enSeoIssues.length) { enPost = enRetry; enSeoIssues = retryIssues }
         }
       }
@@ -2090,7 +2139,7 @@ async function main() {
       })
 
       if (DRY_RUN) {
-        enPostUrl = `${WP_URL}/en/${enSlug}/`
+        enPostUrl = `${WP_URL}/${enSlug}/` // 실제 퍼머링크와 동일하게 언어 접두 디렉터리 없음
       } else {
         enPostUrl = await wpCli(`eval "echo get_permalink(${enResult.id});"`)
         console.log(`  ✓ EN ${postStatus === 'publish' ? '공개 발행' : 'draft 저장'} 완료 (ID: ${enResult.id})`)
