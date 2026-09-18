@@ -6,11 +6,14 @@
  * and scripts/keyword-map.json in the repo root):
  *   - Posts are created with native WP categories, one per pipeline
  *     "cluster": 임대 / 분양 / 제작 / 가격 / 토토개발.
- *   - SEO <head> tags (title, description, canonical, schema) are owned by
- *     Rank Math (rank_math_* postmeta). This theme must NOT echo its own
- *     competing <title>/meta description/OG tags — it only uses
- *     add_theme_support('title-tag') so wp_head() can print exactly one
- *     <title>, and otherwise stays out of Rank Math's way.
+ *   - SEO <head> tags (title, description, canonical, schema) are meant to
+ *     be owned by Rank Math (rank_math_* postmeta) once it's installed.
+ *     Until then, this theme fills the gap with guarded fallbacks
+ *     (onebethub_meta_description_fallback, onebethub_hreflang_fallback,
+ *     onebethub_html_lang_attribute) that go silent the instant Rank Math /
+ *     Polylang are actually active — see the "SEO <head> fallbacks" section
+ *     below. <title> itself uses add_theme_support('title-tag') so wp_head()
+ *     prints exactly one, with or without Rank Math.
  *   - Polylang may not be installed yet on a fresh deploy. Every Polylang
  *     call in this theme is guarded with function_exists() so the theme
  *     works identically with or without the plugin.
@@ -388,6 +391,108 @@ add_action( 'pre_get_posts', 'onebethub_search_category_filter' );
 // sure we don't accidentally double up by leaving WP's default meta
 // generator tag off, but otherwise do not touch <head> SEO tags at all.
 remove_action( 'wp_head', 'wp_generator' );
+
+/* -----------------------------------------------------------------------
+ * SEO <head> fallbacks for the gap between "pipeline saved the SEO data as
+ * postmeta" and "a plugin is actually installed to render it." Rank Math
+ * isn't installed on the live site yet (2026-09-18), so rank_math_description
+ * postmeta was being saved by generate-post.mjs but never reaching <head> —
+ * every published page was missing <meta name="description"> entirely.
+ * Every function below is a no-op the instant Rank Math (or Polylang, for
+ * the language ones) is actually active, so nothing needs to change here
+ * once those plugins are installed — these are pure gap-fillers.
+ * ------------------------------------------------------------------- */
+
+/**
+ * <meta name="description"> fallback, sourced from the rank_math_description
+ * postmeta the pipeline already saves (falls back to the post excerpt if
+ * that's somehow empty). Skips entirely if Rank Math is active so we never
+ * emit a duplicate/competing tag once the plugin takes over.
+ */
+function onebethub_meta_description_fallback() {
+	if ( defined( 'RANK_MATH_VERSION' ) ) {
+		return;
+	}
+	if ( ! is_singular( 'post' ) ) {
+		return;
+	}
+	$post_id     = get_the_ID();
+	$description = get_post_meta( $post_id, 'rank_math_description', true );
+	if ( ! $description ) {
+		$description = wp_strip_all_tags( get_the_excerpt( $post_id ) );
+	}
+	if ( $description ) {
+		printf( '<meta name="description" content="%s" />' . "\n", esc_attr( $description ) );
+	}
+}
+add_action( 'wp_head', 'onebethub_meta_description_fallback', 1 );
+
+/**
+ * KO/EN sibling posts follow a fixed naming convention set by
+ * generate-post.mjs: the EN post's slug is always "{ko-slug}-en" (see
+ * `enSlug = ${page.slug}-en` in createWordPressPost's caller). We use that
+ * convention — not Polylang — to find the sibling post and to tell KO from
+ * EN, so language/hreflang are correct even before Polylang is installed.
+ */
+function onebethub_post_lang_from_slug( $slug ) {
+	return ( is_string( $slug ) && preg_match( '/-en$/', $slug ) ) ? 'en' : 'ko';
+}
+
+function onebethub_sibling_post_id( $post_id ) {
+	$post = get_post( $post_id );
+	if ( ! $post ) {
+		return null;
+	}
+	$sibling_slug = ( 'en' === onebethub_post_lang_from_slug( $post->post_name ) )
+		? preg_replace( '/-en$/', '', $post->post_name )
+		: $post->post_name . '-en';
+	$sibling = get_page_by_path( $sibling_slug, OBJECT, 'post' );
+	return ( $sibling && 'publish' === $sibling->post_status ) ? $sibling->ID : null;
+}
+
+/**
+ * <html lang="..."> — language_attributes() only ever reflects the single
+ * site-wide WP locale, so on a bilingual site without Polylang it is wrong
+ * for whichever language isn't the site default (we found both the KO and
+ * EN post rendering lang="en-US" — the site locale is English). For a
+ * singular post we override using the slug convention above; everything
+ * else (home, archives) still uses the real site locale via
+ * language_attributes(). Once Polylang is active this defers to it
+ * entirely, since Polylang patches language_attributes() itself.
+ */
+function onebethub_html_lang_attribute() {
+	if ( function_exists( 'pll_current_language' ) || ! is_singular( 'post' ) ) {
+		language_attributes();
+		return;
+	}
+	$lang = onebethub_post_lang_from_slug( get_post_field( 'post_name', get_the_ID() ) );
+	echo 'lang="' . ( 'en' === $lang ? 'en-US' : 'ko-KR' ) . '"'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * hreflang tags, derived the same convention-based way. Skips entirely once
+ * Polylang is active (it manages hreflang on its own).
+ */
+function onebethub_hreflang_fallback() {
+	if ( function_exists( 'pll_current_language' ) || ! is_singular( 'post' ) ) {
+		return;
+	}
+	$post_id    = get_the_ID();
+	$lang       = onebethub_post_lang_from_slug( get_post_field( 'post_name', $post_id ) );
+	$sibling_id = onebethub_sibling_post_id( $post_id );
+
+	$ko_url = ( 'ko' === $lang ) ? get_permalink( $post_id ) : ( $sibling_id ? get_permalink( $sibling_id ) : null );
+	$en_url = ( 'en' === $lang ) ? get_permalink( $post_id ) : ( $sibling_id ? get_permalink( $sibling_id ) : null );
+
+	if ( $ko_url ) {
+		printf( '<link rel="alternate" hreflang="ko" href="%s" />' . "\n", esc_url( $ko_url ) );
+		printf( '<link rel="alternate" hreflang="x-default" href="%s" />' . "\n", esc_url( $ko_url ) );
+	}
+	if ( $en_url ) {
+		printf( '<link rel="alternate" hreflang="en" href="%s" />' . "\n", esc_url( $en_url ) );
+	}
+}
+add_action( 'wp_head', 'onebethub_hreflang_fallback', 1 );
 
 function onebethub_body_classes( $classes ) {
 	$classes[] = 'bg-slate-50';
