@@ -195,10 +195,23 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
   `function_exists('pll_current_language')`면 스킵.
 
 **테마/설정 변경 후 반드시 Breeze 캐시 퍼지**(`wp-remote.mjs "breeze purge --cache=all"`) — 안 하면
-반영된 수정사항이 몇 시간씩 예전 버전으로 보인다.
+반영된 수정사항이 몇 시간씩 예전 버전으로 보인다. object-cache-pro도 같이 쓰므로 `wp-remote.mjs
+"cache flush"`도 함께 실행할 것 — 둘 중 하나만 지우면 여전히 옛 버전이 보일 수 있다.
 
 배포: `set -a && source .env && set +a && MSYS_NO_PATHCONV=1 node scripts/_deploy-theme.mjs`
 (업로드 → PHP 문법 검사 → 활성화 → 실패 시 twentytwentyfive로 자동 롤백까지 자동화)
+
+**KO/EN 언어 분리 + 전환 버튼(2026-09-19)** — Polylang 미설치 상태에선 KO/EN 글이 그냥 같은 카테고리의
+평범한 WP 글이라, 모든 목록(홈 히어로/피드, 사이드바 "카테고리별 최신", 카테고리 아카이브, 관련 글)에
+두 언어가 무작위로 섞여 나왔다(실제 라이브에서 발견됨 — 언어 전환 버튼도 아예 없었음). 파이프라인의
+"{ko슬러그}-en" 명명 규칙을 이용한 `onebethub_lang` 커스텀 쿼리 변수 + `posts_where` 필터를 추가해서,
+모든 목록 쿼리가 기본적으로 한 언어만 보여주게 했다(개별 글은 그 글의 언어, 그 외 페이지는 `?lang=en`
+토글). `onebethub_language_switcher()`도 Polylang 없을 때 그냥 아무것도 안 그리던 것을, 같은 슬러그
+규칙으로 실제 작동하는 KO/EN 버튼을 그리도록 교체.
+⚠️ **디버깅에 시간 걸렸던 함정**: `get_posts()`는 `new WP_Query()`와 달리 **`suppress_filters`
+기본값이 `true`**라서, 똑같은 쿼리 인자를 줘도 `posts_where` 필터가 조용히 무시된다. `get_posts()`를
+쓰는 자리(사이드바 위젯, 카테고리 "최근 업데이트")는 전부 `'suppress_filters' => false`를 명시로
+추가해야 했다 — `new WP_Query()`로 쓴 자리(히어로/피드/관련글)는 처음부터 정상 작동했음.
 
 ## 실제 배포하면서 겪은 문제와 수정 (Cloudways 호스팅)
 
