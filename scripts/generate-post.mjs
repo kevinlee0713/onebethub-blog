@@ -1692,6 +1692,10 @@ function extractTag(tag, text) {
 // 갖고 있다 — 새 페이지 추가 시 그 리스트에 수동으로 태스크를 만들고 clickupTaskId를 채워둘 것
 // (안 채우면 매 실행마다 새 태스크가 중복 생성됨, 아래 else 분기 참고).
 async function syncClickUpPostingTask(page, title, postUrl, keyword, postStatus) {
+  // DRY_RUN 테스트 실행이 실제 ClickUp 포스팅 태스크를 덮어쓴 사고가 있었다(2026-09-18, GitHub Actions
+  // 워크플로우를 DRY_RUN으로 검증하던 중 T1-01 태스크의 Status/Name이 재생성된 임시 값으로 바뀜) —
+  // setPolylangLanguage/createWordPressPost 등 다른 실발행 전용 함수들처럼 DRY_RUN이면 아예 스킵한다.
+  if (DRY_RUN) { console.log(`  ⓘ [DRY_RUN] ClickUp 동기화 생략: ${page.id}`); return }
   const apiKey = process.env.CLICKUP_API_KEY
   const listId = process.env.CLICKUP_LIST_ID
   if (!apiKey || !listId) {

@@ -275,6 +275,14 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
    `SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}`를 env에 추가해서 수정. `vars.DRY_RUN=true`로 임시
    전환 후 `gh workflow run`으로 수동 트리거해 GitHub 러너에서 정상 동작하는지 검증함(검증 후 변수
    원복).
+8. **위 DRY_RUN 검증이 실제 ClickUp 포스팅 태스크를 덮어쓴 사고(2026-09-18)** — `syncClickUpPostingTask()`
+   는 `setPolylangLanguage`/`createWordPressPost`처럼 DRY_RUN 스킵 가드가 없어서, 방금 위 7번을 검증하려고
+   돌린 DRY_RUN 실행이 T1-01의 실제 ClickUp 태스크(Status를 "published"→"pending", Name을 그 실행에서
+   재생성된 살짝 다른 제목으로)를 덮어써버렸다. 발견 즉시 수동으로 원상복구(Status/Name)하고,
+   `syncClickUpPostingTask()` 맨 앞에 `if (DRY_RUN) return` 가드를 추가해 재발을 막았다. **교훈: 안전
+   검증(DRY_RUN)이라도 실제 외부 시스템(ClickUp 등)에 쓰기 작업을 하는 함수는 전부 DRY_RUN 가드가
+   있는지 개별 확인해야 한다** — WordPress/Polylang 발행 계열은 원래부터 가드가 있었지만 이후에 추가된
+   ClickUp 동기화는 놓쳤었다.
 
 ## 알려진 이슈 / 참고사항
 
