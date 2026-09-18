@@ -168,7 +168,7 @@ Cloudways 호스팅에 배포하면서 겪은 문제와 수정 내역"을 함께
 파싱해서 동작하는 최소 wp-cli 실행 헬퍼를 만들었다 — `source` 불필요.
 
 ```bash
-cd C:\project\onebethub-blog
+cd C:\project\7play-seo\onebethub-blog
 node scripts/wp-remote.mjs "post list --fields=ID,post_title,post_status,post_name --format=table"
 node scripts/wp-remote.mjs "post get <id> --fields=ID,post_title,post_status,post_name"
 node scripts/wp-remote.mjs "post meta get <id> _onebethub_gen_trace"   # 생성 트레이스(검증 점수 등)

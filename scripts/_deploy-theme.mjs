@@ -4,7 +4,7 @@
 //
 // Usage (env vars must already be loaded into the shell — no dotenv wired
 // into this project):
-//   cd "C:/project/onebethub-blog" && set -a && source .env && set +a && node scripts/_deploy-theme.mjs
+//   cd "C:/project/7play-seo/onebethub-blog" && set -a && source .env && set +a && node scripts/_deploy-theme.mjs
 //
 // No secrets are hardcoded here — everything comes from process.env,
 // matching the pattern already used by scripts/generate-post.mjs's
