@@ -530,13 +530,15 @@ function resolvePageUrlSync(page, lang, log) {
   const entry = log.find(e => e.id === page.id && e.lang === lang)
   if (entry?.url) return entry.url
   if (DRY_RUN) {
-    // 실제 퍼머링크는 언어 접두 디렉터리가 없다 — EN은 슬러그 자체에 -en 접미사가 붙을 뿐이다
-    // (createWordPressPost 호출부의 `enSlug = ${page.slug}-en` 참고). 예전엔 여기서 `en/` 접두사를
-    // 붙였는데, 이 값이 DRY_RUN 발행 원장에 그대로 기록됐다가 실제 실행에서 재사용되며 존재하지
-    //않는 `/en/...` URL이 상향/내부 링크로 삽입되는 사고로 이어졌다(2026-09-18) — 이제 DRY_RUN
-    // 원장은 별도 파일로 분리했지만, 애초에 이 프리픽스 자체가 실제 URL 구조와 달라 틀린 값이었다.
+    // Polylang 설치 전(~2026-09-18)에는 실제 퍼머링크에 언어 접두 디렉터리가 없어서 여기 en 분기에
+    // `/en/`을 붙이면 틀린 값이었다(당시 이 프리픽스가 DRY_RUN 원장에 기록됐다가 실제 실행에서
+    // 재사용되며 존재하지 않는 URL이 삽입되는 사고로 이어졌던 적 있음 — 그래서 DRY_RUN 원장을 별도
+    // 파일로 분리). Polylang 활성화 이후로는 반대로 en에 `/en/` 접두가 실제 정답이 됐으므로(기본
+    // 언어 ko는 접두 없음) 아래처럼 다시 붙인다 — createWordPressPost 호출부의 실제 실행 분기와
+    // 일치시켜야 DRY_RUN 미리보기가 실제 발행 URL과 어긋나지 않는다.
     const slug = lang === 'en' ? `${page.slug}-en` : page.slug
-    return `${WP_URL}/${slug}/`
+    const prefix = lang === 'en' ? 'en/' : ''
+    return `${WP_URL}/${prefix}${slug}/`
   }
   return null
 }
@@ -2051,9 +2053,12 @@ async function main() {
     koPostUrl = `${WP_URL}/${koSlug}/`
   } else {
     const editLink = `${WP_URL}/wp-admin/post.php?post=${result.id}&action=edit`
+    // Polylang 언어 지정을 먼저 해야 get_permalink()가 올바른 URL을 돌려준다(기본 언어인 ko는
+    // 접두 디렉터리가 없어 순서 무관하지만, en은 아래에서 접두 디렉터리 여부가 순서에 좌우되므로
+    // 이 시점부터 양쪽 다 "언어 지정 → permalink 조회" 순서로 통일해둔다).
+    await setPolylangLanguage(result.id, 'ko')
     koPostUrl = await wpCli(`eval "echo get_permalink(${result.id});"`)
     console.log(`  ✓ KO ${postStatus === 'publish' ? '공개 발행' : 'draft 저장'} 완료 (ID: ${result.id})`)
-    await setPolylangLanguage(result.id, 'ko')
     console.log(`  KO 검토: ${editLink}`)
   }
 
@@ -2139,12 +2144,17 @@ async function main() {
       })
 
       if (DRY_RUN) {
-        enPostUrl = `${WP_URL}/${enSlug}/` // 실제 퍼머링크와 동일하게 언어 접두 디렉터리 없음
+        // Polylang 활성화(2026-09-18) 이후 실제 퍼머링크는 기본 언어(ko)가 아닌 en에 `/en/` 접두
+        // 디렉터리가 붙는다(directory 방식 URL 모디피케이션이 기본값) — 예전엔 접두 없음이 맞았지만
+        // 지금은 아래 실제 실행 분기와 동일하게 접두를 반영해야 DRY_RUN 미리보기가 실제와 일치한다.
+        enPostUrl = `${WP_URL}/en/${enSlug}/`
       } else {
-        enPostUrl = await wpCli(`eval "echo get_permalink(${enResult.id});"`)
-        console.log(`  ✓ EN ${postStatus === 'publish' ? '공개 발행' : 'draft 저장'} 완료 (ID: ${enResult.id})`)
+        // KO와 마찬가지로 언어 지정을 먼저 해야 get_permalink()가 `/en/` 접두 URL을 돌려준다 —
+        // 순서가 바뀌면(언어 지정 전에 permalink부터 조회) 접두 없는 옛 URL이 원장에 기록되는 버그가 남는다.
         await setPolylangLanguage(enResult.id, 'en')
         await linkPolylangTranslations(result.id, enResult.id)
+        enPostUrl = await wpCli(`eval "echo get_permalink(${enResult.id});"`)
+        console.log(`  ✓ EN ${postStatus === 'publish' ? '공개 발행' : 'draft 저장'} 완료 (ID: ${enResult.id})`)
       }
       appendPublishedLog({ id: page.id, publishedAt: new Date().toISOString(), lang: 'en', title: enPost.title, url: enPostUrl, status: postStatus })
     }

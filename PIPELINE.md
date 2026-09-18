@@ -263,11 +263,25 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
   5/10으로 FAIL(GPT 8/10·Gemini 9/10은 PASS) 처리했는데, 직접 확인해보니 전부 Serper로 찾은 실재
   업체였다(false positive). 이런 draft가 나오면 **무조건 재작성하지 말고 먼저 내용을 직접 확인**할 것 —
   실제 문제(이땐 근거 없는 "SLA 99% 이상 가동률" 통계 하나였음)만 고쳐서 수동 발행하면 된다.
-- Rank Math, Polylang 미설치 — Kevin이 WP 대시보드에서 직접 설치 예정. 설치되면 테마의 폴백들은 자동으로
-  물러난다(코드 변경 불필요).
+- ~~Rank Math, Polylang 미설치~~ → 2026-09-18 Kevin이 WP 대시보드에서 직접 설치 완료. 테마의 폴백들은
+  설계대로 자동으로 물러났음(코드 변경 불필요, `function_exists('pll_current_language')` 등으로 가드됨).
 - ~~KO/EN 글이 목록에서 섞여 보이고 언어 전환 버튼이 없던 문제~~ → 2026-09-19 해결(위 "KO/EN 언어 분리 +
   전환 버튼" 절 참고). ~~테마 고정 UI 문구가 EN 뷰에서도 한국어로 보이던 문제~~ → 2026-09-18 해결(위
   "정적 UI 텍스트 영문화" 절 참고).
+- **Polylang 실제 설치 후 URL 구조 변경(2026-09-18)** — Polylang 활성화 전엔 EN 글 URL이
+  `onebethub.com/{ko슬러그}-en/`(접두 디렉터리 없음)였는데, Polylang의 기본 URL 모디피케이션 방식(디렉터리)
+  때문에 실제로는 `onebethub.com/en/{ko슬러그}-en/`으로 바뀌었다(ko는 기본 언어라 접두 없이 그대로).
+  기존에 발행된 URL은 301 리다이렉트되어 안 깨지지만, 파이프라인이 URL을 스스로 만들던 두 지점을
+  고쳤다: ① `createWordPressPost()` 이후 KO/EN 각각 `setPolylangLanguage()`(이미 있던 함수, 이번에
+  처음 실제로 작동 확인)를 **`get_permalink()` 조회보다 먼저** 호출하도록 순서를 바꿈 — 언어 지정 전에
+  permalink부터 물어보면 아직 접두 없는 옛 URL이 반환돼 원장(`published-log.json`)에 틀린 값이 박히는
+  버그가 있었음. ② `resolvePageUrlSync()`의 DRY_RUN 분기도 en에 `/en/` 접두를 다시 붙이도록 수정(이전
+  세션에서는 반대로 "접두 없음이 정답"이라 제거했던 로직인데, Polylang이 실제로 켜지면서 상황이
+  뒤집힘 — 코드 히스토리 볼 때 헷갈리지 않도록 주석에 양쪽 사정을 다 남겨둠). 기존 `published-log.json`의
+  EN 두 건도 새 canonical URL로 갱신. 신규 발행 글의 KO↔EN Polylang 번역쌍 연결은 `linkPolylangTranslations()`
+  가 그대로 처리(기존 코드, 이번에 처음 실제 Polylang 대상으로 검증됨). 이미 발행돼 있던 2쌍(T1-01,
+  T2-06 = post ID 11/13/20/22)은 Polylang 설치 마법사가 전부 'ko'로 일괄 배정해버려서 `pll_set_post_language()`
+  /`pll_save_post_translations()`로 수동 재지정·연결함(일회성 스크립트, 완료 후 삭제).
 - Gemini API 무료 티어 쿼터가 자주 소진돼 이미지 생성·3중 검증 중 Gemini 쪽이 종종 실패한다 — Pexels/
   브랜드 이미지 폴백과 Claude+GPT 2개 모델 검증으로 자동 대체되므로 파이프라인 자체는 죽지 않는다.
 - 저자 페르소나 미정(`AUTHOR_ONEBETHUB` 미설정 → 첫 admin 계정 이름으로 표시 중, E-E-A-T 개선 여지).
