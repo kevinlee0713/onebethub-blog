@@ -615,3 +615,108 @@ class OneBetHub_Nav_Walker extends Walker_Nav_Menu {
 		);
 	}
 }
+
+/* -----------------------------------------------------------------------
+ * Static UI-text EN translations (2026-09-19).
+ *
+ * Post CONTENT is already language-separated (onebethub_lang_where() above),
+ * but every static theme string (footer disclaimer, "카테고리별 최신 리포트",
+ * "리포트 열람하기", etc.) is still hardcoded Korean, so an EN-view visitor
+ * got a Korean-chrome page around English articles. Real i18n (.po/.mo +
+ * switch_to_locale()) is overkill for a fixed, known set of theme strings —
+ * instead this intercepts the theme's own existing __()/_e()/esc_html_e()
+ * calls (already correctly using the 'onebethub' text domain throughout)
+ * via the `gettext`/`ngettext` filters and swaps in a translation from the
+ * dictionary below whenever onebethub_current_view_lang() is 'en'. Goes
+ * silent instantly if Polylang (pll__) is active — real .mo-based
+ * translation should take over at that point instead.
+ * ------------------------------------------------------------------- */
+function onebethub_ko_en_dictionary() {
+	return array(
+		'다음' => 'Next',
+		'연관된 리포트가 아직 없습니다.' => 'No related reports yet.',
+		'이전' => 'Previous',
+		'읽는 시간 %d분' => '%d min read',
+		'읽는 시간 약 %d분' => 'About %d min read',
+		'페이지:' => 'Page:',
+		'벤더 SLA, API 규격, GGR 수수료 비교, 라이선스 검색...' => 'Search vendor SLAs, API specs, GGR fees, licensing...',
+		'검색' => 'Search',
+		'주요 카테고리' => 'Primary Categories',
+		'페이지네이션' => 'Pagination',
+		'1:1 심층 실사 요청하기' => 'Request a 1:1 Deep-Dive Audit',
+		'B2B 독립 벤더 실사 문의' => 'B2B Independent Vendor Due-Diligence Inquiry',
+		'Executive Briefing 신청' => 'Subscribe to Executive Briefing',
+		'건' => 'reports',
+		'검색 결과' => 'Search Results',
+		'검토 중인 벤더 견적서를 리서치팀이 교차 검증해 드립니다.' => 'Our research team cross-verifies the vendor quotes you\'re reviewing.',
+		'게시된 콘텐츠가 없습니다.' => 'No content has been published yet.',
+		'구독 신청' => 'Subscribe',
+		'글로벌 플랫폼 코어, API 공급사, 결제 게이트웨이 및 관할 규제 실사' => 'Global platform cores, API providers, payment gateways, and jurisdictional compliance audits',
+		'기업용 브리핑 구독' => 'Subscribe to Corporate Briefing',
+		'는 게이밍 플랫폼 공급업체로부터 광고비를 받고 실사 순위를 조작하지 않습니다. 모든 벤더 평가와 비용 모델은 공개된 계약 구조와 시장 데이터에 기반한 객관적 분석만을 게재합니다.'
+			=> ' does not accept advertising fees from gaming platform vendors or manipulate audit rankings. Every vendor evaluation and cost model published here is based solely on objective analysis of public contract structures and market data.',
+		'는 글로벌 온라인 카지노, 스포츠북 배당 엔진 및 화이트라벨 소프트웨어 공급망을 감사·조사하는 독립 B2B 인텔리전스 미디어입니다. 특정 벤더를 홍보하거나 대행하지 않습니다.'
+			=> ' is an independent B2B intelligence media outlet that audits and investigates the global online casino, sportsbook odds-engine, and white-label software supply chain. It does not promote or represent any specific vendor.',
+		'는 벤더 스폰서십 없이 공개 데이터에 기반해 리포트를 작성합니다.' => ' publishes reports based on public data, without vendor sponsorship.',
+		'는 어떠한 iGaming 플랫폼 벤더로부터도 스폰서십을 받지 않습니다.' => ' accepts no sponsorship from any iGaming platform vendor.',
+		'독립 심사 원칙' => 'Independent Review Principles',
+		'등록 리포트' => 'Registered Reports',
+		'리포트 보기 →' => 'View Report →',
+		'리포트 열람하기' => 'Read the Report',
+		'매주, 심층 리포트를 수신하세요' => 'Get in-depth reports every week',
+		'모든 벤더 성능 지표와 리뷰는 솔루션 공급사의 스폰서십을 엄격히 배제하고 공개 데이터와 계약 구조 분석에만 기반합니다.'
+			=> 'All vendor performance metrics and reviews strictly exclude solution-provider sponsorship and are based solely on public data and contract-structure analysis.',
+		'발행일:' => 'Published:',
+		'벤더 실사 제보, SLA 분쟁 데이터 제공 및 기업 구독 문의:' => 'Vendor due-diligence tips, SLA dispute data, and corporate subscription inquiries:',
+		'벤더 평가 방법론' => 'Vendor Evaluation Methodology',
+		'본 매체에 게재된 인텔리전스는 공익적 정보 제공 및 기술적 소프트웨어 아키텍처 비교를 목적으로 하며, 특정 관할권에서 불법으로 규정된 도박 영업을 조장하거나 유인하지 않습니다. 모든 이용자는 소재 지역 법률을 준수할 책임이 있습니다.'
+			=> 'The intelligence published on this outlet is intended for public-interest information and technical software-architecture comparison, and does not promote or induce gambling operations deemed illegal in any given jurisdiction. All users are responsible for complying with the laws of their own location.',
+		'본문으로 건너뛰기' => 'Skip to content',
+		'실사 리포트' => 'Read the Audit',
+		'아직 게시된 리포트가 없습니다.' => 'No reports have been published yet.',
+		'연관 인텔리전스 리포트' => 'Related Intelligence Reports',
+		'연관 카테고리 바로가기' => 'Related Categories',
+		'이 카테고리에는 아직 게시된 리포트가 없습니다.' => 'No reports have been published in this category yet.',
+		'이 카테고리의 신규 리포트 발행 시 이메일로 안내받으세요.' => 'Get notified by email when a new report is published in this category.',
+		'익명 제보 창구' => 'Anonymous Tip Line',
+		'전체' => 'All',
+		'정정 및 반론 보도 정책' => 'Corrections & Right-of-Reply Policy',
+		'정확한 관할 명칭 또는 벤더/솔루션 유형을 확인해 주세요.' => 'Please check the exact jurisdiction name or vendor/solution type.',
+		'최근 업데이트' => 'Last Updated',
+		'최신 공급망 인텔리전스 피드' => 'Latest Supply-Chain Intelligence Feed',
+		'카테고리 바로가기' => 'Jump to Category',
+		'카테고리 인덱스' => 'Category Index',
+		'카테고리' => 'Category',
+		'카테고리별 최신 리포트' => 'Latest by Category',
+		'편집권 독립 선언서' => 'Editorial Independence Declaration',
+		'편집권 독립 헌장' => 'Editorial Independence Charter',
+		'플랫폼 아키텍트를 위한 공급망 단가 변동 및 인프라 감사 브리핑을 이메일로 전송합니다.' => 'We email platform architects supply-chain pricing shifts and infrastructure audit briefings.',
+		'홈으로 돌아가기' => 'Back to Home',
+		'총 %d건' => '%d results found',
+	);
+}
+
+function onebethub_translate_ui_text( $translated, $original, $domain ) {
+	if ( 'onebethub' !== $domain || function_exists( 'pll__' ) ) {
+		return $translated;
+	}
+	if ( 'en' !== onebethub_current_view_lang() ) {
+		return $translated;
+	}
+	$dict = onebethub_ko_en_dictionary();
+	return isset( $dict[ $original ] ) ? $dict[ $original ] : $translated;
+}
+add_filter( 'gettext', 'onebethub_translate_ui_text', 10, 3 );
+
+function onebethub_translate_ui_text_plural( $translated, $single, $plural, $number, $domain ) {
+	// Both _n() calls in this theme use identical singular/plural Korean text
+	// (Korean doesn't inflect for count), so look up whichever form gettext
+	// picked using the same dictionary as onebethub_translate_ui_text().
+	return onebethub_translate_ui_text( $translated, ( 1 === (int) $number ) ? $single : $plural, $domain );
+}
+add_filter( 'ngettext', 'onebethub_translate_ui_text_plural', 10, 5 );
+
+function onebethub_translate_ui_text_with_context( $translated, $original, $context, $domain ) {
+	return onebethub_translate_ui_text( $translated, $original, $domain );
+}
+add_filter( 'gettext_with_context', 'onebethub_translate_ui_text_with_context', 10, 4 );

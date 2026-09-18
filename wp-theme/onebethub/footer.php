@@ -17,7 +17,7 @@
 						<span class="font-serif-headline text-lg font-bold text-white tracking-tight">One<span class="text-sky-400">Bet</span>Hub</span>
 					</div>
 					<p class="text-slate-400 leading-relaxed text-xs max-w-sm">
-						<?php bloginfo( 'name' ); ?>는 글로벌 온라인 카지노, 스포츠북 배당 엔진 및 화이트라벨 소프트웨어 공급망을 감사·조사하는 독립 B2B 인텔리전스 미디어입니다. 특정 벤더를 홍보하거나 대행하지 않습니다.
+						<?php bloginfo( 'name' ); ?><?php esc_html_e( '는 글로벌 온라인 카지노, 스포츠북 배당 엔진 및 화이트라벨 소프트웨어 공급망을 감사·조사하는 독립 B2B 인텔리전스 미디어입니다. 특정 벤더를 홍보하거나 대행하지 않습니다.', 'onebethub' ); ?>
 					</p>
 				</div>
 
