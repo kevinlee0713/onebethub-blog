@@ -213,6 +213,20 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
 쓰는 자리(사이드바 위젯, 카테고리 "최근 업데이트")는 전부 `'suppress_filters' => false`를 명시로
 추가해야 했다 — `new WP_Query()`로 쓴 자리(히어로/피드/관련글)는 처음부터 정상 작동했음.
 
+**정적 UI 텍스트 영문화(2026-09-18)** — 위 언어 분리 작업 이후에도, 본문(글)은 언어별로 잘 나뉘지만
+테마 자체의 고정 UI 문구("리포트 열람하기", "카테고리별 최신 리포트", 푸터 면책 문구 등)는 전부 하드코딩된
+한국어라 EN 뷰(`?lang=en`)에서도 한국어로 보이는 문제가 있었다. 진짜 WordPress i18n(.po/.mo +
+`switch_to_locale()`)을 새로 붙이는 대신, 테마가 이미 전부 올바른 텍스트 도메인('onebethub')으로
+`__()/_e()/esc_html_e()/esc_attr_e()/_n()/_x()`를 쓰고 있었으므로 그 호출들을 가로채는 방식을 택함:
+- `onebethub_ko_en_dictionary()` — 테마의 모든 번역 가능 문자열을 담은 KO→EN 배열(functions.php)
+- `gettext`/`ngettext`/`gettext_with_context` 필터 3개(`onebethub_translate_ui_text*`) — 도메인이
+  'onebethub'이고 `onebethub_current_view_lang() === 'en'`이고 Polylang(`pll__`)이 없을 때만 사전에서
+  치환. Polylang 설치 시 자동으로 비활성화(그쪽이 우선).
+- `grep -rnoE "(esc_html_e|esc_attr_e|_e|__|_n|_x)\(...)"`로 전체 문자열을 뽑고, 한글 유니코드 범위
+  정규식(`[가-힣]`)으로 번역 함수 호출에 안 걸린 **날것 텍스트**가 남아있는지 재검사하는 방식으로
+  누락을 찾음 — `footer.php`에 `bloginfo('name')` 뒤에 `_e()` 래핑 없이 직접 붙어있던 면책 문구 한 건을
+  찾아 래핑 + 사전 등록. 배포 후 KO/EN 양쪽 curl로 렌더링 확인 완료.
+
 ## 실제 배포하면서 겪은 문제와 수정 (Cloudways 호스팅)
 
 이 서버(`SSH_WP_PATH=/home/1555616.cloudwaysapps.com/trqundhprt/public_html`)는 일반적인 WP 호스팅과
@@ -251,6 +265,9 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
   실제 문제(이땐 근거 없는 "SLA 99% 이상 가동률" 통계 하나였음)만 고쳐서 수동 발행하면 된다.
 - Rank Math, Polylang 미설치 — Kevin이 WP 대시보드에서 직접 설치 예정. 설치되면 테마의 폴백들은 자동으로
   물러난다(코드 변경 불필요).
+- ~~KO/EN 글이 목록에서 섞여 보이고 언어 전환 버튼이 없던 문제~~ → 2026-09-19 해결(위 "KO/EN 언어 분리 +
+  전환 버튼" 절 참고). ~~테마 고정 UI 문구가 EN 뷰에서도 한국어로 보이던 문제~~ → 2026-09-18 해결(위
+  "정적 UI 텍스트 영문화" 절 참고).
 - Gemini API 무료 티어 쿼터가 자주 소진돼 이미지 생성·3중 검증 중 Gemini 쪽이 종종 실패한다 — Pexels/
   브랜드 이미지 폴백과 Claude+GPT 2개 모델 검증으로 자동 대체되므로 파이프라인 자체는 죽지 않는다.
 - 저자 페르소나 미정(`AUTHOR_ONEBETHUB` 미설정 → 첫 admin 계정 이름으로 표시 중, E-E-A-T 개선 여지).
