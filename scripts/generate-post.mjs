@@ -724,6 +724,38 @@ function ctaBlock(page, ctaUrl) {
 ---`
 }
 
+// 발행 직후 실제 라이브 URL을 직접 fetch해서 확인하는 결정적(rule-based) 안전망 — Stage4는 아직
+// WordPress에 올라가기 전의 마크다운 본문만 보므로, 테마/플러그인 렌더링 단계에서만 생기는 문제
+// (예: 2026-09-18에 실제로 겪은 Rank Math 스키마 중복, Polylang 활성화 후 EN 페이지 언어 혼재 등)를
+// 못 잡는다. `/seo검수` 스킬 자체(Claude+Gemini 교차검수, 대화형 판단)를 무인 cron에서 그대로 돌릴
+// 수는 없어서, 그 스킬이 라이브 URL에 대해 확인하는 항목 중 curl만으로 결정적으로 검증 가능한 것만
+// 골라 자동화했다 — 문제가 있으면 발행을 되돌리지 않고(이미 라이브라 되돌리는 게 더 위험할 수 있음)
+// 텔레그램으로 즉시 알려서 사람이 직접 확인하게 한다(2026-09-18, Kevin 요청).
+async function postPublishSanityCheck(koPostUrl, enPostUrl, page, ctaUrl, requiredUpwardLink, featuredMediaUrl) {
+  const issues = []
+  try {
+    const res = await fetch(koPostUrl, { headers: { 'User-Agent': OUTBOUND_UA } })
+    const html = await res.text()
+    if (res.status !== 200) issues.push(`KO 페이지 HTTP ${res.status}`)
+    if (!/<meta name="description" content="[^"]+"/.test(html)) issues.push('KO meta description 태그 없음')
+    if (!html.includes(`rel="canonical" href="${koPostUrl}"`)) issues.push('KO canonical이 self-reference 아님(또는 누락)')
+    if (enPostUrl && !/hreflang=/.test(html)) issues.push('hreflang 태그 없음(KO 페이지)')
+    if (!html.includes('7play.co') && !html.includes(ctaUrl)) issues.push('CTA 링크가 실제 렌더링된 페이지에 없음')
+    if (requiredUpwardLink && !html.includes(requiredUpwardLink.url)) issues.push(`상향 링크(${requiredUpwardLink.url})가 실제 렌더링된 페이지에 없음`)
+  } catch (e) {
+    issues.push(`KO 페이지 fetch 실패: ${e.message}`)
+  }
+  if (requiredUpwardLink) {
+    const code = await isUrlAlive(requiredUpwardLink.url)
+    if (!code) issues.push(`상향 링크 대상(${requiredUpwardLink.url}) 접속 불가`)
+  }
+  if (featuredMediaUrl) {
+    const code = await isUrlAlive(featuredMediaUrl)
+    if (!code) issues.push(`대표 이미지(${featuredMediaUrl}) 접속 불가`)
+  }
+  return issues
+}
+
 async function generatePost(page, outboundLinks = [], internalLinks = [], requiredUpwardLink = null, ctaUrl) {
   const systemPrompt = buildBrandSystemPrompt()
 
@@ -2202,13 +2234,48 @@ async function main() {
   if (enPostUrl) console.log(`  EN: ${enPostUrl}`)
 
   const vi = (r) => r.skipped ? '⚠️' : r.verdict === 'PASS' ? '✅' : '❌'
-  await tg(
-    `✅ <b>새 글 처리 완료${DRY_RUN ? ' (DRY_RUN)' : ''}</b>\n\n` +
-    `📝 <b>${post.title}</b>\n[${page.cluster}/${page.tier}] ${page.id}\n\n` +
-    `🤖 검증: ${vi(claudeAgentResult)}Claude ${vi(gptResult)}GPT ${vi(geminiResult)}Gemini\n` +
-    `상태: ${postStatus}\n\n` +
-    `🇰🇷 ${koPostUrl}` + (enPostUrl ? `\n🇺🇸 ${enPostUrl}` : '')
-  )
+  if (postStatus === 'publish') {
+    await tg(
+      `✅ <b>새 글 발행 완료${DRY_RUN ? ' (DRY_RUN)' : ''}</b>\n\n` +
+      `📝 <b>${post.title}</b>\n[${page.cluster}/${page.tier}] ${page.id}\n\n` +
+      `🤖 검증: ${vi(claudeAgentResult)}Claude ${vi(gptResult)}GPT ${vi(geminiResult)}Gemini\n` +
+      `상태: ${postStatus}\n\n` +
+      `🇰🇷 ${koPostUrl}` + (enPostUrl ? `\n🇺🇸 ${enPostUrl}` : '')
+    )
+    if (!DRY_RUN) {
+      const liveIssues = await postPublishSanityCheck(koPostUrl, enPostUrl, page, ctaUrl, requiredUpwardLink, featuredMediaUrl)
+      if (liveIssues.length > 0) {
+        console.log(`  ⚠ 발행 후 라이브 점검 이상 ${liveIssues.length}건 발견`)
+        await tg(
+          `⚠️ <b>발행 후 라이브 점검에서 이상 발견</b>\n\n` +
+          `📝 <b>${post.title}</b>\n[${page.cluster}/${page.tier}] ${page.id}\n` +
+          `자동 발행은 이미 완료됐고 되돌리지 않았음 — 아래 항목 직접 확인 필요.\n\n` +
+          `  - ${liveIssues.join('\n  - ')}\n\n` +
+          `🇰🇷 ${koPostUrl}`
+        )
+      } else {
+        console.log('  ✓ 발행 후 라이브 점검 통과')
+      }
+    }
+  } else {
+    // 검증 미통과 → draft 저장. 자동 재작성(최대 2회)까지 다 해봤는데도 안 됐다는 뜻이므로, cron으로
+    // 무인 실행되는 상황에서 "물어본다"에 가장 가까운 형태 — 무엇이 왜 실패했는지 구체적으로 적어서
+    // 수동 판단·발행이 필요함을 명확히 알린다(2026-09-18, Kevin 요청 — 기존엔 이 경우도 "✅ 완료"로
+    // 묻혀서 안 보였음).
+    const issueLines = (r, label) => r.skipped
+      ? `  ${label}: 건너뜀`
+      : `  ${label}: ${r.score}/10 (${r.verdict})` + (r.issues?.length ? '\n    - ' + r.issues.join('\n    - ') : '')
+    await tg(
+      `🚨 <b>검증 미통과 — 자동 발행 보류(draft)${DRY_RUN ? ' (DRY_RUN)' : ''}</b>\n\n` +
+      `📝 <b>${post.title}</b>\n[${page.cluster}/${page.tier}] ${page.id}\n` +
+      `재작성 ${revisionCount}회 시도 후에도 3개 모델 전부 PASS 못함 — 수동 확인 후 직접 발행 필요.\n\n` +
+      `${issueLines(claudeAgentResult, 'Claude')}\n${issueLines(gptResult, 'GPT')}\n${issueLines(geminiResult, 'Gemini')}\n\n` +
+      (seoGateIssues.length ? `⚠️ Stage4 규칙 게이트 미해결: ${seoGateIssues.join(', ')}\n\n` : '') +
+      (DRY_RUN
+        ? `[DRY_RUN] 로컬 저장 위치: data/dry-run-output/`
+        : `WP 관리자에서 draft 확인: ${WP_URL}/wp-admin/post.php?post=${result.id}&action=edit`)
+    )
+  }
 }
 
 main()
