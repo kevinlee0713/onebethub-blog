@@ -1,7 +1,7 @@
 # OneBetHub 블로그 파이프라인 v1.0
 
 > **원본**: VOBET 매거진 블로그 파이프라인 v2.0 (`VOBET/blog-project/scripts/generate-post.mjs`, 읽기 전용 참고)
-> **현재 스택**: WordPress (Cloudways) + GitHub Actions + Claude/GPT-4o-mini/Gemini + (Polylang/Rank Math는 아직 미설치)
+> **현재 스택**: WordPress (Cloudways) + GitHub Actions + Claude/GPT-4o-mini/Gemini + Polylang + Rank Math (2026-09-18 둘 다 설치 완료)
 > **최종 갱신**: 2026-09-18 · Drive 문서(회사 SOP용 사본): `[BD][M2-개발] OneBetHub 콘텐츠 자동화 파이프라인_v1.0`
 
 이 문서는 "무엇을 그대로 재사용했는지", "무엇을 onebethub 전용으로 바꿨는지", 그리고 "실제
@@ -97,18 +97,28 @@ Cloudways 호스팅에 배포하면서 겪은 문제와 수정 내역"을 함께
    "브랜드 무관 정보/기술 해설(특정 업체명 억지 언급 금지, 70~90%)" 지침을 프롬프트에 주입한다. 도박
    언급 금지 제약은 제거했다(이 블로그의 목적 자체가 카지노 솔루션 산업을 다루는 것이므로 해당 없음).
 
-4. **CTA — 텔레그램 초대링크 → 역할 기반 분기(2026-09-18 개편)** — 처음엔 원본 CTA
-   (`TELEGRAM_INVITE_LINK`)를 제거하고 클러스터별 `CTA_URL_MAP`(전부 plain `https://7play.co/`)로
-   단순 교체했었는데, 이러면 **콘텐츠 믹스와 무관하게 모든 글이 예외 없이 같은 외부 링크로 귀결**돼서
-   도어웨이 페이지 스팸 패턴으로 읽힐 위험이 있었다(`/seo검수`로 첫 실발행 글 검수 중 발견, Claude·
-   Gemini 교차검수 양쪽 다 동일 지적). 지금은 `isConversionPage(page)`(role에 "전환" 포함 — 클러스터당
-   1개, keyword-map.json에 이미 이렇게 설계돼 있었음)로 분기한다:
+4. **CTA — 텔레그램 초대링크 → 역할 기반 분기(2026-09-18 개편) → 개별 btag 우선순위 추가(2026-09-18)** —
+   처음엔 원본 CTA(`TELEGRAM_INVITE_LINK`)를 제거하고 클러스터별 `CTA_URL_MAP`(전부 plain
+   `https://7play.co/`)로 단순 교체했었는데, 이러면 **콘텐츠 믹스와 무관하게 모든 글이 예외 없이 같은
+   외부 링크로 귀결**돼서 도어웨이 페이지 스팸 패턴으로 읽힐 위험이 있었다(`/seo검수`로 첫 실발행 글
+   검수 중 발견, Claude·Gemini 교차검수 양쪽 다 동일 지적). `isConversionPage(page)`(role에 "전환"
+   포함 — 클러스터당 1개, keyword-map.json에 이미 이렇게 설계돼 있었음)로 분기해서:
    - **전환 페이지**(임대=T1-01, 분양=T1-02, 제작=T1-03, 가격=T1-04, 토토개발=T1-05): `CTA_URL_MAP
-     [cluster]`로 7Play 직접 연결 (btag 미발급 상태라 지금은 plain URL — 7번 항목 참고).
+     [cluster]`로 7Play 직접 연결(개별 btag 없는 경우의 폴백).
    - **그 외 지원/허브 페이지**: `resolveCtaUrl()`이 같은 클러스터의 전환 페이지로 가는 내부 링크를
      해석해서 CTA로 사용(그 전환 페이지가 아직 미발행이면 임시로 7Play 직접 링크 폴백).
    - Stage 4 게이트 10번 항목(CTA 존재 확인)도 이 분기를 반영 — 전환 페이지는 `7play.co` 문자열,
      그 외는 `ctaUrl`(내부 링크) 문자열 포함 여부로 검사(KO/EN 둘 다).
+
+   **개별 btag 우선순위(2026-09-18 추가)** — ClickUp의 "키워드 70개" 리스트(New_7PLAY 통합 스페이스,
+   Kevin의 A.M 스페이스에 태스크를 만들면 자동화로 미러링됨)에서 Kevin에게 실제로 배정·발급된 btag
+   10개를 확인해 `keyword-map.json`의 해당 10개 페이지(T1-02·T1-03·T1-04·T1-05·T2-01·T2-02·T2-03·
+   T2-05·T2-09·T2-10)에 `page.btag` 필드로 반영했다. `resolveCtaUrl(page, pages, log)`는 이제
+   **`page.btag`가 있으면 role/클러스터 분기보다 먼저 그 값을 그대로 반환**한다 — 개별 발급된 btag는
+   페이지마다 고유한 추적 링크라 "모든 글이 같은 목적지로 귀결"되는 도어웨이 우려에 해당하지 않기
+   때문에, 전환 페이지가 아닌 T2 지원 글이어도 자기만의 btag가 있으면 내부링크 대신 직접 CTA를 쓴다.
+   `ctaBlock()`과 Stage 4/EN 게이트 10번 항목의 조건도 `isConversionPage(page) || page.btag`로 확장.
+   btag이 없는 나머지 12개 페이지는 기존 로직 그대로 동작(변경 없음).
 
 5. **DRY_RUN 모드 신규 추가, 그리고 실제 발행 원장과 완전 분리(2026-09-18 수정)** — `DRY_RUN=true`면
    필수 env 체크에서 SSH/WORDPRESS_URL을 제외하고, `createWordPressPost`/`uploadMediaToWordPress`/
@@ -159,7 +169,7 @@ Cloudways 호스팅에 배포하면서 겪은 문제와 수정 내역"을 함께
 | 7-1 | H2에 키워드 포함 | 최소 1개 |
 | 8 | FAQ 섹션 | "## 자주 묻는 질문" 필수 |
 | 9 | 본문 길이 | 2,000자 이상 |
-| 10 | CTA 섹션 | 전환 페이지는 `7play.co`, 그 외는 내부 전환 링크(`ctaUrl`) 포함 |
+| 10 | CTA 섹션 | 전환 페이지 또는 개별 btag(`page.btag`) 배정 페이지는 `7play.co`, 그 외는 내부 전환 링크(`ctaUrl`) 포함 |
 | **11 (신규)** | **상향 링크** | `pushesTo`가 있으면 본문 첫 3문단 안에 상위 페이지 링크 필수 |
 
 ## 라이브 사이트 직접 조회 — `scripts/wp-remote.mjs`
@@ -289,6 +299,33 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
   블록을 추가하는 방식으로 구현했다. JSON-LD/메타를 함께 재생성하지는 않는다.
 - GitHub Actions 워크플로우는 실행 후 `data/published-log.json` 변경분을 자동 커밋한다(러너가 매번
   새로 뜨는 휘발성 환경이라, 로컬 원장을 리포지토리에 영속시켜야 다음 실행에서 중복 체크가 유효하다).
+- **미해결 (2026-09-18 `/seo검수` 재점검에서 발견, 아직 수정 안 함)**:
+  - EN 개별 글 페이지(`/en/{slug}-en/`)에서 정적 UI 텍스트가 같은 페이지 안에서 한/영 혼재로 나타남
+    (예: "카테고리"와 "Category"가 한 페이지에 동시 존재). `onebethub_current_view_lang()`
+    (`pll_current_language()` 우선 호출)이 한 요청 안에서 값이 불안정한 것으로 추정 — single.php의
+    "관련 리포트" 보조 WP_Query가 원인일 가능성이 높으나 미확정. 홈페이지(`front-page.php`)에서는
+    문제없이 확인됨 — 개별 글 템플릿에서만 재현.
+  - Rank Math가 페이지마다 자체 JSON-LD 스키마(`class="rank-math-schema"`, author=Person "Developer")를
+    자동 생성해서, 파이프라인이 직접 주입하는 BlogPosting(author=Organization "OneBetHub")과 중복·
+    상충한다. WP 관리자 → Rank Math → Titles & Meta → Posts → Schema Type을 "None"으로 바꾸면 해결(코드
+    변경 불필요).
+  - T2-06(비전환 페이지, CTA 역할분기 이전인 2026-09-17 발행)에 아직 구버전 직접 7play.co CTA가 남아있음
+    — 역할분기 로직 자체는 이후 정상 작동하나 과거 발행물엔 소급 적용 안 됨. 수동 교체 권장.
+
+## ClickUp 로드맵 (2026-09-18 신규)
+
+Kevin의 A.M 스페이스 `B2B SEO PROJECT - KEVIN` 폴더의 "📅 로드맵" 리스트
+(https://app.clickup.com/9008183571/v/l/li/901821678683)에 22페이지 발행 순서를 태스크로 등록했다.
+`sortedPages()`와 동일한 정렬 기준(클러스터 고정 순서 → T1 우선 → week 오름차순)으로 실제 발행 순번을
+매겼고, 이미 발행된 2건(T1-01·T2-06)은 status=passed, 나머지 20건은 status=planned + GitHub Actions
+주간 cron(매주 화요일) 기준 예상 발행일을 due_date로 채웠다.
+
+이 중 10페이지(T1-02·T1-03·T1-04·T1-05·T2-01·T2-02·T2-03·T2-05·T2-09·T2-10)는 ClickUp의 별도 통합
+스페이스 "New_7PLAY"(Kevin이 절대 직접 건드리면 안 되는 공유 스페이스 — A.M 스페이스에서 태스크를
+만들면 자동화로 그쪽에 미러링되는 구조)에서 Kevin에게 개별 배정되고 btag까지 이미 발급된 키워드와
+정확히 1:1로 매칭됐다(예: B-45 "카지노 솔루션 분양" = T1-02). 각 태스크 설명에 해당 btag URL을 적어뒀고,
+`keyword-map.json`의 `page.btag` 필드에도 반영해 파이프라인이 발행 시 자동으로 그 btag를 CTA로 쓴다
+(위 "CTA — 개별 btag 우선순위" 절 참고).
 
 ## 검수
 

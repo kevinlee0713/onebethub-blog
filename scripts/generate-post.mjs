@@ -88,8 +88,10 @@ const CLUSTER_ORDER = ['임대', '분양', '제작', '가격', '토토개발']
 const EN_CLUSTER_MAP = { '임대': 'Lease', '분양': 'Distribution', '제작': 'Development', '가격': 'Pricing', '토토개발': 'Toto Development' }
 
 // CTA — 원본은 텔레그램 초대링크였으나, onebethub는 7play.co 랜딩으로 연결한다.
-// btag(발급 담당: "찬")이 아직 미발급 상태(2026-09-16 기준 보류)이므로 지금은 전부 plain URL.
-// btag이 확정되면 이 상수의 값만 `https://7play.co/?btag=kv-onebethub-{lease|dist|build|price|toto}` 형태로 교체하면 된다.
+// 클러스터 단위 btag은 아직 미발급 상태라 전부 plain URL(폴백용). 2026-09-18부로 ClickUp "키워드 70개"
+// 리스트에서 Kevin에게 배정된 10개 키워드는 개별 btag이 이미 발급돼 keyword-map.json의 해당 page.btag에
+// 반영돼 있고, resolveCtaUrl()이 page.btag를 이 상수보다 우선 사용한다 — 이 CTA_URL_MAP은 btag 없는
+// 페이지의 폴백으로만 쓰인다.
 const CTA_URL_MAP = {
   '임대': 'https://7play.co/',
   '분양': 'https://7play.co/',
@@ -688,7 +690,12 @@ function isConversionPage(page) {
 // 그 전환 페이지가 아직 발행 전이면(사이트 초기 한정) 안전망으로 7Play 직접 링크를 임시로 쓴다 —
 // 전환 페이지가 발행되는 순간 다음 실행부터 자동으로 내부 링크로 전환된다(CTA는 매번 재생성되므로
 // 과거에 이미 나간 글은 고정되지만, 이 파일 개별 실행 시점 기준 최신 상태를 반영한다).
+// keyword-map.json의 page.btag — SEO팀이 특정 키워드에 개별 발급한 btag(예: ?btag=ob-b45).
+// 이런 페이지는 role이 "전환"이 아니어도(허브가 아니어도) 이 개별 btag를 그대로 CTA로 쓴다 —
+// 페이지마다 고유한 추적 링크라 "매번 같은 목적지로 귀결되는 도어웨이 패턴" 우려에 해당하지 않는다
+// (2026-09-18, ClickUp "키워드 70개" 리스트에서 Kevin에게 배정된 10개 키워드에 btag 반영).
 function resolveCtaUrl(page, pages, log) {
+  if (page.btag) return page.btag
   if (isConversionPage(page)) return CTA_URL_MAP[page.cluster] ?? 'https://7play.co/'
   const target = pages.find(p => p.cluster === page.cluster && p.id !== page.id && isConversionPage(p))
   const url = target ? resolvePageUrlSync(target, 'ko', log) : null
@@ -696,7 +703,7 @@ function resolveCtaUrl(page, pages, log) {
 }
 
 function ctaBlock(page, ctaUrl) {
-  if (isConversionPage(page)) {
+  if (isConversionPage(page) || page.btag) {
     return `---
 ## 카지노 솔루션 도입을 검토 중이라면
 
@@ -891,10 +898,11 @@ function runSeoChecks(post, page, requiredUpwardLink, ctaUrl) {
   // 9. 본문 길이 2,000자 이상
   if (content.length < 2000) issues.push(`본문 너무 짧음: ${content.length}자 (최소 2,000자)`)
 
-  // 10. CTA 섹션 — 전환 페이지(role="전환")는 7play.co 직접 링크, 그 외 지원/허브 페이지는 클러스터
-  // 전환 페이지로 가는 내부 링크(ctaUrl)만 있으면 통과 (ctaBlock/resolveCtaUrl 참고 — 도어웨이 패턴 방지)
-  if (isConversionPage(page)) {
-    if (!content.includes('7play.co')) issues.push('CTA 섹션 누락: 7play.co 링크 필요 (전환 페이지)')
+  // 10. CTA 섹션 — 전환 페이지(role="전환") 또는 개별 btag가 배정된 페이지는 7play.co 직접 링크,
+  // 그 외 지원/허브 페이지는 클러스터 전환 페이지로 가는 내부 링크(ctaUrl)만 있으면 통과
+  // (ctaBlock/resolveCtaUrl 참고 — 도어웨이 패턴 방지)
+  if (isConversionPage(page) || page.btag) {
+    if (!content.includes('7play.co')) issues.push('CTA 섹션 누락: 7play.co 링크 필요 (전환/btag 페이지)')
   } else if (!content.includes(ctaUrl)) {
     issues.push(`CTA 섹션 누락: 내부 전환 링크(${ctaUrl}) 필요`)
   }
@@ -946,8 +954,8 @@ function runSeoChecksEn(post, focusKeyword, requiredUpwardLinkEn, page, ctaUrl) 
 
   if (content.length < 2000) issues.push(`EN 본문 너무 짧음: ${content.length}자 (최소 2,000자)`)
 
-  if (isConversionPage(page)) {
-    if (!content.includes('7play.co')) issues.push('EN CTA 섹션 누락: 7play.co 링크 필요 (전환 페이지)')
+  if (isConversionPage(page) || page.btag) {
+    if (!content.includes('7play.co')) issues.push('EN CTA 섹션 누락: 7play.co 링크 필요 (전환/btag 페이지)')
   } else if (!content.includes(ctaUrl)) {
     issues.push(`EN CTA 섹션 누락: 내부 전환 링크(${ctaUrl}) 필요`)
   }
