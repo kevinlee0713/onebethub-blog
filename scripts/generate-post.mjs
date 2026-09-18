@@ -50,6 +50,25 @@ const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'not-configu
 const WP_URL  = (process.env.WORDPRESS_URL ?? (DRY_RUN ? 'https://onebethub.com' : '')).replace(/\/$/, '')
 const WP_PATH = process.env.SSH_WP_PATH ?? '/home/1555616.cloudwaysapps.com/trqundhprt/public_html'
 
+// 이 Cloudways 서버는 SFTP 서브시스템과 exec/wp-cli 쉘이 서로 다른 절대경로 기준을 본다(경험적으로 확인,
+// diag-ssh-path.mjs로 검증 — SFTP putFile('/tmp/x')는 실제로는 APP_HOME + '/tmp/x'에 쓰여지는데
+// exec 쉘의 '/tmp/x'는 진짜 시스템 /tmp이므로 서로 다른 파일을 가리킴). WP_PATH가 APP_HOME/public_html이라는
+// 것도 확인됐으므로, WP_PATH 부모 디렉터리를 APP_HOME(= SFTP 루트 "/"가 실제 대응하는 절대경로)으로 삼는다.
+const APP_HOME = path.posix.dirname(WP_PATH)
+// wp-cli/eval-file 등 exec 쉘에서 사용할 절대경로는 항상 이 디렉터리를 기준으로 한다(WP 설치 안쪽이라
+// 이미 쓰기 권한이 보장되고, /tmp보다 SFTP↔exec 오프셋 버그에 안전하다).
+const STAGING_DIR = path.posix.join(WP_PATH, 'wp-content', 'uploads', '_pipeline-tmp')
+
+// exec 쉘 기준 절대경로 → 이 서버의 SFTP 서브시스템이 이해하는 경로로 변환.
+// (SFTP 루트 "/" == APP_HOME 이므로, APP_HOME 기준 상대경로 앞에 '/'를 붙이면 된다.)
+function toSftpPath(execAbsolutePath) {
+  const rel = path.posix.relative(APP_HOME, execAbsolutePath)
+  if (rel.startsWith('..')) {
+    throw new Error(`toSftpPath: "${execAbsolutePath}"가 APP_HOME("${APP_HOME}") 하위 경로가 아니라 SFTP 오프셋을 적용할 수 없음`)
+  }
+  return '/' + rel.split(path.sep).join('/')
+}
+
 const PASS_SCORE = 7       // 이 점수 이상이면 통과
 const MAX_RETRIES = 2      // SEO 게이트 재시도 최대 횟수
 const MAX_AI_REVISIONS = 2 // 멀티모델 검증 후 재작성 최대 횟수
@@ -176,29 +195,86 @@ async function sshClose() {
   if (_ssh) { _ssh.dispose(); _ssh = null }
 }
 
-async function wpCli(args) {
-  const ssh = await getSSH()
-  const result = await ssh.execCommand(`wp ${args} --path="${WP_PATH}"`, { cwd: WP_PATH })
-  if (result.code !== 0 && !result.stdout.trim()) {
-    throw new Error(`WP-CLI(${result.code}): ${result.stderr || 'no output'}`)
+// ── 전송 계층 일시 오류(채널 고갈 등) 재시도 ─────────────────────
+// 실제 라이브 실행에서 "(SSH) Channel open failure: open failed"가 관측됐다. 원인은 경로 불일치가
+// 아니라(경로 문제는 wp-cli가 "File doesn't exist" 같은 논리적 오류 메시지를 stdout/stderr로 반환하는
+// 형태로 나타남), 하나의 SSH 연결(_ssh 싱글턴) 위에서 동시에 여러 채널(exec/sftp)을 한꺼번에 여는
+// 지점(예: Promise.all로 태그마다 wp-cli를 동시 호출)이 이 제한적인 Cloudways 게이트웨이의 동시 채널
+// 한도를 넘겨서 발생하는 것으로 확인됐다(아래 태그 처리 Promise.all → 순차 처리로 수정, 이 재시도는
+// 그래도 남아있을 수 있는 일시적 채널/연결 오류에 대한 최소한의 안전망).
+function isTransientSshChannelError(err) {
+  const msg = String(err?.message || err || '')
+  return /channel open failure/i.test(msg) ||
+    /\bnot connected\b/i.test(msg) ||
+    /ECONNRESET|EPIPE|ETIMEDOUT/i.test(msg)
+}
+
+async function withSshRetry(fn, label, maxAttempts = 2) {
+  let lastErr
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await fn()
+    } catch (e) {
+      lastErr = e
+      if (attempt < maxAttempts && isTransientSshChannelError(e)) {
+        console.log(`  ⚠ SSH 전송 오류 감지(${label}) — 연결 재생성 후 재시도: ${e.message}`)
+        await sshClose()
+        continue
+      }
+      throw e
+    }
   }
-  return result.stdout.trim()
+  throw lastErr
+}
+
+async function wpCli(args) {
+  return withSshRetry(async () => {
+    const ssh = await getSSH()
+    const result = await ssh.execCommand(`wp ${args} --path="${WP_PATH}"`, { cwd: WP_PATH })
+    if (result.code !== 0 && !result.stdout.trim()) {
+      throw new Error(`WP-CLI(${result.code}): ${result.stderr || 'no output'}`)
+    }
+    return result.stdout.trim()
+  }, `wpCli`)
+}
+
+// remotePath는 항상 exec/wp-cli 기준 절대경로(예: STAGING_DIR 하위)로 전달한다. SFTP 전송 시에만
+// toSftpPath()로 이 서버의 SFTP↔exec 오프셋을 보정한다 — 호출부는 오프셋을 몰라도 된다.
+let _stagingDirReady = null
+async function ensureStagingDir() {
+  if (_stagingDirReady) return _stagingDirReady
+  _stagingDirReady = withSshRetry(async () => {
+    const ssh = await getSSH()
+    await ssh.execCommand(`mkdir -p "${STAGING_DIR}"`, { cwd: WP_PATH })
+    // wp-content/uploads 하위라 웹에서 직접 접근 가능할 수 있으므로, PHP가 실행되지 않도록 최소 보호막.
+    await ssh.execCommand(
+      `[ -f "${STAGING_DIR}/.htaccess" ] || printf 'Deny from all\\n' > "${STAGING_DIR}/.htaccess"; ` +
+      `[ -f "${STAGING_DIR}/index.php" ] || printf '<?php // silence is golden\\n' > "${STAGING_DIR}/index.php"`,
+      { cwd: WP_PATH }
+    )
+  }, `ensureStagingDir`).catch(e => { _stagingDirReady = null; throw e })
+  return _stagingDirReady
 }
 
 async function sshPutBuffer(buffer, remotePath) {
-  const ssh = await getSSH()
-  const tmpFile = path.join(os.tmpdir(), `onebethub_${Date.now()}_${Math.random().toString(36).slice(2)}`)
-  fs.writeFileSync(tmpFile, buffer)
-  try {
-    await ssh.putFile(tmpFile, remotePath)
-  } finally {
-    try { fs.unlinkSync(tmpFile) } catch {}
-  }
+  await ensureStagingDir()
+  return withSshRetry(async () => {
+    const ssh = await getSSH()
+    const tmpFile = path.join(os.tmpdir(), `onebethub_${Date.now()}_${Math.random().toString(36).slice(2)}`)
+    fs.writeFileSync(tmpFile, buffer)
+    try {
+      await ssh.putFile(tmpFile, toSftpPath(remotePath))
+    } finally {
+      try { fs.unlinkSync(tmpFile) } catch {}
+    }
+  }, `sshPutBuffer:${remotePath}`)
 }
 
 async function sshRm(remotePath) {
-  const ssh = await getSSH()
-  await ssh.execCommand(`rm -f "${remotePath}"`)
+  return withSshRetry(async () => {
+    const ssh = await getSSH()
+    await ssh.execCommand(`rm -f "${remotePath}"`, { cwd: WP_PATH })
+  }, `sshRm:${remotePath}`)
 }
 
 async function getOrCreateTaxonomy(type, name) {
@@ -226,8 +302,8 @@ async function getOrCreateTaxonomy(type, name) {
 async function createWordPressPost(postData) {
   if (DRY_RUN) return createDryRunPost(postData)
   const ts = `${Date.now()}_${Math.floor(Math.random() * 9999)}`
-  const dataFile = `/tmp/onebethub_data_${ts}.json`
-  const phpFile  = `/tmp/onebethub_php_${ts}.php`
+  const dataFile = `${STAGING_DIR}/onebethub_data_${ts}.json`
+  const phpFile  = `${STAGING_DIR}/onebethub_php_${ts}.php`
 
   const phpScript = `<?php
 $d = json_decode(file_get_contents('${dataFile}'), true);
@@ -257,7 +333,10 @@ echo $id;
   await sshPutBuffer(Buffer.from(JSON.stringify(postData), 'utf-8'), dataFile)
   await sshPutBuffer(Buffer.from(phpScript, 'utf-8'), phpFile)
   const idStr = await wpCli(`eval-file "${phpFile}"`)
-  await Promise.all([sshRm(dataFile), sshRm(phpFile)])
+  // 동시 채널 개방으로 인한 "Channel open failure"를 피하기 위해 순차 실행(이 서버는 동시 채널 한도가
+  // 낮은 것으로 확인됨 — 아래 태그 처리 Promise.all 수정 사유 참고).
+  await sshRm(dataFile)
+  await sshRm(phpFile)
   const id = parseInt(idStr)
   if (isNaN(id)) throw new Error(`createWordPressPost: WP-CLI returned: ${idStr}`)
   return { id }
@@ -419,8 +498,8 @@ async function appendHubDownlinksLive(hub, log, block) {
   const existing = await wpCli(`post get ${postId} --field=content`)
   if (existing.includes(marker)) { console.log('  ⓘ 하향링크 블록이 이미 존재 — 재삽입 생략'); return }
   const ts = `${Date.now()}_${Math.floor(Math.random() * 9999)}`
-  const dataFile = `/tmp/onebethub_hubupd_${ts}.json`
-  const phpFile = `/tmp/onebethub_hubupd_${ts}.php`
+  const dataFile = `${STAGING_DIR}/onebethub_hubupd_${ts}.json`
+  const phpFile = `${STAGING_DIR}/onebethub_hubupd_${ts}.php`
   const php = `<?php
 $d = json_decode(file_get_contents('${dataFile}'), true);
 $post = get_post($d['id']);
@@ -433,7 +512,8 @@ echo 'ok';
   await sshPutBuffer(Buffer.from(JSON.stringify({ id: postId, block: await marked(block) }), 'utf-8'), dataFile)
   await sshPutBuffer(Buffer.from(php, 'utf-8'), phpFile)
   await wpCli(`eval-file "${phpFile}"`)
-  await Promise.all([sshRm(dataFile), sshRm(phpFile)])
+  await sshRm(dataFile)
+  await sshRm(phpFile)
 }
 
 // ── URL 해석 (내부링크/상향링크용) ───────────────────────────────
@@ -1261,7 +1341,7 @@ async function uploadMediaToWordPress(imageData) {
     return { id: 0, url: `file://${localPath.replace(/\\/g, '/')}` }
   }
   const ts = `${Date.now()}_${Math.floor(Math.random() * 9999)}`
-  const remotePath = `/tmp/onebethub_img_${ts}_${imageData.filename}`
+  const remotePath = `${STAGING_DIR}/onebethub_img_${ts}_${imageData.filename}`
   await sshPutBuffer(imageData.buffer, remotePath)
   const safeAlt = imageData.alt.replace(/"/g, '\\"')
   const mediaId = parseInt(await wpCli(`media import "${remotePath}" --title="${safeAlt}" --alt="${safeAlt}" --porcelain`))
@@ -1891,7 +1971,12 @@ async function main() {
   const categoryId = await getOrCreateTaxonomy('categories', page.cluster)
   const koTagNames = [...(page.tags || []), ...post.keywords.split(',').map(k => k.trim()).filter(Boolean)]
     .filter((tag, i, arr) => arr.indexOf(tag) === i).slice(0, 7)
-  const tagIds = DRY_RUN ? [] : await Promise.all(koTagNames.map(tag => getOrCreateTaxonomy('tags', tag)))
+  // 태그마다 wp-cli 채널을 동시에(Promise.all) 여는 방식은 이 서버(Cloudways)의 동시 SSH 채널 한도를
+  // 넘겨 "Channel open failure: open failed"를 유발하는 것으로 실측 확인됐다 — 순차 처리로 변경.
+  const tagIds = []
+  if (!DRY_RUN) {
+    for (const tag of koTagNames) tagIds.push(await getOrCreateTaxonomy('tags', tag))
+  }
 
   const koSlug = page.slug // keyword-map.json에 이미 SEO 슬러그가 고정돼 있으므로 그대로 사용
 
@@ -1960,7 +2045,11 @@ async function main() {
       const enClusterName = EN_CLUSTER_MAP[page.cluster] ?? page.cluster
       const enCategoryId = await getOrCreateTaxonomy('categories', enClusterName)
       const enTagNames = enPost.keywords.split(',').map(k => k.trim()).filter(Boolean).slice(0, 5)
-      const enTagIds = DRY_RUN ? [] : await Promise.all(enTagNames.map(tag => getOrCreateTaxonomy('tags', tag)))
+      // KO 태그와 동일한 이유(동시 채널 한도)로 순차 처리.
+      const enTagIds = []
+      if (!DRY_RUN) {
+        for (const tag of enTagNames) enTagIds.push(await getOrCreateTaxonomy('tags', tag))
+      }
 
       let enFeaturedMediaId = featuredMediaId ?? null
       let enFeaturedMediaUrl = featuredMediaUrl
