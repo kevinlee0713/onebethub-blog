@@ -1714,6 +1714,10 @@ async function syncClickUpPostingTask(page, title, postUrl, keyword, postStatus)
     const btagField = fieldMap['btag']
 
     const clickupStatus = postStatus === 'publish' ? 'published' : 'pending'
+    // ClickUp의 New_7PLAY 통합 스페이스 "키워드 70개" 트래커와 대조하기 쉽도록, 그 트래커의 코드가
+    // 확인된 페이지(page.clickupCode, 예: "B-45")는 "B-45. 카지노 솔루션 분양"처럼 코드를 앞에 붙인다
+    // (2026-09-18, Kevin 요청). 코드가 없는 페이지는 키워드만 그대로 쓴다.
+    const keywordLabel = page.clickupCode ? `${page.clickupCode}. ${keyword}` : keyword
 
     if (page.clickupTaskId) {
       // 미리 등록된 태스크 업데이트 — Name/Status는 일반 update, custom field는 필드별 개별 엔드포인트.
@@ -1728,7 +1732,7 @@ async function syncClickUpPostingTask(page, title, postUrl, keyword, postStatus)
       }
       const fieldUpdates = [
         websiteField && [websiteField.id, WP_URL],
-        keywordField && [keywordField.id, keyword],
+        keywordField && [keywordField.id, keywordLabel],
         postUrlField && [postUrlField.id, postUrl],
         btagField && page.btag && [btagField.id, page.btag],
       ].filter(Boolean)
@@ -1745,7 +1749,7 @@ async function syncClickUpPostingTask(page, title, postUrl, keyword, postStatus)
       // keyword-map.json에 수동으로 채워 넣어야 이 함수가 업데이트 경로를 탈 수 있음).
       const customFields = [
         websiteField && { id: websiteField.id, value: WP_URL },
-        keywordField && { id: keywordField.id, value: keyword },
+        keywordField && { id: keywordField.id, value: keywordLabel },
         postUrlField && { id: postUrlField.id, value: postUrl },
         btagField && page.btag && { id: btagField.id, value: page.btag },
       ].filter(Boolean)

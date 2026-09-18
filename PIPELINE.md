@@ -354,14 +354,19 @@ Post url이 자동으로 채워져야 하고, 검수 단계에서 제목이 바�
   - `PUT /api/v2/task/{id}` — Name=최종 제목, Status=`postStatus==='publish' ? 'published' : 'pending'`.
   - 커스텀 필드(Website/Keyword/Post url/Btag)는 ClickUp API 특성상 일반 update에 못 묶고 필드별로
     `POST /api/v2/task/{id}/field/{fieldId}`를 따로 호출해야 한다 — Website=`WP_URL`, Keyword=
-    `focusKeyword`, Post url=KO 발행 URL(EN은 별도 필드 없어 추적 안 함, 페이지 단위 1행 설계),
-    Btag=`page.btag`(있는 페이지만).
+    `keywordLabel`(아래 참고), Post url=KO 발행 URL(EN은 별도 필드 없어 추적 안 함, 페이지 단위 1행
+    설계), Btag=`page.btag`(있는 페이지만).
   - `page.clickupTaskId`가 없으면 새 태스크를 생성만 하고(안전망), 콘솔에 "keyword-map.json에
     clickupTaskId 추가 필요"를 경고로 남긴다.
+- **Keyword 필드 코드 접두어(2026-09-18)** — New_7PLAY 통합 스페이스의 "키워드 70개" 트래커와 나중에
+  대조하기 쉽도록, 그 트래커의 코드가 확인된 10개 페이지는 `page.clickupCode`(예: `"B-45"`)를
+  `keyword-map.json`에 저장해뒀고 `keywordLabel = page.clickupCode ? \`${page.clickupCode}. ${keyword}\`
+  : keyword`로 "B-45. 카지노 솔루션 분양" 형태를 만들어 Keyword 필드에 넣는다. 코드가 없는 나머지
+  12페이지는 키워드만 그대로 들어간다.
 - 필요 env: `CLICKUP_API_KEY`(ClickUp 개인 API 토큰), `CLICKUP_LIST_ID`(포스팅 리스트 ID
-  `901821678685`, `.env`와 GitHub Actions secret 양쪽에 등록 완료). **`CLICKUP_API_KEY`는 아직
-  미등록 — Kevin이 ClickUp 설정에서 발급해서 전달해야 실제로 동작한다.** 둘 다 없으면 함수가
-  조용히 스킵(콘솔 경고만 남김, 파이프라인 자체는 안 죽음).
+  `901821678685`). 둘 다 `.env`와 GitHub Actions secret에 등록 완료(2026-09-18, 실제 API 호출로
+  인증·업데이트 둘 다 동작 확인됨). 둘 중 하나라도 없으면 함수가 조용히 스킵(콘솔 경고만 남김,
+  파이프라인 자체는 안 죽음).
 - 제목이 Stage5에서 재작성돼도 이 호출은 그 이후에 일어나므로 최종 제목이 자동으로 반영된다. 다만
   **발행 후 사람이 WordPress에서 직접 제목을 수정하는 경우**는 별도 동기화 로직이 없어 ClickUp에
   반영 안 됨(웹훅/폴링이 필요한 별개 기능 — 필요하면 추후 추가).
