@@ -8,11 +8,17 @@
  */
 get_header();
 
+// Until Polylang is installed, KO and EN posts are just ordinary same-category
+// WP posts, so every query on this page must opt into the language filter
+// explicitly (see onebethub_lang_where() in functions.php) or KO/EN interleave.
+$onebethub_view_lang = onebethub_current_view_lang();
+
 $hero_query = new WP_Query(
 	array(
 		'posts_per_page' => 3,
 		'post_status'    => 'publish',
 		'ignore_sticky_posts' => true,
+		'onebethub_lang' => $onebethub_view_lang,
 	)
 );
 $hero_ids = wp_list_pluck( $hero_query->posts, 'ID' );
@@ -25,6 +31,7 @@ $feed_query = new WP_Query(
 		'post_status'         => 'publish',
 		'post__not_in'        => ( 1 === $feed_paged ) ? $hero_ids : array(),
 		'ignore_sticky_posts' => true,
+		'onebethub_lang'      => $onebethub_view_lang,
 	)
 );
 ?>
@@ -173,6 +180,8 @@ $feed_query = new WP_Query(
 								'category'       => $cat->term_id,
 								'posts_per_page' => 1,
 								'post_status'    => 'publish',
+								'onebethub_lang' => $onebethub_view_lang,
+								'suppress_filters' => false, // get_posts() defaults this to true, which would silently skip onebethub_lang_where()
 							)
 						);
 						if ( empty( $latest ) ) {

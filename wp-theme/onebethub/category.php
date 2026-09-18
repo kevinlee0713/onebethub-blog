@@ -16,6 +16,8 @@ $latest_in_cat = get_posts(
 		'category'       => $onebethub_cat->term_id,
 		'posts_per_page' => 1,
 		'post_status'    => 'publish',
+		'onebethub_lang' => onebethub_current_view_lang(),
+		'suppress_filters' => false, // get_posts() defaults this to true, which would silently skip onebethub_lang_where()
 	)
 );
 $last_updated = ! empty( $latest_in_cat ) ? get_the_date( '', $latest_in_cat[0] ) : '—';

@@ -118,6 +118,7 @@ $primary_cat     = ! empty( $onebethub_cats ) ? $onebethub_cats[0] : null;
 					'posts_per_page' => 4,
 					'post__not_in'   => array( get_the_ID() ),
 					'post_status'    => 'publish',
+					'onebethub_lang' => onebethub_current_view_lang(),
 				);
 				if ( $primary_cat ) {
 					$related_args['category__in'] = array( $primary_cat->term_id );

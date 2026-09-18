@@ -351,21 +351,96 @@ function onebethub_primary_categories() {
  * Polylang is not installed on the live site yet.
  * ------------------------------------------------------------------- */
 function onebethub_language_switcher( $context = 'desktop' ) {
-	if ( ! function_exists( 'pll_the_languages' ) ) {
+	if ( function_exists( 'pll_the_languages' ) ) {
+		$args = array(
+			'dropdown'                => 0,
+			'show_flags'              => 0,
+			'show_names'              => 1,
+			'display_names_as'        => 'slug',
+			'hide_if_empty'           => 0,
+			'force_home'              => 0,
+		);
+		echo '<div class="pll-switcher flex items-center border border-slate-200 rounded p-0.5 bg-slate-50 text-xs font-semibold" data-context="' . esc_attr( $context ) . '">';
+		pll_the_languages( $args );
+		echo '</div>';
 		return;
 	}
-	$args = array(
-		'dropdown'                => 0,
-		'show_flags'              => 0,
-		'show_names'              => 1,
-		'display_names_as'        => 'slug',
-		'hide_if_empty'           => 0,
-		'force_home'              => 0,
-	);
-	echo '<div class="pll-switcher flex items-center border border-slate-200 rounded p-0.5 bg-slate-50 text-xs font-semibold" data-context="' . esc_attr( $context ) . '">';
-	pll_the_languages( $args );
-	echo '</div>';
+
+	// Fallback switcher while Polylang isn't installed yet — reuses the
+	// pipeline's fixed "{ko-slug}-en" convention (onebethub_sibling_post_id())
+	// so this is a real, working KO/EN toggle rather than just a dead spot
+	// where Polylang's widget would otherwise be. On archives/home it flips
+	// a plain ?lang=en query var, which onebethub_apply_lang_filter_to_main_query()
+	// and the onebethub_lang arg on front-page.php's custom queries both read.
+	$lang = onebethub_current_view_lang();
+	if ( is_singular( 'post' ) ) {
+		$sibling_id = onebethub_sibling_post_id( get_the_ID() );
+		$ko_url     = ( 'ko' === $lang ) ? get_permalink() : ( $sibling_id ? get_permalink( $sibling_id ) : home_url( '/' ) );
+		$en_url     = ( 'en' === $lang ) ? get_permalink() : ( $sibling_id ? get_permalink( $sibling_id ) : home_url( '/?lang=en' ) );
+	} else {
+		$base   = remove_query_arg( 'lang' );
+		$ko_url = $base;
+		$en_url = add_query_arg( 'lang', 'en', $base );
+	}
+	?>
+	<div class="flex items-center border border-slate-200 rounded overflow-hidden text-xs font-bold font-mono" data-context="<?php echo esc_attr( $context ); ?>">
+		<a href="<?php echo esc_url( $ko_url ); ?>" class="px-2.5 py-1.5 transition <?php echo ( 'ko' === $lang ) ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-100'; ?>">KO</a>
+		<a href="<?php echo esc_url( $en_url ); ?>" class="px-2.5 py-1.5 transition <?php echo ( 'en' === $lang ) ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-100'; ?>">EN</a>
+	</div>
+	<?php
 }
+
+/**
+ * Current "view language" — Polylang's real value once installed; until
+ * then, derived from the singular post's own slug, or a plain ?lang=en
+ * query var for archive/home/search views (see onebethub_language_switcher()
+ * and onebethub_apply_lang_filter_to_main_query()).
+ */
+function onebethub_current_view_lang() {
+	if ( function_exists( 'pll_current_language' ) ) {
+		return pll_current_language();
+	}
+	if ( is_singular( 'post' ) ) {
+		return onebethub_post_lang_from_slug( get_post_field( 'post_name', get_the_ID() ) );
+	}
+	return ( isset( $_GET['lang'] ) && 'en' === $_GET['lang'] ) ? 'en' : 'ko'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+}
+
+/**
+ * posts_where filter keyed off a custom 'onebethub_lang' query var, so both
+ * the main query (via pre_get_posts below) and front-page.php's standalone
+ * WP_Query/get_posts() calls can opt in with the same mechanism. Without
+ * this, KO and EN posts (which are just ordinary same-category WP posts
+ * until Polylang is installed) interleave freely in every listing — visibly
+ * broken on a page that's supposed to default to one language at a time.
+ */
+function onebethub_lang_where( $where, $query ) {
+	$lang = $query->get( 'onebethub_lang' );
+	if ( ! $lang ) {
+		return $where;
+	}
+	global $wpdb;
+	$where .= ( 'en' === $lang )
+		? " AND {$wpdb->posts}.post_name LIKE '%-en'"
+		: " AND {$wpdb->posts}.post_name NOT LIKE '%-en'";
+	return $where;
+}
+add_filter( 'posts_where', 'onebethub_lang_where', 10, 2 );
+
+/**
+ * Applies the same language filter to the real main query (category
+ * archives, search, and the home blog fallback) so front-page.php isn't the
+ * only template that needs to remember to pass 'onebethub_lang' explicitly.
+ */
+function onebethub_apply_lang_filter_to_main_query( $query ) {
+	if ( is_admin() || ! $query->is_main_query() || function_exists( 'pll_current_language' ) ) {
+		return;
+	}
+	if ( $query->is_category() || $query->is_search() || $query->is_home() ) {
+		$query->set( 'onebethub_lang', onebethub_current_view_lang() );
+	}
+}
+add_action( 'pre_get_posts', 'onebethub_apply_lang_filter_to_main_query' );
 
 /* -----------------------------------------------------------------------
  * Misc theme hygiene.
