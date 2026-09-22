@@ -283,6 +283,25 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
    검증(DRY_RUN)이라도 실제 외부 시스템(ClickUp 등)에 쓰기 작업을 하는 함수는 전부 DRY_RUN 가드가
    있는지 개별 확인해야 한다** — WordPress/Polylang 발행 계열은 원래부터 가드가 있었지만 이후에 추가된
    ClickUp 동기화는 놓쳤었다.
+9. **화요일 정규 실행이 SSH 유휴 구간 미처리 'error' 이벤트로 조용히 크래시(2026-09-22)** — T2-00 발행
+   시도 중 Stage3(휴머나이징) 2차 재시도 도중 Cloudways SSH 커넥션이 ECONNRESET으로 끊겼는데, 그 시점엔
+   진행 중인 exec가 없어 `connection`에 걸린 에러 리스너가 하나도 없는 상태였다(node-ssh는 `connect()`
+   중에만 `error` 리스너를 걸고 `ready` 즉시 떼어내며, exec 중에만 일시적으로 다시 건다). 리스너 없는
+   `error` 이벤트는 Node가 프로세스를 강제 종료시키는데, 이건 **Promise rejection이 아니라 동기 throw라
+   `main().catch()`도 못 잡고 실패 텔레그램도 안 나갔다** — Kevin이 ClickUp에서 발행 여부를 확인할
+   방법이 없었던 원인. `getSSH()`에서 연결 직후 `connection.on('error', ...)`를 연결 수명 내내 걸어두고
+   (끊기면 `_ssh`만 비워 다음 호출에서 재연결) 크래시 자체를 막았고, 추가로 `process.on('uncaughtException'
+   /'unhandledRejection')` 최후 안전망을 걸어 어떤 원인으로 죽든 최소 하나의 실패 텔레그램은 반드시 나가게
+   했다.
+10. **위 사고 조사 중 GitHub Actions bot 커밋이 한 번도 성공한 적 없었던 것 발견(상시 버그, 2026-09-22
+    확인)** — `weekly-post.yml` 마지막 스텝(`git push`)이 매 실행 `403 Permission to .../onebethub-blog.git
+    denied to github-actions[bot]`로 실패 중이었다(`|| true`로 삼켜져서 잡 자체는 "success"로 표시돼
+    안 보였음). `git log -- data/published-log.json`으로 대조해보니 지금까지의 커밋 전부 author가
+    `onebethub-bot`이 아니라 `kevin`(수동 커밋)이었다. 리포지토리 기본 `GITHUB_TOKEN` 권한이 read-only로
+    설정돼 있던 것으로 추정 — 잡 레벨에 `permissions: contents: write`를 명시해 해결. **잠재 위험**: 이
+    push가 계속 실패하는 상태로 방치됐다면, 다음 주 실행이 매번 "새로 체크아웃한 stale 로그"에서 시작해
+    방금 발행한 페이지를 다시 published-log에 못 남기고 넘어갔을 수 있고, 그 경우 다다음 주 실행이 같은
+    페이지를 중복 발행할 위험이 있었다(다행히 지금까지는 Kevin이 매번 수동 커밋해서 실제 중복은 없었음).
 
 ## 알려진 이슈 / 참고사항
 

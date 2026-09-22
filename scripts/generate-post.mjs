@@ -157,6 +157,28 @@ async function tg(text) {
   } catch { /* 알림 실패는 파이프라인 중단 안 함 */ }
 }
 
+// main()의 .catch()는 "정상적으로 reject된 Promise"만 잡는다 — SSH 'error' 이벤트처럼 EventEmitter가
+// 동기적으로 던지는 미처리 예외(2026-09-22 실측)나 어디선가 놓친 Promise rejection은 여기까지 안 오고
+// 프로세스가 조용히 죽어서 발행 성공/실패 텔레그램 둘 다 안 나가는 상황이 생긴다. Kevin이 "오늘 글이
+// 등록된 건지 확인이 안 된다"고 겪은 게 정확히 이 케이스 — 어떤 크래시든 최소 하나의 알림은 반드시 나가게
+// 하는 최후 안전망. 원인 불문 무조건 알리고 종료(uncaughtException 이후 상태는 신뢰할 수 없음 — Node 공식
+// 가이드대로 재개하지 않고 process.exit).
+let _crashNotified = false
+async function notifyCrashAndExit(label, err) {
+  if (_crashNotified) return
+  _crashNotified = true
+  console.error(`\n[${label}]`, err)
+  await tg(
+    `❌ <b>파이프라인이 처리되지 않은 오류로 중단됨</b> (${label})\n\n` +
+    `<code>${(err && err.message) || err}</code>\n\n` +
+    `이번 실행이 실제로 발행까지 갔는지 WordPress/ClickUp에서 직접 확인 필요.`
+  )
+  await sshClose()
+  process.exit(1)
+}
+process.on('uncaughtException', (err) => { notifyCrashAndExit('uncaughtException', err) })
+process.on('unhandledRejection', (err) => { notifyCrashAndExit('unhandledRejection', err) })
+
 // ── 로컬 발행 원장 (data/published-log.json) ────────────────────
 // WordPress/SSH가 아직 준비되지 않은 상태에서도(DRY_RUN) 중복 발행을 막기 위한 원장.
 // 라이브 모드에서는 원본처럼 `wp post list` 대조도 함께 수행한다(이중 체크).
@@ -200,6 +222,15 @@ async function getSSH() {
     readyTimeout: 30000,
     hostVerifier: () => true,
     ...auth,
+  })
+  // node-ssh는 connect() 중에만 connection.on('error', reject)를 걸어두고 'ready' 시점에 바로 떼어낸다 —
+  // exec 중이 아닌 유휴 구간(예: Claude API 호출 대기 중)에 커넥션이 끊기면(ECONNRESET 등) 아무 리스너도
+  // 없는 'error' 이벤트가 되어 Node가 프로세스를 통째로 죽인다(2026-09-22 실측, main()의 .catch()도 못 잡고
+  // 텔레그램 알림도 못 나감). 연결 수명 내내 리스너를 붙여 크래시를 막고, 끊기면 다음 getSSH() 호출에서
+  // 재연결하도록 _ssh만 비운다 — 진행 중이던 exec가 있었다면 그쪽은 자기 자신의 임시 리스너로 별도 reject됨.
+  _ssh.connection.on('error', (err) => {
+    console.log(`  ⚠ SSH 연결 유휴 중 오류(핸들링됨, 다음 호출에서 재연결): ${err.message}`)
+    _ssh = null
   })
   return _ssh
 }
