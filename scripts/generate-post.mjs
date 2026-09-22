@@ -1189,7 +1189,10 @@ async function verifyWithGemini(post, page) {
   let lastError = null
   for (const modelName of GEMINI_MODELS) {
     try {
-      const model = gemini.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' })
+      // apiVersion 'v1'였을 때 gemini-3.1-pro-preview가 404였다(2026-09-22 실측, ListModels로 직접
+      // 확인 — 이 모델은 v1beta에만 존재). 'v1beta'는 v1 모델을 전부 포함하는 상위 집합이라(이미지 생성
+      // 호출부도 전부 v1beta 사용 중) 안전하게 승격.
+      const model = gemini.getGenerativeModel({ model: modelName }, { apiVersion: 'v1beta' })
       const res = await model.generateContent(prompt)
       const text = res.response.text() ?? ''
       if (!text) throw new Error('빈 응답')
@@ -1205,6 +1208,12 @@ async function verifyWithGemini(post, page) {
   await tg(`⚠️ <b>Gemini 검증 실패 (모든 모델 시도)</b>\n<code>${errMsg}</code>`)
   return { score: 8, issues: [], verdict: 'PASS', skipped: true }
 }
+
+// 텔레그램에서 모델별 검증 결과를 한눈에 보기 위한 공용 포맷터(VOBET 매거진 파이프라인의 알림
+// 스타일 참고, 2026-09-22 — Kevin이 스크린샷으로 준 VOBET 형식처럼 모델별 아이콘+점수 줄바꿈,
+// 이미지/본문/아웃바운드 요약 블록을 여기서도 재사용).
+const verdictIcon = (r) => r.skipped ? '⚠️' : r.verdict === 'PASS' ? '✅' : '❌'
+const scoreLabel = (r) => r.skipped ? '건너뜀' : `${r.score}/10 (${r.verdict})`
 
 function parseVerificationResult(raw, modelName) {
   const scoreMatch = raw.match(/SCORE:\s*(\d+)/)
@@ -1997,9 +2006,9 @@ async function main() {
       verifyWithGemini(post, page),
     ])
 
-    const claudeLabel = claudeAgentResult.skipped ? '건너뜀' : `${claudeAgentResult.score}/10 (${claudeAgentResult.verdict})`
-    const gptLabel = gptResult.skipped ? '건너뜀' : `${gptResult.score}/10 (${gptResult.verdict})`
-    const geminiLabel = geminiResult.skipped ? '건너뜀' : `${geminiResult.score}/10 (${geminiResult.verdict})`
+    const claudeLabel = scoreLabel(claudeAgentResult)
+    const gptLabel = scoreLabel(gptResult)
+    const geminiLabel = scoreLabel(geminiResult)
     console.log(`  Claude-검증: ${claudeLabel}`)
     console.log(`  GPT-4o-mini: ${gptLabel}`)
     console.log(`  Gemini: ${geminiLabel}`)
@@ -2010,6 +2019,13 @@ async function main() {
 
     revisionCount++
     console.log(`\n  ✗ 검증 미통과 — 재작성 ${revisionCount}/${MAX_AI_REVISIONS}회차`)
+    // 재작성마다 진행상황을 텔레그램으로도 쏴서, 발행 완료 메시지 하나만 기다리는 대신 중간에 뭘
+    // 하고 있는지 실시간으로 볼 수 있게 한다(VOBET 매거진 파이프라인과 동일한 패턴, 2026-09-22 추가).
+    await tg(
+      `⚠️ <b>검증 미통과 — 재작성 ${revisionCount}/${MAX_AI_REVISIONS}</b>\n` +
+      `[${page.cluster}/${page.tier}] ${page.id}\n` +
+      `${verdictIcon(claudeAgentResult)} Claude: ${claudeLabel} | ${verdictIcon(gptResult)} GPT-4o: ${gptLabel} | ${verdictIcon(geminiResult)} Gemini: ${geminiLabel}`
+    )
     post = await reviseWithFeedback(post, page, claudeAgentResult, gptResult, geminiResult, ctaUrl)
     post = { ...post, content: ensureCta(post.content, page, ctaUrl) }
   }
@@ -2267,13 +2283,28 @@ async function main() {
   console.log(`  KO: ${koPostUrl}`)
   if (enPostUrl) console.log(`  EN: ${enPostUrl}`)
 
-  const vi = (r) => r.skipped ? '⚠️' : r.verdict === 'PASS' ? '✅' : '❌'
+  // VOBET 매거진 파이프라인의 텔레그램 형식(모델별 아이콘+점수 줄바꿈, 이미지/본문/아웃바운드 요약
+  // 블록)을 그대로 참고해 여기도 같은 구조로 통일(2026-09-22, Kevin이 VOBET 알림 스크린샷 보고 요청).
+  // VOBET은 항상 draft로 저장해 사람 검수를 거치지만 OneBetHub는 검증 통과 시 바로 공개 발행하는
+  // 설계라 문구("검수 필요" 대신 실제 공개 URL)만 그 차이에 맞게 유지.
+  const revisionNote = revisionCount > 0 ? ` (재작성 ${revisionCount}회)` : ''
+  const headerType = !rawFeaturedImg ? null
+    : rawFeaturedImg.filename?.startsWith('gemini-') ? 'AI 생성'
+    : rawFeaturedImg.filename?.startsWith('pexels-') ? 'Pexels(주제 사진)'
+    : '브랜드 자체제작'
   if (postStatus === 'publish') {
     await tg(
       `✅ <b>새 글 발행 완료${DRY_RUN ? ' (DRY_RUN)' : ''}</b>\n\n` +
       `📝 <b>${post.title}</b>\n[${page.cluster}/${page.tier}] ${page.id}\n\n` +
-      `🤖 검증: ${vi(claudeAgentResult)}Claude ${vi(gptResult)}GPT ${vi(geminiResult)}Gemini\n` +
-      `상태: ${postStatus}\n\n` +
+      `🤖 검증 결과${revisionNote}\n` +
+      `  ${verdictIcon(claudeAgentResult)} Claude: ${scoreLabel(claudeAgentResult)}\n` +
+      `  ${verdictIcon(gptResult)} GPT-4o: ${scoreLabel(gptResult)}\n` +
+      `  ${verdictIcon(geminiResult)} Gemini: ${scoreLabel(geminiResult)}\n\n` +
+      `🖼 이미지\n` +
+      `  ${featuredMediaId ? `✅ 헤더 (${headerType})` : '❌ 헤더 없음'}\n` +
+      `  ${bodyImageInserted ? `✅ 본문 이미지 (${bodyImageCount}장, figcaption 크레딧)` : '❌ 본문 이미지 없음'}\n\n` +
+      `📊 본문: ${post.content.length}자 | JSON-LD: ✅\n` +
+      `🔗 아웃바운드: ${outboundLinks.length > 0 ? `✅ ${outboundLinks.length}개` : '⚠️ 없음'}\n\n` +
       `🇰🇷 ${koPostUrl}` + (enPostUrl ? `\n🇺🇸 ${enPostUrl}` : '')
     )
     if (!DRY_RUN) {
@@ -2296,11 +2327,10 @@ async function main() {
     // 무인 실행되는 상황에서 "물어본다"에 가장 가까운 형태 — 무엇이 왜 실패했는지 구체적으로 적어서
     // 수동 판단·발행이 필요함을 명확히 알린다(2026-09-18, Kevin 요청 — 기존엔 이 경우도 "✅ 완료"로
     // 묻혀서 안 보였음).
-    const issueLines = (r, label) => r.skipped
-      ? `  ${label}: 건너뜀`
-      : `  ${label}: ${r.score}/10 (${r.verdict})` + (r.issues?.length ? '\n    - ' + r.issues.join('\n    - ') : '')
+    const issueLines = (r, label) => `  ${verdictIcon(r)} ${label}: ${scoreLabel(r)}` +
+      (r.issues?.length ? '\n    - ' + r.issues.join('\n    - ') : '')
     await tg(
-      `🚨 <b>검증 미통과 — 자동 발행 보류(draft)${DRY_RUN ? ' (DRY_RUN)' : ''}</b>\n\n` +
+      `🟡 <b>검증 미통과 — draft 저장${DRY_RUN ? ' (DRY_RUN)' : ''}</b>\n\n` +
       `📝 <b>${post.title}</b>\n[${page.cluster}/${page.tier}] ${page.id}\n` +
       `재작성 ${revisionCount}회 시도 후에도 3개 모델 전부 PASS 못함 — 수동 확인 후 직접 발행 필요.\n\n` +
       `${issueLines(claudeAgentResult, 'Claude')}\n${issueLines(gptResult, 'GPT')}\n${issueLines(geminiResult, 'Gemini')}\n\n` +

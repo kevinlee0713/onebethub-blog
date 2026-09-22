@@ -302,6 +302,16 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
     push가 계속 실패하는 상태로 방치됐다면, 다음 주 실행이 매번 "새로 체크아웃한 stale 로그"에서 시작해
     방금 발행한 페이지를 다시 published-log에 못 남기고 넘어갔을 수 있고, 그 경우 다다음 주 실행이 같은
     페이지를 중복 발행할 위험이 있었다(다행히 지금까지는 Kevin이 매번 수동 커밋해서 실제 중복은 없었음).
+11. **Gemini 검증 apiVersion 'v1' → 'v1beta', 텔레그램 알림 VOBET 형식으로 통일(2026-09-22)** — 위 SSH
+    수동 재실행 검증 중 Gemini 검증이 두 모델 다 실패하는 걸 발견: `gemini-3.6-flash`는 일시적 503(과부하),
+    `gemini-3.1-pro-preview`는 확정적 404였다 — ListModels로 직접 대조해보니 이 모델은 v1beta에만 존재하는데
+    코드가 `apiVersion: 'v1'`로 호출하고 있었다. 이미지 생성 호출부는 이미 v1beta를 쓰고 있어서(v1beta는
+    v1 슈퍼셋) `verifyWithGemini()`도 v1beta로 통일. 겸사겸사 Kevin이 VOBET 매거진 파이프라인의 텔레그램
+    알림(모델별 아이콘+점수 줄바꿈, 이미지/본문/아웃바운드 요약 블록)을 보여주며 OneBetHub도 같은 형식을
+    요청 — `verdictIcon()`/`scoreLabel()` 공용 헬퍼를 추가하고 발행완료/draft저장 메시지를 그 형식으로
+    재작성, Stage5 재작성 라운드마다도(예전엔 최종 결과만 알림) VOBET처럼 중간 진행상황 텔레그램을
+    추가했다. OneBetHub는 VOBET과 달리 검증 통과 시 바로 공개 발행하므로(VOBET은 항상 draft+사람 검수)
+    "검수 필요" 문구 대신 실제 공개 URL을 그대로 유지.
 
 ## 알려진 이슈 / 참고사항
 
