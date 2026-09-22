@@ -221,6 +221,13 @@ async function getSSH() {
     port: parseInt(process.env.SSH_PORT ?? '22'),
     readyTimeout: 30000,
     hostVerifier: () => true,
+    // Stage2/3/5는 Claude/GPT/Gemini 호출 대기로 SSH가 몇 분씩 완전히 유휴 상태가 된다 — 이 구간에서
+    // Cloudways 게이트웨이가 idle 커넥션을 끊는 것으로 실측 확인(2026-09-22, ECONNRESET·ETIMEDOUT 둘 다
+    // 유휴 중 발생). 더 심각한 건: 끊긴 뒤 재연결은 되는데 그 재연결 세션에서는 WP_PATH를 못 찾는
+    // 문제가 두 번의 실제 실행에서 100% 재현됐다(reconnect 자체가 이 호스트에서 신뢰할 수 없는 상태로
+    // 남는 것으로 보임) — 그러니 재연결에 기대기보다 애초에 끊기지 않게 keepalive로 막는 게 핵심 수정.
+    keepaliveInterval: 15000,
+    keepaliveCountMax: 10,
     ...auth,
   })
   // node-ssh는 connect() 중에만 connection.on('error', reject)를 걸어두고 'ready' 시점에 바로 떼어낸다 —
