@@ -322,6 +322,20 @@ Rank Math·Polylang 미설치 상태를 전제로 설계 — 두 플러그인 �
     유휴 구간에도 주기적으로 살아있다는 신호를 보내게 했다. **다음 실행에서 여전히 "SSH 연결 유휴 중 오류"
     로그가 뜨면 keepalive로도 못 막은 것이니, 그때는 Cloudways 쪽 세션/방화벽 idle timeout 설정을 직접
     확인해야 한다.**
+13. **12번의 진짜 원인 확정: `cd: ***` 오류의 정체는 재연결도 Cloudways 쪽 문제도 아니라 GitHub Actions
+    시크릿 `SSH_WP_PATH` 자체가 손상된 값으로 저장돼 있었던 것(2026-09-23)** — keepalive 배포 후 재실행에서도
+    재연결 없이(유휴 오류 로그 자체가 안 뜸) 여전히 같은 오류가 나서, AI 호출 없이 SSH만 붙는 임시 진단
+    워크플로우(`debug-ssh.yml`)를 잠깐 만들어 러너 안에서 직접 찍어봤다. `SSH_WP_PATH` 길이가 로컬 `.env`의
+    올바른 값(54자)과 다르게 GH 시크릿에서는 74자였다 — 로그에 `C:/Program Files/Git/home/...`가 그대로
+    찍혀서 확인: 과거 이 시크릿을 Git Bash(MSYS)에서 `gh secret set`으로 등록할 때 `MSYS_NO_PATHCONV=1` 없이
+    실행돼, POSIX 절대경로처럼 생긴 값을 MSYS가 Windows 경로로 자동 변환해버린 채로 GitHub에 업로드된 것
+    (레포 루트 PIPELINE.md의 "MSYS가 SSH_WP_PATH 등을 자동 변환" 항목과 동일한 버그의 다른 발현 — 그때는
+    로컬 실행 시 매번 `MSYS_NO_PATHCONV=1`을 붙이는 걸로 막았지만, 시크릿을 "등록"하는 그 한 번의 명령
+    자체가 이미 이 문제에 걸려서 저장된 값 자체가 영구적으로 잘못돼 있었다). `gh secret set SSH_WP_PATH < 파일`
+    (인자가 아니라 stdin으로, argv 변환을 피함)로 올바른 값 재등록, 디버그 워크플로우로 길이/해시 일치 +
+    `cd`/`wp core version`/`ls` 전부 성공 확인 후 임시 파일 삭제. **교훈: 이 프로젝트에서 앞으로 GitHub
+    시크릿을 등록/갱신할 때도(로컬 실행뿐 아니라) 절대경로 값이면 반드시 `MSYS_NO_PATHCONV=1`을 붙이거나
+    stdin으로 넘길 것 — argv 문자열로 넘기면 Git Bash에서 조용히 깨진다.**
 
 ## 알려진 이슈 / 참고사항
 
