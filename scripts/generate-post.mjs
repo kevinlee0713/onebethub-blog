@@ -725,7 +725,12 @@ OneBetHub(onebethub.com)는 특정 브랜드 홍보 채널이 아니라 카지�
 // 도어웨이 패턴을 피하기 위한 설계(세션 합의, 2026-09-18). keyword-map.json의 role 구분이 애초에
 // 이 의도를 전제하고 있었는데 CTA 하드코딩이 그걸 반영하지 못했던 것을 바로잡음.
 function isConversionPage(page) {
-  return (page.role || '').includes('전환')
+  // 단순 부분일치라 role="유입 허브(전환 아님)"처럼 "전환 아님"을 명시한 페이지까지 "전환"
+  // 문자열을 포함한다는 이유로 오탐했다(2026-09-23 실측, T2-00) — 전환 페이지가 아니라고 명시한
+  // 페이지는 "아님"이 붙어있으면 제외한다. keyword-map.json의 모든 실제 전환 role은
+  // "전환"/"전환(허브)"/"전환(기존 1위 방어, 지원글 없음)"처럼 "아님"을 포함하지 않으므로 안전.
+  const role = page.role || ''
+  return role.includes('전환') && !role.includes('아님')
 }
 
 // 지원/허브 페이지의 CTA 목적지 — 같은 클러스터의 전환 페이지(T1, role="전환")로 가는 내부 링크.
