@@ -599,23 +599,48 @@ function getCrossEdges(linkMap, pageId) {
 
 const OUTBOUND_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
 const DEAD_STATUS = new Set([400, 404, 410, 451])
+// 도메인 파킹(만료/방치된 도메인을 광고사가 사들여 리다이렉트·플레이스홀더만 띄우는 페이지)은 HTTP 200을
+// 정상 반환하므로 DEAD_STATUS만으로는 못 거른다 — 실제로 prg-solution.com이 이렇게 필터를 통과해
+// "실존 업체 레퍼런스"처럼 본문에 인용된 사례가 있었다(2026-10-14 /seo검수에서 발견, 수동 제거함).
+const PARKING_SIGNATURES = [
+  /_trfd\.push\(\s*\{\s*ap\s*:\s*["']parking["']/i,
+  /parking-lander/i,
+  /LANDER_SYSTEM/i,
+  /domain\s+(is\s+)?for\s+sale/i,
+  /this domain may be for sale/i,
+  /(buydomains|dan\.com|afternic|sedo|hugedomains)\.com/i,
+]
+function looksLikeParkedPage(html) {
+  if (!html) return false
+  if (PARKING_SIGNATURES.some(re => re.test(html))) return true
+  // 파킹 랜딩은 대부분 <script> 리다이렉트/트래킹만 있고 실제 가시 텍스트가 거의 없다.
+  const visibleText = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return visibleText.length < 80
+}
 async function isUrlAlive(url, timeoutMs = 12000) {
-  const tryOnce = async (method) => {
-    const ctrl = new AbortController()
-    const t = setTimeout(() => ctrl.abort(), timeoutMs)
-    try {
-      const res = await fetch(url, {
-        method,
-        redirect: 'follow',
-        headers: { 'User-Agent': OUTBOUND_UA, 'Accept': 'text/html,*/*' },
-        signal: ctrl.signal,
-      })
-      return res.status
-    } catch { return 0 } finally { clearTimeout(t) }
+  const ctrl = new AbortController()
+  const t = setTimeout(() => ctrl.abort(), timeoutMs)
+  try {
+    const res = await fetch(url, {
+      method: 'GET', // 파킹 탐지에 본문이 필요해 HEAD 없이 바로 GET(물량이 적어 비용 무시 가능)
+      redirect: 'follow',
+      headers: { 'User-Agent': OUTBOUND_UA, 'Accept': 'text/html,*/*' },
+      signal: ctrl.signal,
+    })
+    if (DEAD_STATUS.has(res.status)) return false
+    const body = await res.text().catch(() => '')
+    if (looksLikeParkedPage(body)) return false
+    return true
+  } catch {
+    return false
+  } finally {
+    clearTimeout(t)
   }
-  let code = await tryOnce('HEAD')
-  if ([0, 403, 405, 501].includes(code)) code = await tryOnce('GET')
-  return !DEAD_STATUS.has(code)
 }
 
 async function searchOutboundLinks(keyword) {
